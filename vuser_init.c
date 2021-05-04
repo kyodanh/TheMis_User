@@ -157,5 +157,11 @@ vuser_init()
 
 	lr_end_transaction("login ",LR_AUTO);
 
+	//thêm tho`i gian 
+	
+	web_save_timestamp_param("time", LAST );        
+    lr_output_message(lr_eval_string("Timestamp: {tStamp}"));
+
+	
 	return 0;
 }
