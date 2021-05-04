@@ -1,0 +1,537 @@
+
+$(document).ready(function () {
+
+    loading();
+    getDonVi();
+
+    $('#sortChart').change(function () {
+        sortArray();
+    });
+
+    $('#thongTinNam').change(function () {
+        numberLoad = 0;
+        loading();
+        $(".multiselect-sumo")[0].sumo.selectAll();
+    });
+
+    $("#quyKhoanTheoDonViTable").hide();
+    $("#chart-view").hide();
+    $("#table-view").click(function () {
+        $("#quyKhoanTheoDonViChart").hide();
+        $("#quyKhoanTheoDonViTable").show();
+        $("#table-view").hide();
+        $("#chart-view").show();
+    });
+    $("#chart-view").click(function () {
+        $("#quyKhoanTheoDonViChart").show();
+        $("#quyKhoanTheoDonViTable").hide();
+        $("#table-view").show();
+        $("#chart-view").hide();
+    });
+});
+
+function loading() {
+    $(".loading-default").html("");
+    $(".loading-default").each(function (index, item) {
+        $(this).html('<i class="fas fa-spinner fa-spin spin-default"></i>');
+    });
+}
+var PageData = {
+    thongTinDonVi: [],
+    thongTinBoPhan: [],
+    thongTinNam: ''
+};
+
+var PageData_LNBase = {
+    thongTinDonVi: [],
+    thongTinBoPhan: [],
+    thongTinNam: ''
+};
+
+var data_donvi = [];
+var data_reportDA = [];
+var data_reportDV = [];
+var lnbaseCn;
+var numberLoad = 0;
+
+function displayLNBase() {
+    var count = $("#thongTinDonVi :selected").length;
+    var count_bp = $("#thongTinBoPhan :selected").length;
+    if (count > 0) {
+        if (count_bp > 0) {
+            $("#sumLoiNhuanBaseChart").html('<i class="fas fa-spinner fa-spin spin-default"></i>');
+            PageData_LNBase = {
+                thongTinDonVi: [],
+                thongTinBoPhan: [],
+                thongTinNam: ''
+            };
+            getLNBaseCN();
+        } else {
+            drawSumLoiNhuanBaseChart(0, 0, 0);
+        }
+    } else {
+        drawSumLoiNhuanBaseChart(0, 0, 0);
+    }
+}
+
+function getLNBaseCN() {
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        PageData_LNBase.thongTinDonVi.push(item.value);
+    });
+    $('#thongTinBoPhan option:selected').map(function (a, item) {
+        PageData_LNBase.thongTinBoPhan.push(item.value);
+    });
+    PageData_LNBase.thongTinNam = $("#thongTinNam").val();
+    var setting = {
+        url: contextPath + "/bao-cao-lanh-dao-DA/lnbase-cn",
+        method: "POST",
+        data: JSON.stringify(PageData_LNBase),
+        timeout: 30000
+    };
+    $.ajax(setting).done(function (response) {
+        if (response.error_code === "SUCCESSFUL") {
+            console.log(response.data);
+            lnbase = response.data;
+            numberLoad = 2;
+            drawSumLoiNhuanBaseChart(parseFloat(convertSoTienThanhTy(lnbase.lNBaseKHHT)), parseFloat(convertSoTienThanhTy(lnbase.lNBaseKHNam)), parseFloat(convertSoTienThanhTy(lnbase.lNBaseTT)));
+        }
+    }).fail(function (j, t) {
+    });
+}
+
+function getPageData() {
+    numberLoad = 0;
+    PageData = {
+        thongTinDonVi: [],
+        thongTinBoPhan: [],
+        thongTinNam: ''
+    };
+    PageData_DA = {
+        thongTinDonVi: [],
+        listBP: [],
+        thongTinNam: '',
+        thongTinBoPhan: []
+    };
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        PageData.thongTinDonVi.push(item.value);
+    });
+    $('#thongTinBoPhan option:selected').map(function (a, item) {
+        PageData.thongTinBoPhan.push(item.text);
+    });
+    PageData.thongTinNam = $("#thongTinNam").val();
+
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        PageData_DA.thongTinDonVi.push(item.value);
+    });
+    $('#thongTinBoPhan option:selected').map(function (a, item) {
+        PageData_DA.listBP.push({
+            thongTinBoPhan: item.value,
+            thongTinBoPhanText: item.text
+        });
+        PageData_DA.thongTinBoPhan.push(item.value);
+    });
+    PageData_DA.thongTinNam = $("#thongTinNam").val();
+    var settings = {
+        url: contextPath + "/bao-cao-lanh-dao-DA/du-an",
+        method: "POST",
+        data: JSON.stringify(PageData_DA),
+        timeout: 30000
+    };
+    $.ajax(settings).done(function (response) {
+        if (response.error_code === "SUCCESSFUL") {
+            console.log(response.data);
+            data_reportDA = response.data;
+            numberLoad = 1;
+            displayData();
+        }
+    }).fail(function (j, t) {
+        console.log(error);
+    });
+
+    var settings = {
+        url: contextPath + "/bao-cao-lanh-dao-DA/don-vi",
+        method: "POST",
+        data: JSON.stringify(PageData),
+        timeout: 30000
+    };
+    $.ajax(settings).done(function (response) {
+        if (response.error_code === "SUCCESSFUL") {
+            console.log(response.data);
+            data_reportDV = response.data;
+            displayDataDV();
+
+        }
+    }).fail(function (j, t) {
+        console.log(error);
+    });
+}
+
+
+function getDonVi() {
+    $('#thongTinDonVi').empty();
+    $("#thongTinDonVi").find('option').remove();
+    $("#thongTinDonVi").html("");
+    var settings = {
+        url: contextPath + "/bcld-kinh-doanh/get-don-vi-bo-phan",
+        method: "POST",
+        data: "",
+        timeout: 30000
+    };
+    $.ajax(settings).done(function (response) {
+        if (response.error_code === "SUCCESSFUL") {
+            console.log(response.data);
+            data_donvi = response.data;
+            $.each(data_donvi, function (index, item) {
+                var option = $(new Option(item.TenFisX, item.id, true, true));
+                option.attr('data-mabophan', item.id !== '0' ? item.TenFisX : '0');
+                $("#thongTinDonVi").append(option);
+            });
+            customSelect($('#thongTinDonVi'));
+            getBoPhan();
+
+            $('#thongTinDonVi').unbind('change');
+            $('#thongTinDonVi').on('change', function (e) {
+                loading();
+                getBoPhan();
+            });
+        }
+    }).fail(function (jqXHR, textStatus) {
+        console.log(textStatus);
+    });
+}
+;
+
+function customSelect(curCBB) {
+    var width = $(this).width();
+    let placeHolderSearch = "Tìm kiếm ...";
+    if (curCBB.attr("data-placeholder-search")) {
+        placeHolderSearch = curCBB.attr("data-placeholder-search");
+    }
+    let placeHolder = "Chọn nhiều";
+    if (curCBB.attr("data-placeholder")) {
+        placeHolder = curCBB.attr("data-placeholder");
+    }
+    let prefix = "Đã chọn";
+    if (curCBB.attr("data-prefix")) {
+        prefix = curCBB.attr("data-prefix");
+    }
+    curCBB.SumoSelect({
+        okCancelInMulti: true, csvDispCount: 1, placeholder: placeHolder,
+        searchText: placeHolderSearch, search: true,
+        captionFormat: prefix,
+        captionFormatAllSelected: prefix,
+        isClickAwayOk: true, okCancelInMulti: true,
+        locale: ['Xong', 'Đóng lại', 'Chọn tất cả'],
+        selectAll: true,
+        showTitle: false,
+        triggerChangeCombined: true
+    });
+}
+
+function getBoPhan() {
+    $('#thongTinBoPhan').empty();
+    $("#thongTinBoPhan").find('option').remove();
+    $("#thongTinBoPhan").html("");
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        var listDepart = [];
+        let donvi = data_donvi.find(x => x.id.toString() === item.value);
+        if (donvi) {
+            listDepart = donvi.listDepartment;
+        }
+        $.each(listDepart, function (index, item) {
+            var option = $(new Option(item.TenFisX, item.id, true, true));
+            option.attr('data-mabophan', item.id !== '0' ? item.TenFisX : '0');
+            $("#thongTinBoPhan").append(option);
+        });
+        return null;
+    });
+    customSelect($('#thongTinBoPhan'));
+
+    setTimeout(function () {
+        $(".multiselect-sumo")[1].sumo.reload();
+        if (numberLoad === 0) {
+            getPageData();
+        } else {
+            displayData();
+            displayDataDV();
+        }
+        displayLNBase();
+    }, 100);
+    $('#thongTinBoPhan').unbind('change');
+    $('#thongTinBoPhan').on('change', function (e) {
+        if (numberLoad === 2) {
+            displayData();
+            displayDataDV();
+            displayLNBase();
+        }
+    });
+}
+
+var arrDonVi_DuAn = [];
+
+function displayDataDV() {
+    var totalQuyKhoanDV = 0;
+    var totalQuyKhoanDaChiDV = 0;
+    var totalQuyKhoanConLaiDV = 0;
+
+    let arrDV = [];
+    let arrBP = [];
+    let arrDV_text = [];
+
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        arrDV.push(item.value);
+        arrDV_text.push(item.text);
+        return null;
+    });
+
+    $('#thongTinBoPhan option:selected').map(function (a, item) {
+        arrBP.push(item.text.toLowerCase());
+        return null;
+    });
+
+    $.each(arrDV, function (i, idFisx) {
+        let dtDV = data_reportDV.find(x => x.Fisx.toString() === idFisx);
+        if (dtDV) {
+            if (arrDV.length > 1) {
+                let data_bp = dtDV.listChartBP.filter(x => arrBP.includes(x.boPhan.toLowerCase()));
+                $.each(data_bp, function (index, item) {
+                    totalQuyKhoanDV += item.quyKhoanDV;
+                    totalQuyKhoanDaChiDV += item.quyKhoanDVDaChi;
+                    totalQuyKhoanConLaiDV += item.quyKhoanDVConLai;
+                });
+            } else {
+                let data_bp = dtDV.listChartBP.filter(x => arrBP.includes(x.boPhan.toLowerCase()));
+                $.each(data_bp, function (index, item) {
+                    totalQuyKhoanDV += item.quyKhoanDV;
+                    totalQuyKhoanDaChiDV += item.quyKhoanDVDaChi;
+                    totalQuyKhoanConLaiDV += item.quyKhoanDVConLai;
+                });
+            }
+        }
+    });
+
+    let qkdv = convertSoTienThanhObject(totalQuyKhoanDV, 2, "B");
+    $("#quy-khoan-dv").html(qkdv.soTien + "" + qkdv.chuTat + "");
+    let qkdcdv = convertSoTienThanhObject(totalQuyKhoanDaChiDV, 2, "B");
+    $("#quy-khoan-da-chi-dv").html(qkdcdv.soTien + "" + qkdcdv.chuTat + "");
+    let qkcldv = convertSoTienThanhObject(totalQuyKhoanConLaiDV, 2, "B");
+    $("#quy-khoan-con-lai-dv").html(qkcldv.soTien + "" + qkcldv.chuTat + "");
+}
+
+function displayData() {
+//    let data = data_report;
+    // var lnbaseKeHoachNam = 0;
+    var totalQuyKhoanDA = 0;
+    var totalQuyKhoanDaChiDA = 0;
+    var totalQuyKhoanConLaiDA = 0;
+    var totalLuongKhoanChiTra = 0;
+
+    var DAamQuy = 0;
+    var DAduongQuy = 0;
+    var quyKhoanDuong = 0;
+    var quyKhoanAm = 0;
+    var DAduDK = 0;
+    var soDA = 0;
+
+    let arrDV = [];
+    let arrBP = [];
+    let arrDV_text = [];
+    arrDonVi_DuAn = [];
+    let arrLuongChiTra = [];
+
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        arrDV.push(item.value);
+        arrDV_text.push(item.text);
+        return null;
+    });
+
+    $('#thongTinBoPhan option:selected').map(function (a, item) {
+        arrBP.push(item.text.toLowerCase());
+        return null;
+    });
+    $.each(arrDV, function (i, idFisx) {
+        let dtDA = data_reportDA.find(x => x.Fisx.toString() === idFisx);
+        if (dtDA) {
+            let totalQKDA_temp = 0;
+            let totalQKDADaChi_temp = 0;
+            let totalQKDAConLai_temp = 0;
+
+            let totalluongKhoanChiTrachart = 0;
+
+            if (arrDV.length > 1) {
+                let lnbase = 0;
+                let data_bp = dtDA.listChartBP.filter(x => arrBP.includes(x.boPhan.toLowerCase()));
+                $.each(data_bp, function (index, item) {
+
+                    lnbase += item.lNBase;
+                    totalluongKhoanChiTrachart += item.luongKhoanChiTra;
+
+                    totalQuyKhoanDA += item.quyKhoanDA;
+                    totalQuyKhoanDaChiDA += item.quyKhoanDADaChi;
+                    totalQuyKhoanConLaiDA += item.quyKhoanDAConLai;
+                    totalLuongKhoanChiTra += item.luongKhoanChiTra;
+
+                    totalQKDA_temp += item.quyKhoanDA;
+                    totalQKDADaChi_temp += item.quyKhoanDADaChi;
+                    totalQKDAConLai_temp += item.quyKhoanDAConLai;
+
+                    DAduDK += item.listduAnDuDieuKien.length;
+                    soDA += item.listsoDuAn.length;
+                    DAamQuy += item.duAnDuongQuy;
+                    DAduongQuy += item.duAnAmQuy;
+                    quyKhoanAm += item.quyKhoanDAAm;
+                    quyKhoanDuong += item.quyKhoanDADuong;
+
+
+                });
+                arrDonVi_DuAn.push({
+                    TenFisX: arrDV_text[i],
+                    TotalQK: totalQKDA_temp,
+                    TotalQKDC: totalQKDADaChi_temp,
+                    TotalQKCL: totalQKDAConLai_temp,
+                    LNBase: lnbase
+                });
+
+                arrLuongChiTra.push({
+                    fisX: arrDV_text[i],
+                    luongKhoanCT: totalluongKhoanChiTrachart
+                });
+
+            } else {
+                let dtDA = data_reportDA.find(x => arrDV.includes(x.Fisx.toString()));
+                if (dtDA) {
+                    let data_bp = dtDA.listChartBP.filter(x => arrBP.includes(x.boPhan.toLowerCase()));
+                    $.each(data_bp, function (index, item) {
+                        console.log(item)
+
+                        totalluongKhoanChiTrachart += item.luongKhoanChiTra;
+
+                        totalQuyKhoanDA += item.quyKhoanDA;
+                        totalQuyKhoanDaChiDA += item.quyKhoanDADaChi;
+                        totalQuyKhoanConLaiDA += item.quyKhoanDAConLai;
+                        totalLuongKhoanChiTra += item.luongKhoanChiTra;
+
+                        totalQKDA_temp += item.quyKhoanDA;
+                        totalQKDADaChi_temp += item.quyKhoanDADaChi;
+                        totalQKDAConLai_temp += item.quyKhoanDAConLai;
+
+                        DAduDK += item.listduAnDuDieuKien.length;
+                        soDA += item.listsoDuAn.length;
+                        DAamQuy += item.duAnDuongQuy;
+                        DAduongQuy += item.duAnAmQuy;
+                        quyKhoanAm += item.quyKhoanDAAm;
+                        quyKhoanDuong += item.quyKhoanDADuong;
+
+                        arrDonVi_DuAn.push({
+                            TenFisX: item.boPhan,
+                            TotalQK: totalQKDA_temp,
+                            TotalQKDC: totalQKDADaChi_temp,
+                            TotalQKCL: totalQKDAConLai_temp,
+                            LNBase: item.lNBase
+                        });
+
+                        arrLuongChiTra.push({
+                            fisX: item.boPhan,
+                            luongKhoanCT: totalluongKhoanChiTrachart
+                        });
+                    });
+                }
+            }
+        }
+    });
+
+    sortArray();
+
+    let lkct = convertSoTienThanhObject(totalLuongKhoanChiTra, 2);
+    $("#luong-khoan-chi-tra").html(lkct.soTien + "" + lkct.chuTat + "");
+
+    let qkda = convertSoTienThanhObject(totalQuyKhoanDA, 2);
+    $("#quy-khoan-DA").html(qkda.soTien + "" + qkda.chuTat + "");
+    let qkdcda = convertSoTienThanhObject(totalQuyKhoanDaChiDA, 2);
+    $("#quy-khoan-da-chi-DA").html(qkdcda.soTien + "" + qkdcda.chuTat + "");
+    let qkclda = convertSoTienThanhObject(totalQuyKhoanConLaiDA, 2);
+    $("#quy-khoan-con-lai-DA").html(qkclda.soTien + "" + qkclda.chuTat + "");
+    $("#DA-duong-quy").html(DAduongQuy);
+    let qkd = convertSoTienThanhObject(quyKhoanDuong, 2);
+    $("#quy-khoan-duong").html(qkd.soTien + "" + qkd.chuTat + "");
+    $("#DA-am-quy").html(DAamQuy);
+    let qka = convertSoTienThanhObject(quyKhoanAm, 2);
+    $("#quy-khoan-am").html(qka.soTien + "" + qka.chuTat + "");
+    $("#du-an-du-dk").html(DAduDK);
+    $("#du-an").html(soDA);
+
+    arrLuongChiTra.sort(function (a, b) {
+        return b.luongKhoanCT - a.luongKhoanCT;
+    });
+
+    drawLuongKhoanChiTraChart(arrLuongChiTra.map((v) => v.luongKhoanCT), arrLuongChiTra.map((v) => v.fisX));
+}
+
+//function lnBaseChart(){
+//    
+//    drawSumLoiNhuanBaseChart(lnbase.lNBaseKHHT, lnbase.lNBaseKHNam, lnbase.lNBaseTT);
+//}
+
+function sortArray() {
+    let typeSort = $("#sortChart").val();
+
+    arrDonVi_DuAn.sort(function (a, b) {
+        if (typeSort === "lnbase")
+        {
+            return b.LNBase - a.LNBase;
+        } else if (typeSort === "qk")
+        {
+            return b.TotalQK - a.TotalQK;
+        } else if (typeSort === "qkdc")
+        {
+            return b.TotalQKDC - a.TotalQKDC;
+        } else if (typeSort === "qkcl")
+        {
+            return b.TotalQKCL - a.TotalQKCL;
+        }
+    });
+    let arrDonVi = arrDonVi_DuAn.map((v) => v.TenFisX);
+
+    let quyKhoanList = arrDonVi_DuAn.map((v) => parseFloat(convertSoTienThanhTy(v.TotalQK)));
+    let quyKhoanDaChiList = arrDonVi_DuAn.map((v) => parseFloat(convertSoTienThanhTy(v.TotalQKDC)));
+    let quyKhoanConLaiList = arrDonVi_DuAn.map((v) => parseFloat(convertSoTienThanhTy(v.TotalQKCL)));
+    let lnBaseList = arrDonVi_DuAn.map((v) => parseFloat(convertSoTienThanhTy(v.LNBase)));
+    drawQuyKhoanTheoDonViChart(arrDonVi, lnBaseList, quyKhoanList, quyKhoanDaChiList, quyKhoanConLaiList);
+
+    $('#quyKhoanTheoDonViTable table tbody').empty();
+    for (var i = 0, max = arrDonVi.length; i < max; i++) {
+        var row2$ = $('<tr/>');
+        row2$.append($('<td/>').html(arrDonVi[i]));
+        row2$.append($('<td/>').html(lnBaseList[i] + " B"));
+        row2$.append($('<td/>').html(quyKhoanList[i] + " B"));
+        row2$.append($('<td/>').html(quyKhoanDaChiList[i] + " B"));
+        row2$.append($('<td/>').html(quyKhoanConLaiList[i] + " B"));
+        // row2$.append($('<tr/>'));
+        $('#quyKhoanTheoDonViTable table tbody').append(row2$);
+    }
+
+//    let arrDV_text = [];
+//    $('#thongTinDonVi option:selected').map(function (a, item) {
+//        arrDV_text.push(item.text);
+//        return null;
+//    });
+//    if (arrDV_text.length === 1) {
+//        arrDV_text = [];
+//        $('#thongTinBoPhan option:selected').map(function (a, item) {
+//            arrDV_text.push(item.text);
+//            return null;
+//        });
+//    }
+//    let data_filter = arrDV_text.filter(item => !arrDonVi.includes(item));
+//    $.each(data_filter, function (iBP, item) {
+//        var row3$ = $('<tr/>');
+//        row3$.append($('<td/>').html(item));
+//        row3$.append($('<td/>').html("-"));
+//        row3$.append($('<td/>').html("-"));
+//        row3$.append($('<td/>').html("-"));
+//        row3$.append($('<td/>').html("-"));
+//        // row2$.append($('<tr/>'));
+//        $('#quyKhoanTheoDonViTable table tbody').append(row3$);
+//    });
+}
+

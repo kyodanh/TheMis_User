@@ -1,0 +1,46 @@
+[
+    {
+        "actionName": "vuser_init",
+        "steps": [
+            {
+                "stepId": "STEP1",
+                "stepName": "Url: dang-nhap-test-perf",
+                "infFile": "t1.inf",
+                "time": 1616577374691
+            },
+            {
+                "stepId": "STEP2",
+                "stepName": "Custom Request: dang-nhap-demo",
+                "infFile": "t2.inf",
+                "time": 1616577375109
+            },
+            {
+                "stepId": "STEP3",
+                "stepName": "Url: bao-cao-nhan-vien",
+                "infFile": "t3.inf",
+                "time": 1616577377045
+            },
+            {
+                "stepId": "STEP4",
+                "stepName": "Custom Request: bao-cao-nhan-vien_2",
+                "infFile": "t4.inf",
+                "time": 1616577377133
+            },
+            {
+                "stepId": "STEP5",
+                "stepName": "Custom Request: check-eva",
+                "infFile": "t5.inf",
+                "time": 1616577437227
+            }
+        ],
+        "transactions": [
+            {
+                "transactionName": "login ",
+                "rawStartTime": 1616577374692,
+                "rawEndTime": 1616577437227,
+                "thinkTime": 0.0,
+                "wastedTime": 0.06151771545410156
+            }
+        ]
+    }
+]

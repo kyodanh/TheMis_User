@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="/assets/js/jquery-v3.5.1.js"></script>
+        <script src="/assets/js/user.js"></script>
+        <meta charset="UTF-8">
+
+        <link rel="icon" href="/assets/new/image/head-left.jpg" type="image/x-icon">
+        <title>
+            Đăng nhập
+        </title>
+    </head>
+    <body style="background-image: url('/assets/new/image/loginPageBackground.png');background-repeat:no-repeat;background-size:cover; margin: 0">
+        <img src="/assets/new/image/topBannerFptLogo.png" style="width: 205px; height: auto;display: block;margin-left: auto;margin-right: auto; margin-top:2%">
+        <hr style="border: none; height: 2px; color: #FFFFFF; background-color: #FFFFFF; opacity: 0.1;margin-left: 5%;margin-right: 5%;">
+
+        <div id="center-div" style="margin-top:8%;">
+            <img src="/assets/new/image/loginIcon.png" style="max-height: 200px; display: block;margin-left: auto;margin-right: auto;">
+            <input type="hidden" id="fptURL" value="https://adfs.fpt.com.vn/adfs/oauth2/authorize?client_id=FIS_PM_Khoan&response_type=code&response_mode=form_post&redirect_uri=https://themis.test.xplat.fpt.com.vn/">
+            <input type="button" value="Đăng nhập tài khoản" onclick="requestLogin()" style="display: block;margin-left: auto;margin-right: auto;margin-top: 50px; font-family: 'Roboto' , sans-serif; font-size: 16px; color: #000000; background: #FFFFFF; border-radius: 9px; border: none; width: 385px; height: 56px; font-weight: bold;"/> 
+        </div>
+    </body>
+</html> 

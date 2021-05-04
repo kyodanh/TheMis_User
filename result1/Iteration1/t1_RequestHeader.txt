@@ -1,0 +1,16 @@
+GET /dang-nhap-test-perf HTTP/1.1
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Dest: document
+sec-ch-ua: "Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Accept: */*
+Connection: Keep-Alive
+Host: themis.test.xplat.fpt.com.vn
+Cookie: adfs=1; sstk=630f2d6e-218a-46dc-a908-2fcb75c1b132-1616576349604; 921003f142e7cfc42fd106350b5b3d9e=6ef5a8f4485d2a17e81198c877602733
+

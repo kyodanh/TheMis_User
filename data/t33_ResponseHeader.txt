@@ -1,0 +1,20 @@
+HTTP/1.1 200 OK
+Expires: Sat, 01 Jan 2000 00:00:00 GMT
+Content-Type: application/json; charset=UTF-8
+facebook-api-version: v3.2
+x-fb-request-id: AVkkApFjUeqsjZ1XeQY9BYE
+Strict-Transport-Security: max-age=15552000; preload
+x-fb-trace-id: CKVa0IoVvjR
+x-fb-rev: 1003503469
+Cache-Control: private, no-cache, no-store, must-revalidate
+Pragma: no-cache
+x-fb-rlafr: 0
+cross-origin-resource-policy: cross-origin
+Access-Control-Allow-Origin: *
+X-FB-Debug: 5+H5LHBhhkMp/Nur1u+klSK7wlQL5gMwrXLkyLa1pnHV+ioDrWq+3YYvolHOJ97tiQeFzpB/K8Jg8vJJho/Wqw==
+Date: Wed, 24 Mar 2021 09:08:03 GMT
+Priority: u=3,i
+Alt-Svc: h3-29=":443"; ma=3600,h3-27=":443"; ma=3600
+Connection: keep-alive
+Content-Length: 64
+

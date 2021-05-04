@@ -1,0 +1,13 @@
+[t5]
+FileName1=t5.json
+URL1=https://themis.test.xplat.fpt.com.vn/data-rmis/check-eva
+Total=2
+RequestHeaderFile=t5_RequestHeader.txt
+RequestBodyFile=t5_RequestBody.txt
+ResponseHeaderFile=t5_ResponseHeader.txt
+ContentType=application/json
+SnapshotXmlFile=snapshot_5.xml
+FileName2=t5_fa-solid-900.html
+URL2=https://themis.test.xplat.fpt.com.vn/assets/new/webfonts/fa-solid-900.woff2
+[ProtocolInfo]
+ProtocolId=QTWeb

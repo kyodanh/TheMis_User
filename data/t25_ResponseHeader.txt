@@ -1,0 +1,25 @@
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+X-RoutingOfficeCluster: inc-000.reverseproxy.onenote.com
+X-RoutingOfficeFE: ReverseProxyFrontEnd_IN_1
+X-RoutingOfficeVersion: 16.0.13918.40456
+X-RoutingSessionId: ac61b5d0-7781-40ec-803b-eaa319792690
+X-RoutingCorrelationId: af08e060-9e78-4831-8666-422326d8bc92
+P3P: CP="CAO DSP COR ADMa DEV CONi TELi CUR PSA PSD TAI IVDi OUR SAMi BUS DEM NAV STA UNI COM INT PHY ONL FIN PUR"
+X-CorrelationId: af08e060-9e78-4831-8666-422326d8bc92
+X-UserSessionId: ac61b5d0-7781-40ec-803b-eaa319792690
+X-OfficeFE: SiteFrontEnd_IN_2
+X-OfficeVersion: 16.0.13907.40451
+X-OfficeCluster: inw-000.site.onenote.com
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+Content-Security-Policy: frame-ancestors 'self' teams.microsoft.com *.teams.microsoft.com *.teams.microsoft.us teams.microsoft.us *.teams.office.com *.skype.com outlook.office.com outlook-sdf.office.com outlook.office365.com outlook-sdf.office365.com outlook.live.com outlook-sdf.live.com
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff,nosniff
+X-AspNetMvc-Version: 5.2
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Cache-Control: public, max-age=753
+Date: Mon, 22 Mar 2021 10:39:21 GMT
+Content-Length: 1116
+Connection: keep-alive
+

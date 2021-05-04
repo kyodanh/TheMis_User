@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+Date: Wed, 24 Mar 2021 09:15:15 GMT
+Set-Cookie: _firo_crfs=1SeLzesWrXviUdCX9TcvFJ0kh1tgPHzDMeyIdTVYR2M8EP3Y8396_FQyVJNvsZ1xEE8=;Path=/;Domain=themis.test.xplat.fpt.com.vn;HttpOnly
+Expires: Thu, 01 Jan 1970 00:00:00 GMT
+x-frame-options: DENY
+X-XSS-Protection: 1; mode=block
+Content-Type: text/html;charset=utf-8
+Transfer-Encoding: chunked
+

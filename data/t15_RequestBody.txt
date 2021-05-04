@@ -1,0 +1,2 @@
+"{\"thongTinDonVi\":[\"0\",\"0\"],\"thongTinDonViText\":[\"FIS\",\"FIS\"],\"thongTinBoPhan\":[]"
+",\"thongTinKyKhoan\":\"5\"}"

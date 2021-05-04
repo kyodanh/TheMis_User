@@ -1,0 +1,11 @@
+[t46]
+FileName1=t46.html
+URL1=https://adfs.fpt.com.vn/adfs/oauth2/logout?post_logout_redirect_uri=https://themis.test.xplat.fpt.com.vn/&id_token_hint=null
+Total=1
+RequestHeaderFile=t46_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t46_ResponseHeader.txt
+ContentType=text/html
+SnapshotXmlFile=snapshot_46.xml
+[ProtocolInfo]
+ProtocolId=QTWeb

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="icon" href="/assets/new/image/head-left.jpg" type="image/x-icon">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> 
+        </title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="/assets/new/css/bootstrap.min.css">
+        <!-- jQuery library -->
+        <script src="/assets/js/jquery-v3.5.1.js"></script>
+        <script src="/assets/new/lib/moment.js" type="text/javascript"></script>
+        <!-- Popper JS -->
+        <script src="/assets/new/js/popper.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="/assets/new/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="/assets/new/font/Montserrat-full.css">
+        <link href="/assets/new/css/css2.css" rel="stylesheet">
+        <link href="/assets/new/css/all.css" rel="stylesheet">
+        <link rel="stylesheet" href="/assets/new/css/common.css">
+        <link rel="stylesheet" href="/assets/new/css/style.css">
+        <link rel="stylesheet" href="/assets/css/style.design.css">
+        <link rel="stylesheet" href="/assets/css/loader.css">
+        
+        <link rel='stylesheet' type='text/css' media='screen' href='/assets/new/css/newstyle/login.css'>
+        
+        <script src="/assets/js/common.js"></script>
+        <script src="/assets/js/pagination.js"></script>
+        <script> var contextPath = '';</script>
+    </head>
+    <body>
+        <div class="wrapper row mx-0" id="wrapper">
+            <div class="main-header w-100">
+                <nav class="navbar navbar-expand navbar-dark h-100 pl-0 main-header__nav pr-col-1">
+    <div class="navbar-brand p-0 m-0 col-xl-5 col-lg-8 col-md-10 col-9">
+        <img src="/assets/new/image/head-left.jpg" alt="Upper-left cornor" class="float-left mr-4" />
+        <p class="mb-0 text-st float-left d-none d-md-block">PHẦN MỀM TÍNH KHOÁN</p>
+        <p class="mb-0 mt-1 text-nd float-left d-none d-md-block">Theo dõi khoán tình hình tính khoán đơn vị
+            & bộ phận</p>
+    </div>
+    <div class="collapse navbar-collapse col-xl-7 col-lg-4 col-md-2 col-3 px-0 main-header__account"
+         id="navbarSupportedContentAW">
+        <ul class="navbar-nav mr-auto d-none d-sm-block">
+        </ul>
+        <div class="dropdown main-header__dropdown">
+            <div class="dropdown__main" data-toggle="dropdown">
+                <div class="user-avatar float-left"></div>
+                <p class="float-right ml-3 mb-0 d-none d-lg-block text-light dropdown-toggle">
+                    danhnc14 (FIS)                
+                </p>
+            </div>
+            <div class="dropdown-menu">
+                <a class="dropdown-item selected-role 41742 " href="/phan-quyen/chuyen-tai-khoan/41742" style="text-align: right">
+                    HR 
+                    (FIS)                </a>                    
+                <a class="dropdown-item  41742 " href="/phan-quyen/chuyen-tai-khoan/41744" style="text-align: right">
+                    QL KD + DV + SX 
+                    (FIS BANK)                </a>                    
+                <a class="dropdown-item  41742 " href="/phan-quyen/chuyen-tai-khoan/41743" style="text-align: right">
+                    Tính khoán sản xuất 
+                    (FIS GMC)                </a>                    
+                <hr>
+                <a class="dropdown-item" href="/dang-xuat" style="text-align: right">Đăng xuất</a>
+            </div>
+        </div>
+    </div>
+    <img src="/assets/new/image/h-right.jpg" alt="Upper-right cornor" class="head-right" />
+</nav>
+            </div>
+            <!-- ******************************************************************************************************** -->
+            <div class="row mx-0 w-100 main-body position-relative">
+                <div class="col-12 main-body__content_login px-0">
+                    <div class="col-12 px-0 content__body">
+                        <div class="wrapper_login">
+    <div class="row m-0 full-div--img">
+        <div class="div-center">
+            <h3 class="text--login text-light">Phần mềm tính khoán</h3>
+            <input type="text" id="user" class="form-control">
+            <br>
+            <button class="btn btn--login text-light" onclick="requestLogin()">
+                <p class="my-0 d-inline-flex"><i class="fas fa-sign-in-alt mr-4 icon--sign-in"></i><span class="">Đăng nhập</span></p>
+            </button>
+        </div>
+    </div> 
+</div>
+<script src="/assets/js/jquery-v3.5.1.js"></script>
+<script src="/assets/js/user_1.js"></script>
+                    </div>
+                </div>
+            </div>
+            <!-- ******************************************************************************************************** -->
+            <div class="w-100 position-relative main-footer">
+                <div class="position--center">
+                    <img src="/assets/new/image/logoFPT.png" class="float-left" alt="Logo FPT"/>
+                    <p class="mb-0 mt-1 text-light float-left font-weight-bold ml-3 main-footer__text">Công ty TNHH hệ thống thông tin FPT</p>
+                </div>
+            </div>
+        </div>        
+        <div id="loading-site">
+            <div class="loader">
+                <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            </div>
+        </div>
+        <div id="xemDuLieuModalTag"></div>
+    </body>
+    <script src="/assets/new/js/main.js"></script>
+    <script type="text/javascript" src="/assets/new/js/loader.js"></script>
+    <script type="text/javascript" src="/assets/new/js/xlsx.min.js"></script>
+    <script type="text/javascript" src="/assets/new/js/xlsx.core.js"></script>
+    <script type="text/javascript" src="/assets/new/js/sweetalert.js"></script>
+</html>

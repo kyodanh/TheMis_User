@@ -1,0 +1,18 @@
+POST https://themis.test.xplat.fpt.com.vn/bang-khoan-kinh-doanh/tim-kiem-bcld HTTP/1.1
+sec-ch-ua: "Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"
+Accept: */*
+X-Requested-With: XMLHttpRequest
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Origin: https://themis.test.xplat.fpt.com.vn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://themis.test.xplat.fpt.com.vn/quan-ly/bcld-kkhoan
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: adfs=1; _firo_crfs=kYV_5joAf5Rr2yvZTSNTOeky_7pIZZpCDFQYHa3k-MB7SaIAkdCEX4q9mbavC4zo4es=; 921003f142e7cfc42fd106350b5b3d9e=6ef5a8f4485d2a17e81198c877602733; sstk=8878ab00-7945-4cf8-9c8c-0eced9b682b8-1616409194834
+Host: themis.test.xplat.fpt.com.vn
+Content-Length: 283
+

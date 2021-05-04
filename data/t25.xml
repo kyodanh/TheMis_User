@@ -1,0 +1,21 @@
+<tile>
+	<visual version="1" lang="en-US" arguments="action=tileClicked&amp;name=Visual_1_0_1">
+		<binding template="TileMedium" branding="nameAndLogo" arguments="action=tileMediumClicked&amp;name=MediumTile_1_0_1">
+			<image placement="peek" src="https://site-cdn.onenote.net/161390740451_Images/LiveTileImages/MediumAndLarge/Image1.png" />
+			<text>Jot notes</text>
+			<text hint-style="captionsubtle" hint-wrap="true">Type, write, or draw your ideas and notes</text>
+		</binding>
+		<binding template="TileWide" branding="nameAndLogo" arguments="action=tileWideClicked&amp;name=WideTile_1_0_1">
+			<image placement="peek" src="https://site-cdn.onenote.net/161390740451_Images/LiveTileImages/Wide/Image1.png" />
+			<group>
+				<subgroup hint-weight="1">
+					<image src="https://site-cdn.onenote.net/161390740451_Images/LiveTileImages/Small/Image1.png" />
+				</subgroup>
+				<subgroup hint-weight="3">
+					<text>Jot notes</text>
+					<text hint-style="captionsubtle" hint-wrap="true">Type, write, or draw your ideas and notes</text>
+				</subgroup>
+			</group>
+		</binding>
+	</visual>
+</tile>

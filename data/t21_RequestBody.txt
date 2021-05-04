@@ -1,0 +1,4 @@
+"{\"searchString\":\"\",\"limit\":10,\"pageNum\":1,\"advance\":{\"listFis\":[\"FIS BANK\",\"FIS"
+" CA\",\"FIS ENT\",\"FIS ERP\",\"FIS ERPHCM\",\"FIS FPS\",\"FIS FSB\",\"FIS FTS\",\"FIS GMC\",\""
+"FIS OBC\",\"FIS SRV\"],\"bangKhoan\":\"BCLD_DA\",\"fisX\":\"0\",\"ttbp\":\"0\",\"namTinhKhoan\""
+":\"2021\",\"typeSort\":\"\",\"valueSort\":\"\"}}"

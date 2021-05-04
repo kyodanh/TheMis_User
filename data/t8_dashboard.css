@@ -1,0 +1,200 @@
+.summary-container {
+    float: left;
+    margin-right: 25px;
+}
+
+.big-summary-container {
+    margin-right: 0;
+}
+
+.medium-summary-container {
+}
+
+.summary-container table {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    padding: 0 20px 0 20px;
+    font-size: 14px;
+}
+
+.circle-content {
+    border-radius: 50%;
+    height: 130px;
+    width: 200px;
+    margin: 30px auto 0 auto;
+    position: relative;
+}
+
+.circle-number-content {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.table-below-circle-content td {
+    padding: 15px 2px 15px 2px;
+}
+
+.table-below-circle-content .table-below-circle-content-first-column{
+    width: 70%;
+}
+
+.table-below-circle-content .table-below-circle-content-first-row{
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.table-below-circle-content .table-below-circle-content-second-column{
+    width: 30%;
+    text-align: right;
+}
+
+.sum-number {
+    color: #597EF7;
+    font-weight: bold;
+    font-size: 30px;
+    margin: 23px 0 0 20px;
+}
+
+.sum-number-title-container {
+    margin: 5px 0 0 20px;
+    border-bottom: 4px solid #F5F5F5;
+    padding-bottom: 15px;
+}
+
+.sum-number-title {
+    color: #597EF7;
+    font-size: 16px;
+    padding-bottom: 15px;
+    border-bottom: 4px solid #597EF7;
+    display: inline;
+}
+
+.table-below-sum-number td {
+    padding: 12px 2px 12px 2px;
+}
+
+.table-below-sum-number .table-below-sum-number-first-column{
+    width: 25%;
+}
+
+.table-below-sum-number .table-below-sum-number-second-column{
+    width: 25%;
+}
+.table-below-sum-number .table-below-sum-number-third-column{
+    width: 25%;
+}
+.table-below-sum-number .table-below-sum-number-fourth-column{
+    width: 25%;
+}
+
+.table-below-sum-number .table-below-sum-number-first-row{
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.table-below-sum-number .table-below-sum-number-second-row{
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.multiselect .multiselect-selected-text{
+    position: relative;
+}
+
+.multiselect .multiselect-selected-text .numberChoo{
+    background: #557EF7;
+    color: white;
+    width: 20px;
+    border-radius: 20px;
+    height: 20px;
+    display: inline-block;
+}
+
+.multiselect-item .input-group .input-group-addon{
+    position: absolute;
+    width: 20px;
+    height: 34px;
+    background: none;
+    z-index: 999;
+    border: none;
+}
+
+.multiselect-item .input-group .input-group-addon .glyphicon{
+    top: 4px;
+}
+
+.multiselect-item .input-group .multiselect-search{
+    padding-left: 30px;
+}
+
+.table-below-sum-number thead td{
+    text-align: center;
+}
+
+.loading-default{
+    text-align: center;
+    position: relative;
+}
+
+.loading-default .spin-default{
+    font-size: 1rem;
+    top: 30%;
+    position: absolute;
+}
+
+.loadDefaultLarge .spin-default{
+    font-size: 3rem;
+}
+
+.loadDefaultMedium .spin-default{
+    font-size: 2.5rem;
+    margin-top: -18px;
+    left: 37%;
+}
+
+.table>tbody>tr:first-child>td{
+    border-top: none;
+}
+
+.circle-number-content p{
+    text-align: center;
+}
+
+.circle-number-content span{
+    display: block;
+}
+
+#quyKhoanTheoDonViTable table tbody td{
+    text-align: right;
+}
+#quyKhoanTheoDonViTable table thead th{
+    text-align: right;
+}
+
+#quyKhoanTheoDonViTable table tbody tr td:first-child{
+    text-align: left;
+}
+#quyKhoanTheoDonViTable table thead tr th:first-child{
+    text-align: left;
+}
+
+.table-below-sum-number tr td {
+    text-align: right;
+}
+
+.table-below-sum-number tr td:first-child {
+    text-align: left;
+}
+
+.table-below-sum-number thead td {
+    text-align: right;
+}
+
+.table-below-sum-number thead td:first-child {
+    text-align: left;
+}

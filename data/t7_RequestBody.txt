@@ -1,0 +1,3 @@
+"{\"searchString\":\"\",\"limit\":10,\"pageNum\":1,\"advance\":{\"thongTinNam\":\"2021\",\"thon"
+"gTinKyTinh\":\"5\",\"loaiTinh\":\"san-xuat\",\"sort\":{\"sortSanXuat\":[],\"sortKinhDoanhNT\":"
+"[],\"sortKinhDoanhNN\":[]}}}"

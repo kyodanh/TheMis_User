@@ -1,0 +1,15 @@
+[t21]
+FileName1=t21.json
+URL1=https://themis.test.xplat.fpt.com.vn/bang-khoan-san-xuat/tim-kiem-bcld
+Total=3
+RequestHeaderFile=t21_RequestHeader.txt
+RequestBodyFile=t21_RequestBody.txt
+ResponseHeaderFile=t21_ResponseHeader.txt
+ContentType=application/json
+SnapshotXmlFile=snapshot_21.xml
+FileName2=t21_fa-solid-900.html
+URL2=https://themis.test.xplat.fpt.com.vn/assets/new/webfonts/fa-solid-900.woff2
+FileName3=t21_noData.png
+URL3=https://themis.test.xplat.fpt.com.vn/assets/image/version2/noData.png
+[ProtocolInfo]
+ProtocolId=QTWeb

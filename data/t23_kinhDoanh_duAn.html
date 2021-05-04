@@ -1,0 +1,1065 @@
+$(function () {
+    $(window).resize(function () {
+        // need to do twice to render
+        positioningContainer();
+        positioningContainer();
+    });
+
+    $(window).resize();
+});
+
+// function fired when expand-retract user-section
+function relocateSummaryDiagramDiv() {
+    positioningContainer();
+    positioningContainer();
+}
+
+function positioningContainer() {
+    var bodyContentWidth = $('#body-content').width();
+
+    if (bodyContentWidth >= 1050) {
+        $('.summary-container.medium-third').css({
+            'width': (bodyContentWidth - 650) + 'px'
+        });
+
+        $('.summary-container.small-third').css({
+            'width': '300px',
+            'margin-left': '25px'
+        });
+    } else {
+        $('.summary-container.medium-third').css({
+            'width': bodyContentWidth + 'px'
+        });
+
+        $('.summary-container.small-third').css({
+            'width': (bodyContentWidth - 26) / 2 + 'px',
+            'margin-left': '25px'
+        });
+
+        $('.summary-container.small-third.first-small-third').css({
+            'margin-left': '0'
+        });
+    }
+}
+
+function drawSumLoiNhuanBaseChart(loiNhuanBaseKHHienTai, loiNhuanBaseKHCaNam, loiNhuanBaseThucTe) {
+    $("div#sumLoiNhuanBaseChart").html("");
+    if (loiNhuanBaseKHCaNam !== 0) {
+        var step = getMinStepForGaugeChart_Billion(loiNhuanBaseKHCaNam, loiNhuanBaseKHHienTai, loiNhuanBaseThucTe);
+        var displayMaxValue = getValueToDisplayMaxGaugeChart_Billion(loiNhuanBaseKHCaNam, step);
+        var displayFirstRingValue = getValueToDisplayFirstRingGaugeChart_Billion(loiNhuanBaseKHCaNam, loiNhuanBaseKHHienTai, loiNhuanBaseThucTe, step);
+
+        zingchart.render({
+            id: 'sumLoiNhuanBaseChart',
+            data: {
+                type: 'gauge',
+                globals: {
+                    'font-family': "Roboto, sans-serif",
+                    fontSize: '12px'
+                },
+                title: {
+                    "text": "Lợi nhuận Base",
+                    "position": "0% 95%",
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                },
+                scale: {
+                    'size-factor': "170%" //Modify your gauge chart size.
+                },
+                plot: {
+                    valueBox: {
+                        placement: 'tip',
+                        rules: [
+                            {
+                                rule: '%v == ' + displayFirstRingValue + " && %v != " + step,
+                                text: loiNhuanBaseKHHienTai + " B",
+                                color: "#595959",
+                                offsetY: '-15px'
+                            },
+                            {
+                                rule: '%v == ' + displayMaxValue + " && %v != " + step,
+                                text: loiNhuanBaseKHCaNam + " B",
+                                offsetY: '15px',
+                                offsetX: getOffsetXForMaxGaugeChart_Billion(loiNhuanBaseKHCaNam)
+                            },
+                            {
+                                rule: '%v == ' + step,
+                                text: ''
+                            },
+                            {
+                                rule: '%v == -1',
+                                text: '0',
+                                offsetY: '15px',
+                                offsetX: '20px'
+                            },
+                            {
+                                rule: '%v == ' + loiNhuanBaseThucTe,
+                                text: loiNhuanBaseThucTe + " B",
+                                offsetY: '-15px'
+                            }
+                        ]
+                    },
+                    size: '100%',
+                    tooltip: {
+                        visible: false
+                    }
+                },
+                plotarea: {
+                    marginTop: '110px'
+                },
+                scaleR: {
+                    aperture: 180,
+                    center: {
+                        visible: false
+                    },
+                    item: {
+                        'font-size': 0
+                    },
+                    maxValue: displayMaxValue,
+                    minValue: 0,
+                    ring: {
+                        rules: [{
+                                backgroundColor: '#597EF7',
+                                rule: '%v >= 0 && %v <= ' + displayFirstRingValue
+                            },
+                            {
+                                backgroundColor: '#D6E4FF',
+                                rule: '%v >= ' + displayFirstRingValue + ' && %v <= ' + displayMaxValue
+                            }
+                        ],
+                        size: '40'
+                    },
+                    step: step,
+                    tick: {
+                        visible: false
+                    }
+                },
+                series: [
+                    {
+                        backgroundColor: '#597EF7',
+                        text: "KH đến hiện tại"
+                    }
+                    ,
+                    {
+                        backgroundColor: '#D6E4FF',
+                        text: "Kế hoạch cả năm"
+                    },
+                    {
+                        indicator: [10, 0, 0, 0, 0],
+                        values: [loiNhuanBaseThucTe], // starting value
+                        csize: "3%", //Needle Width
+                        size: "40%", //Needle Length
+                        'background-color': "#FF4D4F", //Needle Color
+                        legendItem: {
+                            visible: false
+                        }
+                    },
+                    {
+                        values: [displayFirstRingValue],
+                        csize: "1%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [-1], // starting value
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [displayMaxValue],
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }
+
+                ]
+                ,
+                legend: {
+                    border: 'none',
+                    layout: " 1x2", //row x column
+                    align: "left",
+                    "vertical-align": "top",
+                    toggleAction: 'none',
+                    item: {
+                        'font-family': "Roboto, sans-serif",
+                        'font-size': "12px",
+                        color: "#595959"
+                    },
+                    marker: {
+                        type: 'circle'
+                    },
+                    offsetX: '-2px',
+                    offsetY: '-10px'
+                }
+            },
+            height: '100%',
+            width: '100%'
+        });
+
+    } else {
+        zingchart.render({
+            id: 'sumLoiNhuanBaseChart',
+            data: {
+                type: 'gauge',
+                globals: {
+                    'font-family': "Roboto, sans-serif",
+                    fontSize: '12px'
+                },
+                title: {
+                    "text": "Lợi nhuận Base ",
+                    "position": "0% 95%",
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                },
+                scale: {
+                    'size-factor': "170%" //Modify your gauge chart size.
+                },
+                plot: {
+                    valueBox: {
+                        placement: 'tip',
+                        rules: [
+                            {
+                                //rule: '%v == ' + displayFirstRingValue + " && %v != " + step,
+                                text: loiNhuanBaseKHHienTai + " B",
+                                color: "#595959",
+                                offsetY: '0px'
+                            },
+                            {
+                                //rule: '%v == ' + displayMaxValue + " && %v != " + step,
+                                text: loiNhuanBaseKHCaNam + " B",
+                                offsetY: '15px',
+                                //offsetX: getOffsetXForMaxGaugeChart_Billion(loiNhuanBaseKHCaNam)
+                            },
+                            {
+                                rule: '%v == ' + step,
+                                text: ''
+                            },
+                            {
+                                rule: '%v == -1',
+                                text: '0',
+                                offsetY: '15px',
+                                offsetX: '20px'
+                            },
+                            {
+                                //rule: '%v == ' + loiNhuanBaseThucTe,
+                                text: loiNhuanBaseThucTe + " B",
+                                offsetY: '-15px'
+                            }
+                        ]
+                    },
+                    size: '100%',
+                    tooltip: {
+                        visible: false
+                    }
+                },
+                plotarea: {
+                    marginTop: '110px'
+                },
+                scaleR: {
+                    aperture: 180,
+                    center: {
+                        visible: false
+                    },
+                    item: {
+                        'font-size': 0
+                    },
+                    maxValue: displayMaxValue,
+                    minValue: 0,
+                    ring: {
+                        rules: [{
+                                backgroundColor: '#597EF7',
+                                rule: '%v >= 0 && %v <= ' + displayFirstRingValue
+                            },
+                            {
+                                backgroundColor: '#D6E4FF',
+                                rule: '%v >= ' + displayFirstRingValue + ' && %v <= ' + displayMaxValue
+                            }
+                        ],
+                        size: '40'
+                    },
+                    step: step,
+                    tick: {
+                        visible: false
+                    }
+                },
+                series: [
+                    {
+                        backgroundColor: '#597EF7',
+                        text: "KH đến hiện tại"
+                    }
+                    ,
+                    {
+                        backgroundColor: '#D6E4FF',
+                        text: "Kế hoạch cả năm"
+                    },
+                    {
+                        indicator: [10, 0, 0, 0, 0],
+                        values: [loiNhuanBaseThucTe], // starting value
+                        csize: "3%", //Needle Width
+                        size: "40%", //Needle Length
+                        'background-color': "#FF4D4F", //Needle Color
+                        legendItem: {
+                            visible: false
+                        }
+                    },
+                    {
+                        values: [displayFirstRingValue],
+                        csize: "1%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [-1], // starting value
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [displayMaxValue],
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }
+
+                ]
+                ,
+                legend: {
+                    border: 'none',
+                    layout: " 1x2", //row x column
+                    align: "left",
+                    "vertical-align": "top",
+                    toggleAction: 'none',
+                    item: {
+                        'font-family': "Roboto, sans-serif",
+                        'font-size': "12px",
+                        color: "#595959"
+                    },
+                    marker: {
+                        type: 'circle'
+                    },
+                    offsetX: '-2px',
+                    offsetY: '-10px'
+                }
+            },
+            height: '100%',
+            width: '100%'
+        });
+
+    }
+}
+
+function drawSumLoiNhuanBaseChart_KD(loiNhuanBaseKHHienTai, loiNhuanBaseKHCaNam, loiNhuanBaseThucTe) {
+    $("div#sumLoiNhuanBaseChart").html("");
+    if (loiNhuanBaseKHHienTai > ((loiNhuanBaseKHCaNam * 9) / 10) && loiNhuanBaseKHCaNam!==0) {
+        var step = getMinStepForGaugeChart_Billion(loiNhuanBaseKHCaNam, loiNhuanBaseKHHienTai, loiNhuanBaseThucTe);
+        var displayMaxValue = getValueToDisplayMaxGaugeChart_Billion(loiNhuanBaseKHCaNam, step);
+        var displayFirstRingValue = getValueToDisplayFirstRingGaugeChart_Billion(loiNhuanBaseKHCaNam, loiNhuanBaseKHHienTai, loiNhuanBaseThucTe, step);
+        zingchart.render({
+            id: 'sumLoiNhuanBaseChart',
+            data: {
+                type: 'gauge',
+                globals: {
+                    'font-family': "Roboto, sans-serif",
+                    fontSize: '12px'
+                },
+                title: {
+                    "text": "Lợi nhuận Base (Billions)",
+                    "position": "0% 95%",
+                    "offset-y": 15,
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                },
+                scale: {
+                    'size-factor': "170%" //Modify your gauge chart size.
+                },
+                plot: {
+                    valueBox: {
+                        placement: 'tip',
+                        rules: [
+                            {
+                                rule: '%v == ' + displayFirstRingValue + " && %v != " + step,
+                                text: loiNhuanBaseKHHienTai.toFixed(2) + " B",
+                                color: "#597EF7",
+                                placement: 'center',
+                                offsetY: '30px',
+                                offsetX: '80px'
+                            },
+                            {
+                                rule: '%v == ' + displayMaxValue + " && %v != " + step,
+                                text: loiNhuanBaseKHCaNam.toFixed(2) + " B",
+                                offsetY: '15px',
+                                offsetX: getOffsetXForMaxGaugeChart_Billion(loiNhuanBaseKHCaNam),
+                                placement: 'tip',
+                                color: "#96B8FD",
+                            },
+                            {
+                                rule: '%v == ' + step,
+                                text: ''
+                            },
+                            {
+                                rule: '%v == -1',
+                                text: '0',
+                                offsetY: '15px',
+                                offsetX: '20px'
+                            }
+                        ]
+                    },
+                    size: '100%',
+                    tooltip: {
+                        visible: false
+                    }
+                },
+                plotarea: {
+                    marginTop: '110px'
+                },
+                scaleR: {
+                    aperture: 180,
+                    center: {
+                        visible: false
+                    },
+                    item: {
+                        'font-size': 0
+                    },
+                    maxValue: displayMaxValue,
+                    minValue: 0,
+                    ring: {
+                        rules: [{
+                                backgroundColor: '#597EF7',
+                                rule: '%v >= 0 && %v <= ' + displayFirstRingValue
+                            },
+                            {
+                                backgroundColor: '#96B8FD',
+                                rule: '%v >= ' + displayFirstRingValue + ' && %v <= ' + displayMaxValue
+                            }
+                        ],
+                        size: '40'
+                    },
+                    step: step,
+                    tick: {
+                        visible: false
+                    }
+                },
+                series: [
+                    {
+                        backgroundColor: '#597EF7',
+                        text: "Kế hoạch thực tế"
+                    }
+                    ,
+                    {
+                        backgroundColor: '#96B8FD',
+                        text: "Kế hoạch cả năm"
+                    },
+                    {
+                        indicator: [10, 0, 0, 0, 0],
+                        values: [loiNhuanBaseThucTe], // starting value
+                        csize: "3%", //Needle Width
+                        size: "40%", //Needle Length
+                        'background-color': "#FF4D4F", //Needle Color
+                        visible: false,
+                        legendItem: {
+                            visible: false
+                        }
+                    },
+                    {
+                        values: [displayFirstRingValue],
+                        csize: "1%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [-1], // starting value
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [displayMaxValue],
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }
+
+                ]
+                ,
+                legend: {
+                    border: 'none',
+                    layout: " 1x2", //row x column
+                    align: "left",
+                    "vertical-align": "top",
+                    toggleAction: 'none',
+                    item: {
+                        'font-family': "Roboto, sans-serif",
+                        'font-size': "12px",
+                        color: "#595959"
+                    },
+                    marker: {
+                        type: 'circle'
+                    },
+                    offsetX: '-2px',
+                    offsetY: '-10px'
+                }
+            },
+            height: '100%',
+            width: '100%'
+        });
+    } else if (loiNhuanBaseKHCaNam !== 0) {
+        var step = getMinStepForGaugeChart_Billion(loiNhuanBaseKHCaNam, loiNhuanBaseKHHienTai, loiNhuanBaseThucTe);
+        var displayMaxValue = getValueToDisplayMaxGaugeChart_Billion(loiNhuanBaseKHCaNam, step);
+        var displayFirstRingValue = getValueToDisplayFirstRingGaugeChart_Billion(loiNhuanBaseKHCaNam, loiNhuanBaseKHHienTai, loiNhuanBaseThucTe, step);
+        zingchart.render({
+            id: 'sumLoiNhuanBaseChart',
+            data: {
+                type: 'gauge',
+                globals: {
+                    'font-family': "Roboto, sans-serif",
+                    fontSize: '12px'
+                },
+                title: {
+                    "text": "Lợi nhuận Base (Billions)",
+                    "position": "0% 95%",
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                },
+                scale: {
+                    'size-factor': "170%" //Modify your gauge chart size.
+                },
+                plot: {
+                    valueBox: {
+                        placement: 'tip',
+                        rules: [
+                            {
+                                rule: '%v == ' + displayFirstRingValue + " && %v != " + step,
+                                text: loiNhuanBaseKHHienTai.toFixed(2) + " B",
+                                color: "#597EF7",
+                                offsetY: '-15px'
+                            },
+                            {
+                                rule: '%v == ' + displayMaxValue + " && %v != " + step,
+                                text: loiNhuanBaseKHCaNam.toFixed(2) + " B",
+                                offsetY: '15px',
+                                offsetX: getOffsetXForMaxGaugeChart_Billion(loiNhuanBaseKHCaNam),
+                                color: "#96B8FD"
+                            },
+                            {
+                                rule: '%v == ' + step,
+                                text: ''
+                            },
+                            {
+                                rule: '%v == -1',
+                                text: '0',
+                                offsetY: '15px',
+                                offsetX: '20px'
+                            },
+                            {
+                                rule: '%v == ' + loiNhuanBaseThucTe,
+                                text: loiNhuanBaseThucTe.toFixed(2),
+                                offsetY: '-15px'
+                            }
+                        ]
+                    },
+                    size: '100%',
+                    tooltip: {
+                        visible: false
+                    }
+                },
+                plotarea: {
+                    marginTop: '110px'
+                },
+                scaleR: {
+                    aperture: 180,
+                    center: {
+                        visible: false
+                    },
+                    item: {
+                        'font-size': 0
+                    },
+                    maxValue: displayMaxValue,
+                    minValue: 0,
+                    ring: {
+                        rules: [{
+                                backgroundColor: '#597EF7',
+                                rule: '%v >= 0 && %v <= ' + displayFirstRingValue
+                            },
+                            {
+                                backgroundColor: '#96B8FD',
+                                rule: '%v >= ' + displayFirstRingValue + ' && %v <= ' + displayMaxValue
+                            }
+                        ],
+                        size: '40'
+                    },
+                    step: step,
+                    tick: {
+                        visible: false
+                    }
+                },
+                series: [
+                    {
+                        backgroundColor: '#597EF7',
+                        text: "Kế hoạch thực tế"
+                    }
+                    ,
+                    {
+                        backgroundColor: '#96B8FD',
+                        text: "Kế hoạch cả năm"
+                    },
+                    {
+                        indicator: [10, 0, 0, 0, 0],
+                        values: [loiNhuanBaseThucTe], // starting value
+                        csize: "3%", //Needle Width
+                        size: "40%", //Needle Length
+                        'background-color': "#FF4D4F", //Needle Color
+                        visible: false,
+                        legendItem: {
+                            visible: false
+                        }
+                    },
+                    {
+                        values: [displayFirstRingValue],
+                        csize: "1%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [-1], // starting value
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [displayMaxValue],
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }
+
+                ]
+                ,
+                legend: {
+                    border: 'none',
+                    layout: " 1x2", //row x column
+                    align: "left",
+                    "vertical-align": "top",
+                    toggleAction: 'none',
+                    item: {
+                        'font-family': "Roboto, sans-serif",
+                        'font-size': "12px",
+                        color: "#595959"
+                    },
+                    marker: {
+                        type: 'circle'
+                    },
+                    offsetX: '-2px',
+                    offsetY: '-10px'
+                }
+            },
+            height: '100%',
+            width: '100%'
+        });
+
+    } else {
+        zingchart.render({
+            id: 'sumLoiNhuanBaseChart',
+            data: {
+                type: 'gauge',
+                globals: {
+                    'font-family': "Roboto, sans-serif",
+                    fontSize: '12px'
+                },
+                title: {
+                    "text": "Lợi nhuận Base (Billions)",
+                    "position": "0% 95%",
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                },
+                scale: {
+                    'size-factor': "170%" //Modify your gauge chart size.
+                },
+                plot: {
+                    valueBox: {
+                        placement: 'tip',
+                        rules: [
+                            {
+                                //rule: '%v == ' + displayFirstRingValue + " && %v != " + step,
+                                text: loiNhuanBaseKHHienTai + " B",
+                                color: "#595959",
+                                offsetY: '-15px'
+                            },
+                            {
+                                //rule: '%v == ' + displayMaxValue + " && %v != " + step,
+                                text: loiNhuanBaseKHCaNam + " B",
+                                offsetY: '15px',
+                                //offsetX: getOffsetXForMaxGaugeChart_Billion(loiNhuanBaseKHCaNam)
+                            },
+                            {
+                                rule: '%v == ' + step,
+                                text: ''
+                            },
+                            {
+                                rule: '%v == -1',
+                                text: '0',
+                                offsetY: '15px',
+                                offsetX: '20px'
+                            },
+                            {
+                                //rule: '%v == ' + loiNhuanBaseThucTe,
+                                text: loiNhuanBaseThucTe,
+                                offsetY: '-15px'
+                            }
+                        ]
+                    },
+                    size: '100%',
+                    tooltip: {
+                        visible: false
+                    }
+                },
+                plotarea: {
+                    marginTop: '110px'
+                },
+                scaleR: {
+                    aperture: 180,
+                    center: {
+                        visible: false
+                    },
+                    item: {
+                        'font-size': 0
+                    },
+                    maxValue: displayMaxValue,
+                    minValue: 0,
+                    ring: {
+                        rules: [{
+                                backgroundColor: '#597EF7',
+                                rule: '%v >= 0 && %v <= ' + displayFirstRingValue
+                            },
+                            {
+                                backgroundColor: '#D6E4FF',
+                                rule: '%v >= ' + displayFirstRingValue + ' && %v <= ' + displayMaxValue
+                            }
+                        ],
+                        size: '40'
+                    },
+                    step: step,
+                    tick: {
+                        visible: false
+                    }
+                },
+                series: [
+                    {
+                        backgroundColor: '#597EF7',
+                        text: "Kế hoạch thực tế"
+                    }
+                    ,
+                    {
+                        backgroundColor: '#D6E4FF',
+                        text: "Kế hoạch cả năm"
+                    },
+                    {
+                        indicator: [10, 0, 0, 0, 0],
+                        values: [loiNhuanBaseThucTe], // starting value
+                        csize: "3%", //Needle Width
+                        size: "40%", //Needle Length
+                        'background-color': "#FF4D4F", //Needle Color
+                        visible: false,
+                        legendItem: {
+                            visible: false
+                        }
+                    },
+                    {
+                        values: [displayFirstRingValue],
+                        csize: "1%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [-1], // starting value
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [displayMaxValue],
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }
+
+                ]
+                ,
+                legend: {
+                    border: 'none',
+                    layout: " 1x2", //row x column
+                    align: "left",
+                    "vertical-align": "top",
+                    toggleAction: 'none',
+                    item: {
+                        'font-family': "Roboto, sans-serif",
+                        'font-size': "12px",
+                        color: "#595959"
+                    },
+                    marker: {
+                        type: 'circle'
+                    },
+                    offsetX: '-2px',
+                    offsetY: '-10px'
+                }
+            },
+            height: '100%',
+            width: '100%'
+        });
+
+    }
+}
+
+
+
+function drawQuyKhoanTheoDonViChart(tenDonViList, lnBaseList, quyKhoanList, quyKhoanDaChiList, quyKhoanConLaiList) {
+//    console.log(tenDonViList);
+//    console.log(lnBaseList);
+//    console.log(quyKhoanList);
+//    console.log(quyKhoanDaChiList);
+//    console.log(quyKhoanConLaiList);
+//    lnBaseList = lnBaseList.map(x=>parseFloat(x));
+//    quyKhoanList = quyKhoanList.map(x=>parseFloat(x));
+//    quyKhoanDaChiList = quyKhoanDaChiList.map(x=>parseFloat(x));
+//    quyKhoanConLaiList = quyKhoanConLaiList.map(x=>parseFloat(x));
+    $("#quyKhoanTheoDonViChart").html("");
+    var LNBaseChart = [];
+    for (var i = 0; i < lnBaseList.length; i++) {
+        LNBaseChart[i] = "LNBase: " + lnBaseList[i];
+    }
+    ;
+    zingchart.render({
+        id: 'quyKhoanTheoDonViChart',
+        data: {
+            type: 'bar',
+            plotarea: {
+                "margin": "40px dynamic dynamic dynamic"
+            },
+            "plot": {
+                "bars-space-left": 0.15,
+                "bars-space-right": 0.15,
+                "bar-space": "0px",
+                "bar-width": "15px"
+            },
+            globals: {
+                'font-family': "Roboto, sans-serif",
+                fontSize: '12px'
+            },
+            "scale-y": {
+                "line-width": "0",
+                "item": {
+                    "font-color": "#8C8C8C"
+                },
+                "label": {
+                    "text": "Billions",
+                    "font-family": "arial",
+                    "bold": true,
+                    "font-size": "14px",
+                    "font-color": "#7E7E7E",
+                },
+                "itemsOverlap": true,
+                "max-items": 10,
+                "guide": {
+                    "visible": true,
+                    "line-color": "#F5F5F5",
+                    "line-width": "1px"
+                },
+                "tick": {
+                    "visible": false
+                }
+            },
+            'scroll-x': {
+            },
+            "crosshair-x": {
+                "line-width": "100%",
+                "alpha": 0.18,
+                "plot-label": {
+                    "header-text": "%k"
+                }
+            },
+            'scale-x': {
+                "values": tenDonViList,
+                "line-color": "#F5F5F5",
+                "line-width": "1px",
+                zooming: true,
+                'zoom-to': [0, 5],
+                "item": {
+                    "font-color": "#8C8C8C"
+                },
+                "itemsOverlap": true,
+                "tick": {
+                    "visible": false
+                }
+            },
+            "scaleX2": {
+                "values": LNBaseChart,
+                "placement": "default",
+                "line-color": "#F5F5F5",
+                "line-width": "1px",
+                zooming: true,
+                'zoom-to': [0, 5],
+                "tick": {
+                    "visible": false,
+//                    "size": 20,
+//                    "placement": "cross"
+                },
+                "item": {
+                    "offsetY": -20,
+                    "font-color": "#DFDC7C"
+                }
+            },
+            series: [
+//                {
+//                    values: lnBaseList,
+//                    "background-color": "#DFDC7C",
+//                    "text": "Lợi Nhuận Base"
+//                },
+                {
+                    values: quyKhoanList,
+                    "background-color": "#91D5FF",
+                    "text": "Quỹ khoán"
+                },
+                {
+                    values: quyKhoanDaChiList,
+                    "background-color": "#B3EBC5",
+                    "text": "Quỹ khoán đã chi"
+                },
+                {
+                    values: quyKhoanConLaiList,
+                    "background-color": "#FFBB96",
+                    "text": "Quý khoán còn lại"
+                }
+            ],
+            legend: {
+                border: 'none',
+                layout: " 1x4", //row x column
+                align: "left",
+                "vertical-align": "top",
+                toggleAction: 'none',
+                item: {
+                    'font-family': "Roboto, sans-serif",
+                    'font-size': "14px",
+                    color: "#595959",
+                    "visible": false
+                },
+                marker: {
+                    type: 'circle'
+                },
+                offsetX: '-2px',
+                offsetY: '-10px'
+            }
+        },
+        height: '100%',
+        width: '100%'
+    });
+}
+
+function drawLuongKhoanChiTraChart(luongKhoanChiTraList, luongKhoanChiTraDonViList) {
+    $("#luongKhoanChiTraChart").html("");
+    var sum = 0;
+    var dataSeries = [];
+    for (i = 0; i < luongKhoanChiTraList.length; i++) {
+        sum += luongKhoanChiTraList[i];
+        let convertMoney = convertSoTienThanhTy(luongKhoanChiTraList[i], 2);
+        dataSeries.push({
+            values: [luongKhoanChiTraList[i]],
+            text: luongKhoanChiTraDonViList[i] + ": " + convertMoney + "" + " B"
+        });
+    }
+    let convertSum = convertSoTienThanhTy(sum, 2);
+    zingchart.render({
+        id: 'luongKhoanChiTraChart',
+        data: {
+            graphset: [
+                {
+                    type: 'pie',
+                    backgroundColor: 'none',
+                    scale: {
+                        'size-factor': "90%"
+                    },
+                    'scale-r': {
+                        'ref-angle': 90
+                    },
+                    plot: {
+                        tooltip: {
+                            visible: false
+                        },
+                        valueBox: [
+                            {
+                                // Label text
+                                text: convertSum + "" + " B",
+                                connected: false,
+                                fontColor: '#262626',
+                                fontSize: '16px',
+                                'font-family': "Roboto, sans-serif",
+                                'font-weight': 'normal',
+                                placement: 'center',
+                                visible: true
+                            }
+                        ],
+                        slice: 50,
+                        'detach': false
+                    },
+                    plotarea: {
+                        marginTop: '10px',
+                        marginRight: '45%',
+                        marginBottom: '0px',
+                        backgroundColor: 'none'
+                    },
+                    series: dataSeries,
+                    legend: {
+                        'border': 'none',
+                        layout: "x1", //row x column
+                        align: "center",
+                        "vertical-align": "middle",
+                        "margin-left": "250px",
+                        item: {
+                            'font-color': "#595959",
+                            'font-family': "Roboto, sans-serif"
+                        },
+                        marker: {
+                            type: 'circle'
+                        }
+                    }
+                }
+            ]
+        },
+        height: '100%',
+        width: '100%'
+    });
+}

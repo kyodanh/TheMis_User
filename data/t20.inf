@@ -1,0 +1,17 @@
+[t20]
+FileName1=t20.json
+URL1=https://themis.test.xplat.fpt.com.vn/bcld-kinh-doanh/get-don-vi-bo-phan
+Total=4
+RequestHeaderFile=t20_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t20_ResponseHeader.txt
+ContentType=application/json
+SnapshotXmlFile=snapshot_20.xml
+FileName2=t20_topBannerFptLogoRetracted2.png
+URL2=https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogoRetracted2.png
+FileName3=t20_topBannerBackground.png
+URL3=https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerBackground.png
+FileName4=t20_topBannerFptLogo2.png
+URL4=https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo2.png
+[ProtocolInfo]
+ProtocolId=QTWeb

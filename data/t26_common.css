@@ -1,0 +1,719 @@
+.box-sizing-border-box {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+input[type=button] {
+    cursor: pointer;
+}
+
+html {
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    color: #595959;
+    font-size: 14px;
+}
+
+.big-font {
+    font-size: 18px;
+}
+
+.bigger-font {
+    font-size: 22px;
+}
+
+.medium-font {
+    font-size: 14px;
+}
+
+.small-font {
+    font-size: 10px;
+}
+
+body {
+    margin: 0px;
+    display: flex;
+    flex-flow: column;
+    min-height: 100%;
+    overflow: auto;
+}
+
+#top-banner {
+    width: 100%; 
+    height: 130px;
+    overflow: hidden;
+    position: relative;
+    background-size: 100% 130px;
+}
+
+#user-section-logo-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 130px;
+    width: 300px; 
+    border-radius: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#user-section-logo {
+    height: 50px;
+    width: auto;
+    margin: 40px 0 40px 25px;
+    z-index: 2;
+}
+
+#user-section-logo-container-2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 129px;
+    width: 300px; 
+    border-bottom: 1px solid #F5F5F5;
+    background-color: #ffffff;
+}
+
+#user-section-logo-2 {
+    height: 50px;
+    width: auto;
+    margin: 40px 0 40px 25px;
+    z-index: 2;
+}
+
+#user-section-logo-container-retracted {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 130px;
+    width: 80px; 
+    border-radius: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#user-section-logo-retracted {
+    height: 36px;
+    width: auto;
+    margin: 20px 0 0 10px;
+    z-index: 2;
+}
+
+#user-section-logo-container-2-retracted {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 129px;
+    width: 80px; 
+    border-bottom: 1px solid rgba(240, 240, 240, 0.5);
+    background-color: #ffffff;
+}
+
+#user-section-logo-2-retracted {
+    height: 36px;
+    width: auto;
+    margin: 20px 0 0 10px;
+    z-index: 2;
+}
+
+.user-seciton-retract-button {
+    float: right;
+    height: 20px;
+    width: 20px;
+    margin: 55px 20px 55px 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.user-seciton-retract-button:hover {
+    opacity: 0.5;
+}
+
+.user-seciton-expand-button {
+    height: 20px;
+    width: 20px;
+    margin: 25px 0px 0px 30px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.user-seciton-expand-button:hover {
+    opacity: 0.5;
+}
+
+#user-section {
+    position: fixed;
+    top: 130px;
+    left: 0;
+    width: 300px; 
+    border: 0px;
+    background-color: #ffffff;
+    z-index: 100;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
+    overflow-y: auto;
+}
+
+#user-section-info {
+    padding-left: 25px;
+    height: 120px;
+    position:-webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 101;
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(240, 240, 240, 0.5);
+}
+
+#user-section-user-name {
+    font-weight: bold;
+    line-height: 30px;
+    font-size: 20px;
+    color: #262626;
+    padding-top: 30px;
+}
+
+#user-section-user-code {
+    line-height: 20px;
+    font-size: 12px;
+    color: #8C8C8C;
+}
+
+#sign-out-button {
+    line-height: 20px;
+    font-size: 12px;
+    color: #FF4D4F;
+    cursor: pointer;
+}
+
+#sign-out-button:hover {
+    opacity: 0.5;
+}
+
+#user-section li .user-section-menu-tab {
+    padding: 0px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(240, 240, 240, 0.5);
+}
+
+#user-section .user-section-menu-tab {
+    padding: 5px 0 5px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(240, 240, 240, 0.5);
+}
+
+#user-section .user-section-menu-tab table {
+    width: 100%;
+}
+
+#user-section .user-section-menu-tab:hover {
+    opacity: 0.5;
+}
+
+#user-section .user-section-menu-tab.chosen {
+    color: #597EF7;
+    cursor: auto;
+    opacity: 1;
+}
+
+#user-section .user-section-menu-tab.chosen svg path{
+    fill: #597EF7;
+}
+
+#user-section .user-section-menu-tab svg path{
+    fill: #8C8C8C;
+}
+
+
+#user-section .user-section-menu-tab.ld.chosen svg path{
+    stroke: #597EF7;
+}
+
+#user-section .user-section-menu-tab.ld svg path{
+    stroke: #8C8C8C;
+}
+
+#user-section-retracted {
+    position: fixed;
+    top: 130px;
+    left: 0;
+    width: 80px;
+    border: 0px;
+    background-color: #ffffff;
+    z-index: 100;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+#user-section-retracted .user-section-menu-tab {
+    height: 20px;
+    width: 20px;
+    padding: 15px 30px 15px 30px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(240, 240, 240, 0.5);
+}
+
+#user-section-retracted .user-section-menu-tab:hover {
+    opacity: 0.5;
+}
+
+#user-section-retracted .user-section-menu-tab.chosen {
+    color: #597EF7;
+    cursor: auto;
+    opacity: 1;
+}
+
+#user-section-retracted .user-section-menu-tab.chosen svg path{
+    fill: #597EF7;
+}
+
+#user-section-retracted .user-section-menu-tab svg path{
+    fill: #8C8C8C;
+}
+
+#btnTongQuatDuAn {
+    float: left;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    height: 40px;
+    width: 40px;
+    margin-right: 16px;
+    padding: 8px 0 8px 0;
+    text-align: center;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    cursor: pointer;
+}
+
+#btnTongQuatDuAn:hover {
+    opacity: 0.7;
+}
+
+#switch-navigation {
+    display: inline-block;
+    background-color: #F5F5F5;
+    border-radius: 8px;
+    height: 40px;
+    width: 227px;
+    margin-right: 16px;
+}
+
+#switch-navigation input[type=button]{
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    width: 102px;
+    height: 32px;
+    background-color: #F5F5F5;
+    color: #8C8C8C;
+    font-size: 14px;
+}
+
+#switch-navigation input[type=button]:hover{
+    opacity: 0.7;
+}
+
+#switch-navigation input[type=button].chosen{
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.03);
+    background-color: #FFFFFF;
+    color: #262626;
+    cursor: default;
+    opacity: 1;
+}
+
+#main-body {
+    flex: 1 1 auto;
+    background-color: #FAFAFA;
+    width: 100%;
+    overflow: hidden;
+}
+
+#body-content {
+    margin-left: 325px;
+    margin-right: 50px;
+    position: relative;
+    min-height: 100%;
+}
+
+#no-data-section {
+    z-index: 100;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    position: absolute;
+    top: 0;
+}
+
+#no-data-container {
+    margin: 0;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+#no-data-icon {
+    height: 200px;
+    width: auto;
+}
+
+#no-data-text {
+    font-size: 30px;
+    line-height: 38px;
+    margin: 0;
+}
+
+#body-content-top-menu {
+    margin-top: 25px;
+}
+
+#body-content-top-menu select {
+    padding: 5px;
+    margin-right: 16px;
+    border: 1px solid rgb(220, 220, 220);
+    border-radius: 5px;
+    height: 35px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
+    margin-bottom: 25px;
+}
+
+#body-content-top-menu .multiple-select-container {
+    margin-right: 16px;
+    margin-bottom: 25px;
+    padding: 0;
+    display: inline-block;
+}
+
+#body-content-top-menu > label {
+    margin-right: 5px;
+    color: #8C8C8C;
+    cursor: pointer;
+}
+
+#body-content-top-menu > label:hover {
+    opacity: 0.5;
+}
+
+#body-content-top-menu > label.last {
+    color: #1890FF;
+    opacity: 1;
+    cursor: default;
+}
+
+#body-content-top-menu > svg {
+    margin-right: 5px;
+    fill: #BFBFBF;
+}
+
+#body-content-summary {
+    width: 100%;
+}
+
+#body-content-detail-container {
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+#body-content-detail {
+    padding: 0 20px 20px 20px;
+}
+
+.pagination-bar {
+    margin-top: 20px;
+    float: right;
+
+}
+
+.pagination-bar input[type=button]{
+    background-color: #E5E5E5;
+    border: 0;
+    color: #8C8C8C;
+    border-radius: 4px;
+    padding: 5px 12px;
+}
+.pagination-bar input[type=button]:hover {
+    opacity: 0.5;
+}
+
+
+.pagination-bar input[type=button].current-page{
+    background-color: #597EF7;
+    color: white;
+    cursor: default;
+    opacity: 1;
+}
+
+#up-top-button {
+    height: 35px;
+    width: 35px;
+    background-color: #FFFFFF;
+    position: fixed;
+    top: 50%;
+    right: 10px;
+    cursor: pointer;
+    margin: -15px 0 0 -15px;
+    border-radius: 4px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
+    z-index: 101;
+}
+
+#up-top-button:hover {
+    opacity: 0.5;
+}
+
+#up-top-button svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -5px 0 0 -9px;
+}
+
+table.data-table {
+    border-spacing: 0;
+    table-layout: fixed;
+    border-collapse: separate;
+}
+
+table.data-table th {
+    background-color: #FAFAFA;
+    color: #262626;
+    cursor: pointer;
+    border: 0.5px solid rgb(245,245,245);
+    position:-webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+table.data-table th > div {
+    position: relative;
+    background-color: #FAFAFA;
+    padding: 15px 0 15px 0;
+}
+
+table.data-table td {
+    padding: 10px 0 10px 0;
+    border: 0.5px solid rgb(245,245,245);
+    background-color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+table.data-table td:hover {
+    text-overflow: clip;
+    white-space: normal;
+    word-break: break-all;
+}
+
+.sort-icon {
+    height: 16px;
+    width: 16px;
+    background-color: white;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    cursor: pointer;
+    margin: -8px 0 0 -8px;
+}
+
+.sort-icon svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -3px 0 0 -4px;
+}
+
+.icon-container {
+    position: relative;
+}
+
+.icon-container svg.icon {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    height: 48px;
+    width: 48px;
+}
+
+svg.icon path{
+    fill: #FFFFFF;
+}
+
+.body-content-detail-header {
+    overflow: hidden;
+}
+
+.body-content-detail-header-title { 
+    font-weight: bold;
+    margin-top: 12px; 
+    display: inline-block;
+    line-height: 40px;
+}
+
+#switch-body-content-detail-header {
+    display: inline-block;
+    background-color: #F5F5F5;
+    border-radius: 8px;
+    height: 40px;
+    width: 427px;
+    margin: 12px 16px 0 0;
+}
+
+#switch-body-content-detail-header input[type=button]{
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    width: 202px;
+    height: 32px;
+    background-color: #F5F5F5;
+    color: #8C8C8C;
+    font-size: 14px;
+}
+
+#switch-body-content-detail-header input[type=button]:hover{
+    opacity: 0.7;
+}
+
+#switch-body-content-detail-header input[type=button].chosen{
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.03);
+    background-color: #FFFFFF;
+    color: #262626;
+    cursor: default;
+    opacity: 1;
+}
+
+.body-content-detail-header-detail-option-container {
+    float: right; 
+    margin: 12px 20px 10px 0;
+    position: relative;
+    border: 1px solid #F5F5F5;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.03);
+    border-radius: 8px;
+    height: 40px;
+}
+
+.body-content-detail-header-search-container {
+    float: right; 
+    background-color: rgb(240, 240, 240); 
+    border: 0; 
+    border-radius: 10px; 
+    margin: 12px 0 10px 0;
+    height: 40px;
+}
+
+.body-content-detail-header-search-icon {
+    margin: 0 0 0 10px; 
+    height: 14px; 
+    width: 14px;
+    cursor: pointer;
+}
+
+.body-content-detail-header-search-icon:hover path {
+    opacity: 0.5;
+}
+
+.body-content-detail-header-search-field {
+    background-color: rgb(240, 240, 240); 
+    border: 0; 
+    margin: 5px 5px 0 0; 
+    width: 250px; 
+    height: 30px;
+}
+
+
+/* The custom checkbok */
+/* The container */
+.custom-checkbox-container {
+    display: block;
+    position: relative;
+    padding-right: 30px;
+    margin: 12px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.custom-checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.custom-checkbox-container .checkmark {
+    position: absolute;
+    border-radius: 4px;
+    border: 2px solid #BFBFBF;
+    top: -3px;
+    right: 0;
+    height: 16px;
+    width: 16px;
+}
+
+/* On mouse-over, add a grey background color */
+.custom-checkbox-container:hover input ~ .checkmark {
+    background-color: #ccc;
+    border-radius: 4px;
+    border: 2px solid #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.custom-checkbox-container input:checked ~ .checkmark {
+    background-color: #2196F3;
+    border-radius: 4px;
+    border: 2px solid #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.custom-checkbox-container .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.custom-checkbox-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.custom-checkbox-container .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 3px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.btn-export-new{
+    float:right;
+    margin: 14px 0 0 5px;
+    padding: 7px 12px;
+}
+
+.btn-export-kkhoan{
+    float:right;
+    margin: 2px 2px 5px 5px;
+    padding: 7px 12px;
+}
+
+.btn-export-dashboard {
+    float: right;
+    margin: 0px 5px 5px 5px;
+    padding: 6px 12px;
+    border: 1px solid #EFEFEF;
+    background: #ffffff;
+    box-shadow: 3px 4px 9px #F7F7F7;
+}

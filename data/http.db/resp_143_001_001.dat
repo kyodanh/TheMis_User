@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Autodiscover xmlns="http://schemas.microsoft.com/exchange/autodiscover/responseschema/2006">
+  <Response xmlns="http://schemas.microsoft.com/exchange/autodiscover/outlook/responseschema/2006a">
+    <User>
+      <DisplayName>Nguyen Cong Danh (FIS PQAHCM)</DisplayName>
+      <LegacyDN>/o=ExchangeLabs/ou=Exchange Administrative Group (FYDIBOHF23SPDLT)/cn=Recipients/cn=8b252157442f43a1bdbe009424ff6166-Danh Nguyen</LegacyDN>
+      <AutoDiscoverSMTPAddress>DanhNC14@fpt.com.vn</AutoDiscoverSMTPAddress>
+      <DeploymentId>b787ddaf-ec3e-4ccf-96dc-76e6e0e3849b</DeploymentId>
+    </User>
+    <Account>
+      <AccountType>email</AccountType>
+      <Action>settings</Action>
+      <MicrosoftOnline>True</MicrosoftOnline>
+      <ConsumerMailbox>False</ConsumerMailbox>
+      <Protocol Type="mapiHttp" Version="1">
+        <MailStore>
+          <ExternalUrl>https://outlook.office365.com/mapi/emsmdb/?MailboxId=2fff4b76-f836-4536-a3b5-fb0180aa662f@fpt.com.vn</ExternalUrl>
+        </MailStore>
+        <AddressBook>
+          <ExternalUrl>https://outlook.office365.com/mapi/nspi/?MailboxId=2fff4b76-f836-4536-a3b5-fb0180aa662f@fpt.com.vn</ExternalUrl>
+        </AddressBook>
+      </Protocol>
+      <Protocol>
+        <Type>WEB</Type>
+        <Internal>
+          <OWAUrl AuthenticationMethod="LiveIdFba, OAuth">https://outlook.office365.com/owa/</OWAUrl>
+          <Protocol>
+            <Type>EXCH</Type>
+            <ASUrl>https://outlook.office365.com/EWS/Exchange.asmx</ASUrl>
+          </Protocol>
+        </Internal>
+        <External>
+          <OWAUrl AuthenticationMethod="Fba">https://outlook.office365.com/owa/fpt.com.vn/</OWAUrl>
+          <Protocol>
+            <Type>EXPR</Type>
+            <ASUrl>https://outlook.office365.com/EWS/Exchange.asmx</ASUrl>
+          </Protocol>
+        </External>
+      </Protocol>
+      <Protocol>
+        <Type>EXHTTP</Type>
+        <Server>outlook.office365.com</Server>
+        <SSL>On</SSL>
+        <AuthPackage>Basic</AuthPackage>
+        <ASUrl>https://outlook.office365.com/EWS/Exchange.asmx</ASUrl>
+        <EwsUrl>https://outlook.office365.com/EWS/Exchange.asmx</EwsUrl>
+        <EmwsUrl>https://outlook.office365.com/EWS/Exchange.asmx</EmwsUrl>
+        <SharingUrl>https://outlook.office365.com/EWS/Exchange.asmx</SharingUrl>
+        <EcpUrl>https://outlook.office365.com/owa/</EcpUrl>
+        <EcpUrl-um>?path=/options/callanswering</EcpUrl-um>
+        <EcpUrl-aggr>?path=/options/connectedaccounts</EcpUrl-aggr>
+        <EcpUrl-mt>options/ecp/PersonalSettings/DeliveryReport.aspx?rfr=olk&amp;exsvurl=1&amp;IsOWA=&lt;IsOWA&gt;&amp;MsgID=&lt;MsgID&gt;&amp;Mbx=&lt;Mbx&gt;&amp;realm=fpt.com.vn</EcpUrl-mt>
+        <EcpUrl-ret>?path=/options/retentionpolicies</EcpUrl-ret>
+        <EcpUrl-sms>?path=/options/textmessaging</EcpUrl-sms>
+        <EcpUrl-publish>?path=/options/calendarpublishing/id/&lt;FldID&gt;</EcpUrl-publish>
+        <EcpUrl-photo>?path=/options/myaccount/action/photo</EcpUrl-photo>
+        <EcpUrl-connect>?path=/options/socialnetworks&amp;ignore1=&lt;Action&gt;&amp;ignore2=&lt;Provider&gt;</EcpUrl-connect>
+        <EcpUrl-tm>options/ecp/?rfr=olk&amp;ftr=TeamMailbox&amp;exsvurl=1&amp;realm=fpt.com.vn</EcpUrl-tm>
+        <EcpUrl-tmCreating>options/ecp/?rfr=olk&amp;ftr=TeamMailboxCreating&amp;SPUrl=&lt;SPUrl&gt;&amp;Title=&lt;Title&gt;&amp;SPTMAppUrl=&lt;SPTMAppUrl&gt;&amp;exsvurl=1&amp;realm=fpt.com.vn</EcpUrl-tmCreating>
+        <EcpUrl-tmEditing>options/ecp/?rfr=olk&amp;ftr=TeamMailboxEditing&amp;Id=&lt;Id&gt;&amp;exsvurl=1&amp;realm=fpt.com.vn</EcpUrl-tmEditing>
+        <EcpUrl-extinstall>?path=/options/manageapps</EcpUrl-extinstall>
+        <OOFUrl>https://outlook.office365.com/EWS/Exchange.asmx</OOFUrl>
+        <UMUrl>https://outlook.office365.com/EWS/UM2007Legacy.asmx</UMUrl>
+        <OABUrl>https://outlook.office365.com/OAB/f3407e91-fdc6-48dc-953a-a3ca74606f32/</OABUrl>
+        <ServerExclusiveConnect>On</ServerExclusiveConnect>
+      </Protocol>
+      <PublicFolderInformation>
+        <SmtpAddress>PFMailbox1@fpt.com.vn</SmtpAddress>
+      </PublicFolderInformation>
+    </Account>
+  </Response>
+</Autodiscover>

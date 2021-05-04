@@ -1,0 +1,117 @@
+.modal-header span{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+}
+
+.check-box {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'Montserrat', sans-serif;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.check-box input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: -2px;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.check-box:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.check-box input:checked ~ .checkmark {
+    background-color: #28a745;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.check-box input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.check-box .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.error{
+    color: red!important;
+}
+fieldset legend{
+    color: #f1940f;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 19.5px;
+}
+fieldset legend .headerlg{
+    color: #f1940f;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 19.5px;
+    font-family: "Montserrat", sans-serif;
+}
+.gray-cl{
+    color: #505050;  
+    text-transform: initial;
+    font-weight: normal;
+}
+
+.btn.disabled, .btn:disabled {
+    border: 1px solid #999999!important;
+    background-color: #cccccc!important;
+    color: #666666!important;
+}
+.disabled-bgcl{
+    background-color: #eceff4!important;
+}
+.img-chon-file{
+    width: 28px;
+    height: 28px;
+    margin: 5px 0 0 5px;
+}
+.row-btn-file button{
+    margin-top: 5px;
+}
+.row-bc-kq{
+    height: 60px;
+}
+.KhoanSXDuAn--text {
+    font-size: 16px;
+    font-family: "Montserrat", sans-serif;
+}

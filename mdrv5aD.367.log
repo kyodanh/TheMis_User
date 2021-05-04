@@ -1,0 +1,11 @@
+vuser_end.c(29): t=63574ms: 183-byte DECODED response body for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): t=63575ms: 295-byte ENCODED response body received for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): t=63575ms: 295-byte DECODED response body for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): t=63575ms: 5-byte chunked response overhead for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): t=63575ms: 7-byte chunked response overhead for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): t=63576ms: 3081-byte ENCODED response body received for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): t=63576ms: 3119-byte DECODED response body for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): web_url("dang-xuat") was successful, 146241 body bytes, 864 header bytes, 127 chunking overhead bytes  	[MsgId: MMSG-26385]
+Ending action vuser_end.	[MsgId: MMSG-15918]
+Vuser Terminated.	[MsgId: MMSG-15963]
+Vuser 48 (thread 23348), ended OK."	[MsgId: MMSG-10695]

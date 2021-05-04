@@ -1,0 +1,670 @@
+/* global contextPath, loaderGlobal, common, swal, pagination */
+var donViTableData = [];
+var sumHW_DV = 0;
+var sumSW_DV = 0;
+var sumSRV_DV = 0;
+var sumHW_KD = 0;
+var sumSW_KD = 0;
+var sumSRV_KD = 0;
+var sumHW_DA = 0;
+var sumSW_DA = 0;
+var sumSRV_DA = 0;
+var indexActive = 0;
+$(function () {
+    $('.sort-icon-tbl').on('click', function () {
+        $('.sort-icon-tbl').removeClass("active");
+        $(this).addClass("active");
+        let typeSort = $(this).attr("data-type");
+        let valueSort = $(this).attr("data-value");
+        $(this).children("i").removeClass();
+        if (typeSort === "0") {
+            $(this).children("i").addClass("fa fa-caret-up");
+            $(this).attr("data-type", "1");
+        } else {
+            $(this).children("i").addClass("fa fa-caret-down");
+            $(this).attr("data-type", "0");
+        }
+
+        search.advance.typeSort = typeSort;
+        search.advance.valueSort = valueSort;
+        if (indexActive === 1) {
+            getBangKhoanKD();
+        } else if (indexActive === 2) {
+            getBangKhoanDA();
+        }
+    });
+
+    $('#switch-menu-section input[type="button"]').on('click', function () {
+        var fisx = $('#selectedFISx option:selected').val();
+        let index = $(this).index();
+//        if (fisx === "0" && index !== 0) {
+//            toastr.error("Không thể chuyển Tab do đang là FIS");
+//            return false;
+//        } else {
+        if (!$(this).hasClass("chosen")) {
+            $('#switch-menu-section input[type="button"]').removeClass("chosen");
+            $(this).addClass("chosen");
+            $(".search-menu-section").removeClass("searchMenu-active");
+            $('#table-section #don-vi-table-section').hide();
+            $('#table-section #du-an-section').hide();
+            $('#table-section #kinh-doanh-section').hide();
+
+            if ($(this).attr("data-hash") == 'donVi') {
+                $('#don-vi-table-section').show();
+                $("#k-hw-fisx").html(sumHW_DV);
+                $("#k-srv-fisx").html(sumSRV_DV);
+                $("#k-sw-fisx").html(sumSW_DV);
+                indexActive = 0;
+                $(".search-menu-section").eq(0).addClass("searchMenu-active");
+                chkFisBank();
+
+            }
+
+            if ($(this).attr("data-hash") == 'kinhDoanh') {
+                $('#kinh-doanh-section').show();
+                $("#k-hw-fisx").html(sumHW_KD);
+                $("#k-srv-fisx").html(sumSRV_KD);
+                $("#k-sw-fisx").html(sumSW_KD);
+                indexActive = 1;
+                $(".search-menu-section").eq(1).addClass("searchMenu-active");
+                chkFisBank();
+
+            }
+
+            if ($(this).attr("data-hash") == 'duAn') {
+                $('#du-an-section').show();
+                $("#k-hw-fisx").html(sumHW_DA);
+                $("#k-srv-fisx").html(sumSRV_DA);
+                $("#k-sw-fisx").html(sumSW_DA);
+                indexActive = 2;
+                $(".search-menu-section").eq(2).addClass("searchMenu-active");
+                chkFisBank();
+
+            }
+        }
+//        }
+
+    });
+});
+
+
+var data_donvi = [];
+function getDonVi() {
+    $('#thongTinDonVi').empty();
+    $("#thongTinDonVi").find('option').remove();
+    $("#thongTinDonVi").html("");
+    var settings = {
+        url: contextPath + "/bcld-kinh-doanh/get-don-vi-bo-phan",
+        method: "POST",
+        data: "",
+        timeout: 30000
+    };
+    $.ajax(settings).done(function (response) {
+        if (response.error_code === "SUCCESSFUL") {
+            data_donvi = response.data;
+            if ($("#chkIsFis").val() === "true")
+                $("#selectedFISx").append(new Option("FIS", 0));
+            $.each(data_donvi, function (index, item) {
+                search.advance.listFis.push(item.TenFisX);
+                var option = $(new Option(item.TenFisX, item.id));
+                option.attr('data-mabophan', item.id !== '0' ? item.TenFisX : '0');
+                $("#selectedFISx").append(option);
+            });
+            getBoPhan();
+
+            $('#selectedFISx').unbind('change');
+            $('#selectedFISx').on('change', function (e) {
+                var fisx = $('#selectedFISx').val();
+
+//                if (fisx === "0") {
+//                    $('#switch-menu-section input[type="button"]').each(function (index) {
+//                        console.log(index);
+//                        if (index === 0) {
+//                            $(this).click();
+//                            return false;
+//                        }
+//                    });
+//
+//                }
+
+                getBoPhan();
+            });
+        }
+    }).fail(function (jqXHR, textStatus) {
+        console.log(textStatus);
+    });
+}
+;
+
+function getBoPhan() {
+    $('#selectedBoPhan').empty();
+    $("#selectedBoPhan").find('option').remove();
+    $("#selectedBoPhan").html("");
+    var fisx = $('#selectedFISx option:selected').val();
+    var listDepart = [];
+    let donvi = data_donvi.find(x => x.id.toString() === fisx);
+    if (donvi) {
+        listDepart = donvi.listDepartment;
+    }
+    $("#selectedBoPhan").append(new Option("Tất Cả", 0));
+    $.each(listDepart, function (index, item) {
+
+        var option = $(new Option(item.TenFisX, item.id));
+        option.attr('data-mabophan', item.id !== '0' ? item.TenFisX : '0');
+        $("#selectedBoPhan").append(option);
+    });
+    loadData();
+
+    $('#thongTinBoPhan').unbind('change');
+    $('#thongTinBoPhan').on('change', function (e) {
+        loadData();
+    });
+}
+
+function loadData() {
+    if ($("#don-vi-section").length > 0)
+        getBangKhoan();
+    if ($("#kinh-doanh-section").length > 0)
+        getBangKhoanKD();
+    if ($("#du-an-section").length > 0)
+        getBangKhoanDA();
+}
+
+function defaultTab() {
+    if ($("#don-vi-section").length > 0) {
+
+    } else {
+        if ($("#kinh-doanh-section").length > 0 && $("#du-an-section").length > 0) {
+            $("#section1").removeClass('chosen');
+            $(".search-menu-section").removeClass("searchMenu-active");
+            $("#section2").addClass('chosen');
+            $('#kinh-doanh-section').show();
+            $("#k-hw-fisx").html(sumHW_KD);
+            $("#k-srv-fisx").html(sumSRV_KD);
+            $("#k-sw-fisx").html(sumSW_KD);
+            indexActive = 1;
+            $(".search-menu-section").eq(1).addClass("searchMenu-active");
+            chkFisBank();
+            $("#switch-menu-section").css("width", "240px");
+        } else if ($("#kinh-doanh-section").length > 0) {
+            $("#section1").removeClass('chosen');
+            $(".search-menu-section").removeClass("searchMenu-active");
+            $("#section2").addClass('chosen');
+            $('#kinh-doanh-section').show();
+            $("#k-hw-fisx").html(sumHW_KD);
+            $("#k-srv-fisx").html(sumSRV_KD);
+            $("#k-sw-fisx").html(sumSW_KD);
+            indexActive = 1;
+            $(".search-menu-section").eq(1).addClass("searchMenu-active");
+            $("#switch-menu-section").css("width", "115px");
+        } else if ($("#du-an-section").length > 0) {
+            $("#section1").removeClass('chosen');
+            $(".search-menu-section").removeClass("searchMenu-active");
+            $("#section3").addClass('chosen');
+            $('#du-an-section').show();
+            $("#k-hw-fisx").html(sumHW_DA);
+            $("#k-srv-fisx").html(sumSRV_DA);
+            $("#k-sw-fisx").html(sumSW_DA);
+            indexActive = 2;
+            $(".search-menu-section").eq(2).addClass("searchMenu-active");
+            $("#switch-menu-section").css("width", "115px");
+        }
+    }
+}
+$(document).ready(function () {
+//    defaultTab();
+    getDonVi();
+    defaultTab();
+
+//---------------------------------export excel ---------------------------//
+    $('#btnXuatKKhoan').click(function () {
+        var fisX = $("#selectedFISx").val();
+        var ttbp = $("#selectedBoPhan option:selected").text();
+        var namTinhKhoan = $("#selectedNam").val();
+        search.advance.bangKhoan = "BCLD_DV";
+        search.advance.fisX = fisX;
+        search.advance.ttbp = ttbp;
+        search.pageNum = 1;
+        search.limit = 1000;
+        search.advance.namTinhKhoan = namTinhKhoan;
+        search.advance.IsExpExcel = "true";
+
+        if (indexActive === 1) {
+            search.advance.bangKhoan = "BCLD_KD";
+        } else if (indexActive === 2) {
+            search.advance.bangKhoan = "BCLD_DA";
+        }
+        var settings = {
+            url: contextPath + "/Export-BCLD/export-BCLD-KKhoan",
+            method: "POST",
+            data: JSON.stringify(search),
+            timeout: 30000
+        };
+        loaderGlobal.showLoader();
+        $.ajax(settings).done(function (response) {
+            if (response.error_code === "SUCCESSFUL") {
+                var link = document.createElement('a');
+                document.body.appendChild(link);
+                link.href = contextPath + "/tep-dinh-kem/tai-xuong-tep-export?fileName=" + response.data;
+                link.click();
+            } else {
+                swal({
+                    title: 'Thông báo',
+                    text: 'Xuất dữ liệu không thành công',
+                    icon: 'warning',
+                    button: 'Đồng ý'
+                });
+            }
+            loaderGlobal.hideLoader();
+        }).fail(function (j, t) {
+            loaderGlobal.hideLoader();
+        });
+    });
+    //----------------------------------------------//
+    $('.re-searching').on('change', function () {
+        loadData();
+    });
+    $('.search-menu-section-icon').on('click', function () {
+        if (indexActive === 0) {
+            getBangKhoan();
+        } else if (indexActive === 1) {
+            getBangKhoanKD();
+        } else if (indexActive === 2) {
+            getBangKhoanDA();
+        }
+    });
+    $('.search-menu-section-field').on('change keypress paste keypress', function (e) {
+        search.searchString = $(this).val();
+        if (e.which === 13) {
+            if (indexActive === 0) {
+                getBangKhoan();
+            } else if (indexActive === 1) {
+                getBangKhoanKD();
+            } else if (indexActive === 2) {
+                getBangKhoanDA();
+            }
+            return false;
+        }
+    });
+    $('#don-vi-table-section tr.group,tr.groupee,tr.groupee2').click(function () {
+        $('#don-vi-table-section tr.group,tr.groupee,tr.groupee2').removeClass("chosen");
+        $(this).addClass("chosen");
+    });
+
+    $('#don-vi-table-section td.expand-section').click(function () {
+        var trParent = $(this).parent();
+        var currentSign = $(this).html();
+        var currentGroupee = "";
+        var currentGroupee2 = "";
+        if (trParent.hasClass("group")) {
+
+            if (trParent.hasClass("HW")) {
+                currentGroupee = "HW-groupee";
+                currentGroupee2 = "HW_KD-groupee2";
+            } else if (trParent.hasClass("SRV")) {
+                currentGroupee = "SRV-groupee";
+                currentGroupee2 = "SRV_KD-groupee2";
+            } else if (trParent.hasClass("SW")) {
+                currentGroupee = "SW-groupee";
+                currentGroupee2 = "SW_KD-groupee2";
+            }
+
+            if (currentGroupee != "") {
+                if (currentSign == "+") {
+                    $(this).html("-");
+                    $('#don-vi-table-section tr.' + currentGroupee).show();
+                    $('#don-vi-table-section tr.expandable.' + currentGroupee + ' td.expand-section').html("+");
+                } else if (currentSign == "-") {
+                    $(this).html("+");
+                    $('#don-vi-table-section tr.' + currentGroupee).hide();
+                    $('#don-vi-table-section tr.' + currentGroupee2).hide();
+                }
+            }
+        } else if (trParent.hasClass("groupee")) {
+            if (trParent.hasClass("HW_KD")) {
+                currentGroupee2 = "HW_KD-groupee2";
+            } else if (trParent.hasClass("Sisol_KD")) {
+                currentGroupee2 = "Siso_KD-groupee2";
+            } else if (trParent.hasClass("SRV_KD")) {
+                currentGroupee2 = "SRV_KD-groupee2";
+            } else if (trParent.hasClass("SW_KD")) {
+                currentGroupee2 = "SW_KD-groupee2";
+            }
+
+            if (currentGroupee2 != "") {
+                if (currentSign == "+") {
+                    $(this).html("-");
+                    $('#don-vi-table-section tr.' + currentGroupee2).show();
+                } else if (currentSign == "-") {
+                    $(this).html("+");
+                    $('#don-vi-table-section tr.' + currentGroupee2).hide();
+                }
+            }
+        }
+    });
+});
+
+// function fired when expand-retract user-section
+function relocateSummaryDiagramDiv() {
+    drawDonviTableSection();
+}
+
+function populateDonviTableSection(datas) {
+
+    var fisx = $('#selectedFISx option:selected').val();
+    if (fisx === "0") {
+        donViTableData = datas;
+//        drawDonviTableFIS();
+    } else {
+        donViTableData = datas;
+    }
+    drawDonviTableSection();
+}
+
+
+function chkValueZero(value) {
+    return (value === "0.00%" ? "hide-null-value-color" : "");
+}
+
+function chkFisBank() {
+    if (($('#selectedFISx option:selected').val() === "715") && indexActive == 0) {
+        $("#table-section table").css("width", "135%");
+    } else {
+        console.log("Check fail")
+        $("#table-section table").css("width", "100%");
+    }
+}
+
+//Xuat ra bang du lieu cua don vi
+function drawDonviTableSection() {
+
+    var fisx = $('#selectedFISx option:selected').val();
+    if (fisx === "0") {
+        $("#summary-section").hide();
+    } else {
+        $("#summary-section").show();
+    }
+    $('#don-vi-table-section .data').remove();
+    //var containerWidth = $('#table-container').width();
+    //var extraEmptyColumn = Math.ceil((containerWidth - 100 - donViTableData.length * 120) / 120);
+    //$('#don-vi-table-section').width(100 + (donViTableData.length + extraEmptyColumn) * 120);
+    sumHW_DV = 0;
+    sumSW_DV = 0;
+    sumSRV_DV = 0;
+    sumHW_KD = 0;
+    sumSW_KD = 0;
+    sumSRV_KD = 0;
+    sumHW_DA = 0;
+    sumSW_DA = 0;
+    sumSRV_DA = 0;
+    if (donViTableData.length <= 0) {
+        $('#don-vi-table-section tr.header-section').append("<th class='data empty-data'>-</th>");
+        $('#don-vi-table-section tr.HW').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.HW_LD').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.HW_KD').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.HW_KD_BH').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.HW_KD_TV').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.HW_SX').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.SRV').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.SRV_LD').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.SRV_KD').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.SRV_KD_BH').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.SRV_KD_TV').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.SRV_SX').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.SW').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.SW_LD').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.SW_KD').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.SW_KD_BH').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.SW_KD_TV').append("<td class='data empty-data'>-</td>");
+        $('#don-vi-table-section tr.SW_SX').append("<td class='data empty-data'>-</td>");
+    } else {
+        for (i = 0; i < donViTableData.length; i++) {
+            let data = {
+                'name': donViTableData[i].FISXText,
+                'HW': (donViTableData[i].QuyTNHW * 100).toFixed(2) + common.percentageStr,
+                'HW_LD': (donViTableData[i].HWKLD * 100).toFixed(2) + common.percentageStr,
+                'HW_KD': (donViTableData[i].HWKKD * 100).toFixed(2) + common.percentageStr,
+                'HW_KD_BH': (donViTableData[i].HWKBH * 100).toFixed(2) + common.percentageStr,
+                'HW_KD_TV': (donViTableData[i].HWKTV * 100).toFixed(2) + common.percentageStr,
+                'HW_SX': (donViTableData[i].HWKSX * 100).toFixed(2) + common.percentageStr,
+                'SRV': (donViTableData[i].QuyTNSRV * 100).toFixed(2) + common.percentageStr,
+                'SRV_LD': (donViTableData[i].SRVKLD * 100).toFixed(2) + common.percentageStr,
+                'SRV_KD': (donViTableData[i].SRVKKD * 100).toFixed(2) + common.percentageStr,
+                'SRV_KD_BH': (donViTableData[i].SRVKBH * 100).toFixed(2) + common.percentageStr,
+                'SRV_KD_TV': (donViTableData[i].SRVKTV * 100).toFixed(2) + common.percentageStr,
+                'SRV_SX': (donViTableData[i].SRVKSX * 100).toFixed(2) + common.percentageStr,
+                'SW': (donViTableData[i].QuyTNSW * 100).toFixed(2) + common.percentageStr,
+                'SW_LD': (donViTableData[i].SWKLD * 100).toFixed(2) + common.percentageStr,
+                'SW_KD': (donViTableData[i].SWKKD * 100).toFixed(2) + common.percentageStr,
+                'SW_KD_BH': (donViTableData[i].SWKBH * 100).toFixed(2) + common.percentageStr,
+                'SW_KD_TV': (donViTableData[i].SWKTV * 100).toFixed(2) + common.percentageStr,
+                'SW_SX': (donViTableData[i].SWKSX * 100).toFixed(2) + common.percentageStr
+            };
+
+            if (data['name'].toLowerCase() === $("#selectedFISx option:selected").text().toLowerCase())
+//        if (donViTableData[i].FISX.toString() === $("#selectedFISx").val())
+            {
+                sumHW_DV = data['HW'];
+                sumHW_KD = data['HW_KD'];
+                sumHW_DA = data['HW_SX'];
+                sumSW_DV = data['SW'];
+                sumSW_KD = data['SW_KD'];
+                sumSW_DA = data['SW_SX'];
+                sumSRV_DV = data['SRV'];
+                sumSRV_KD = data['SRV_KD'];
+                sumSRV_DA = data['SRV_SX'];
+
+                if (indexActive === 0) {
+                    $("#k-hw-fisx").html(sumHW_DV);
+                    $("#k-srv-fisx").html(sumSRV_DV);
+                    $("#k-sw-fisx").html(sumSW_DV);
+                } else if (indexActive === 1) {
+                    $("#k-hw-fisx").html(sumHW_KD);
+                    $("#k-srv-fisx").html(sumSRV_KD);
+                    $("#k-sw-fisx").html(sumSW_KD);
+                } else if (indexActive === 2) {
+                    $("#k-hw-fisx").html(sumHW_DA);
+                    $("#k-srv-fisx").html(sumSRV_DA);
+                    $("#k-sw-fisx").html(sumSW_DA);
+                }
+            }
+
+            $('#don-vi-table-section tr.header-section').append("<th class='data '>" + data['name'] + "</th>");
+            $('#don-vi-table-section tr.HW').append("<td class='data " + chkValueZero(data['HW']) + "'>" + data['HW'] + "</td>");
+            $('#don-vi-table-section tr.HW_LD').append("<td class='data " + chkValueZero(data['HW_LD']) + "'>" + data['HW_LD'] + "</td>");
+
+            $('#don-vi-table-section tr.HW_KD').append("<td class='data " + chkValueZero(data['HW_KD']) + "'>" + data['HW_KD'] + "</td>");
+
+            $('#don-vi-table-section tr.HW_KD_BH').append("<td class='data " + chkValueZero(data['HW_KD_BH']) + "'>" + data['HW_KD_BH'] + "</td>");
+
+            $('#don-vi-table-section tr.HW_KD_TV').append("<td class='data " + chkValueZero(data['HW_KD_TV']) + "'>" + data['HW_KD_TV'] + "</td>");
+            $('#don-vi-table-section tr.HW_SX').append("<td class='data " + chkValueZero(data['HW_SX']) + "'>" + data['HW_SX'] + "</td>");
+            $('#don-vi-table-section tr.SRV').append("<td class='data " + chkValueZero(data['SRV']) + "'>" + data['SRV'] + "</td>");
+            $('#don-vi-table-section tr.SRV_LD').append("<td class='data " + chkValueZero(data['SRV_LD']) + "'>" + data['SRV_LD'] + "</td>");
+            $('#don-vi-table-section tr.SRV_KD').append("<td class='data " + chkValueZero(data['SRV_KD']) + "'>" + data['SRV_KD'] + "</td>");
+            $('#don-vi-table-section tr.SRV_KD_BH').append("<td class='data " + chkValueZero(data['SRV_KD_BH']) + "'>" + data['SRV_KD_BH'] + "</td>");
+            $('#don-vi-table-section tr.SRV_KD_TV').append("<td class='data " + chkValueZero(data['SRV_KD_TV']) + "'>" + data['SRV_KD_TV'] + "</td>");
+            $('#don-vi-table-section tr.SRV_SX').append("<td class='data " + chkValueZero(data['SRV_SX']) + "'>" + data['SRV_SX'] + "</td>");
+            $('#don-vi-table-section tr.SW').append("<td class='data " + chkValueZero(data['SW']) + "'>" + data['SW'] + "</td>");
+            $('#don-vi-table-section tr.SW_LD').append("<td class='data " + chkValueZero(data['SW_LD']) + "'>" + data['SW_LD'] + "</td>");
+            $('#don-vi-table-section tr.SW_KD').append("<td class='data " + chkValueZero(data['SW_KD']) + "'>" + data['SW_KD'] + "</td>");
+            $('#don-vi-table-section tr.SW_KD_BH').append("<td class='data " + chkValueZero(data['SW_KD_BH']) + "'>" + data['SW_KD_BH'] + "</td>");
+            $('#don-vi-table-section tr.SW_KD_TV').append("<td class='data " + chkValueZero(data['SW_KD_TV']) + "'>" + data['SW_KD_TV'] + "</td>");
+            $('#don-vi-table-section tr.SW_SX').append("<td class='data " + chkValueZero(data['SW_SX']) + "'>" + data['SW_SX'] + "</td>");
+        }
+    }
+    chkFisBank();
+}
+
+//Phan trang cho bang khoan KD
+/**/
+var pageNum = 1;
+var search = {
+
+    searchString: '',
+    limit: 10,
+    pageNum: 1,
+    advance: {
+        listFis: [],
+        bangKhoan: '',
+        fisX: '',
+        ttbp: '',
+        namTinhKhoan: '',
+        typeSort: '',
+        valueSort: ''
+    }
+};
+function  funcPhantrangKD(e) {
+    search.pageNum = e;
+    getBangKhoanKD();
+}
+//
+function getBangKhoan() {
+    $("#k-hw-fisx").html("0%");
+    $("#k-srv-fisx").html("0%");
+    $("#k-sw-fisx").html("0%");
+    var fisX = $("#selectedFISx option:selected").val();
+    var ttbp = $("#selectedBoPhan option:selected").text();
+    var namTinhKhoan = $("#selectedNam").val();
+    search.advance.bangKhoan = "BCLD_DV";
+    search.advance.fisX = fisX;
+    search.advance.ttbp = ttbp;
+    search.pageNum = 1;
+    search.limit = 1000;
+    search.advance.namTinhKhoan = namTinhKhoan;
+
+    var settings = {
+        url: contextPath + "/bang-khoan-don-vi/tim-kiem-bcld",
+        method: "POST",
+        data: JSON.stringify(search),
+        timeout: 30000
+    };
+    $.ajax(settings).done(function (response) {
+        if (response.error_code === "SUCCESSFUL") {
+            populateDonviTableSection(response.data);
+        }
+    }).fail(function (jqXHR, textStatus) {
+        console.log(textStatus);
+    });
+
+}
+
+//Show bang khoan Kinh Doanh
+function getBangKhoanKD() {
+    search.advance.bangKhoan = '';
+    search.advance.fisX = '';
+    search.advance.ttbp = '';
+    search.advance.namTinhKhoan = '';
+    var fisX = $("#selectedFISx option:selected").val();
+    var namTinhKhoan = $("#selectedNam").val();
+    var ttbp = $("#selectedBoPhan option:selected").text();
+    search.advance.bangKhoan = "BCLD_KD";
+    search.advance.fisX = fisX;
+    search.advance.ttbp = ttbp;
+    search.limit = 10;
+    search.advance.namTinhKhoan = namTinhKhoan;
+    var settings = {
+        url: contextPath + "/bang-khoan-kinh-doanh/tim-kiem-bcld",
+        method: "POST",
+        data: JSON.stringify(search),
+        timeout: 30000
+    };
+    $.ajax(settings).done(function (response) {
+        if (response.error_code === "SUCCESSFUL") {
+            displayBangKhoanKD(response.data);
+//            console.log(response.data.lists);
+//            var contentPage = pagination.renderPagination(response.data.limit, search.pageNum, response.data.totalResults, "funcPhantrangKD", true);
+//            $('#paginationBlock2').html(contentPage);
+        }
+
+    }).fail(function (jqXHR, textStatus) {
+        console.log(textStatus);
+    });
+}
+;
+
+function displayBangKhoanKD(data) {
+    $('#kinh-doanh-table-section tbody').empty();
+    $.each(data, function (index, item) {
+        var row$ = $('<tr/>');
+        row$.attr('data-id', item.id);
+        row$.append($('<td/>').html(item.DonVi !== undefined ? item.DonVi : '').addClass('text-right'));
+        row$.append($('<td/>').html(item.BoPhan !== undefined ? item.BoPhan : '').addClass('text-right'));
+        row$.append($('<td/>').html(item.LoaiDuAn !== undefined ? item.LoaiDuAn : '').addClass('text-right'));
+
+        if (item.HeSoK === undefined)
+            row$.append($('<td/>').html('-').addClass('text-right'));
+        else
+            row$.append($('<td/>').html((item.HeSoK * 100).toFixed(2) + common.percentageStr).addClass('text-right'));
+
+        if (item.TraNgay === undefined)
+            row$.append($('<td/>').html('-').addClass('text-right'));
+        else
+            row$.append($('<td/>').html((item.TraNgay * 100).toFixed(2) + common.percentageStr).addClass('text-right'));
+
+        $('#kinh-doanh-table-section tbody').append(row$);
+    });
+    chkFisBank();
+}
+;
+//display bang khoan du an
+function getBangKhoanDA() {
+    search.advance.bangKhoan = '';
+    search.advance.fisX = '';
+    search.advance.ttbp = '';
+    search.advance.namTinhKhoan = '';
+    var fisX = $("#selectedFISx option:selected").val();
+    var namTinhKhoan = $("#selectedNam").val();
+    var ttbp = $("#selectedBoPhan option:selected").val();
+    search.advance.bangKhoan = "BCLD_DA";
+    search.advance.fisX = fisX;
+    search.advance.ttbp = ttbp;
+    search.limit = 10;
+    search.advance.namTinhKhoan = namTinhKhoan;
+    var settings = {
+        url: contextPath + "/bang-khoan-san-xuat/tim-kiem-bcld",
+        method: "POST",
+        data: JSON.stringify(search),
+        timeout: 30000
+    };
+    $.ajax(settings).done(function (response) {
+        if (response.error_code === "SUCCESSFUL") {
+            displayBangKhoanDA(response.data);
+//            var contentPage = pagination.renderPagination(response.data.limit, search.pageNum, response.data.totalResults, "funcPhantrangDA", true);
+//            $('#paginationBlock3').html(contentPage);
+        }
+    }).fail(function (jqXHR, textStatus) {
+        console.log(textStatus);
+    });
+}
+;
+function displayBangKhoanDA(data) {
+    console.log(data);
+    $('#du-an-table-section tbody').empty();
+    $.each(data, function (index, item) {
+        var row$ = $('<tr/>');
+        row$.attr('data-id', item.id);
+        row$.append($('<td/>').html(item.DonVi !== undefined ? item.DonVi : ''));
+        row$.append($('<td/>').html(item.BoPhan !== undefined ? item.BoPhan : ''));
+        row$.append($('<td/>').html(item.MaDuAn !== undefined ? item.MaDuAn : ''));
+        row$.append($('<td/>').html(item.TenDuAn !== undefined ? item.TenDuAn : ''));
+        row$.append($('<td/>').html(item.MilestoneKhoan !== undefined ? item.MilestoneKhoan : ''));
+
+        if (item.KKhoan === undefined)
+            row$.append($('<td/>').html('-').addClass('text-right'));
+        else
+            row$.append($('<td/>').html((item.KKhoan * 100).toFixed(2) + common.percentageStr).addClass('text-right'));
+
+        $('#du-an-table-section tbody').append(row$);
+    });
+}
+;
+//Phan trang cho bang khoan san xuat
+
+function funcPhantrangDA(e) {
+    search.pageNum = e;
+    getBangKhoanDA();
+}
+;
+
+//---------------------------------------------------New K Khoan page javascript-------------------------------------------------------------//

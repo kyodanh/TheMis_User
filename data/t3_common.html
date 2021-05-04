@@ -1,0 +1,248 @@
+function loadDefaultAvatarCurrentUser() {
+    $(".current-user-avatar").attr("src", "../../assets/new/image/DefaultAvatar.png");
+}
+
+function buttOnclickGuide() {
+    window.open("https://insight.fis.com.vn/confluence/pages/viewpage.action?pageId=51415979&preview=/51415979/72778023/HuongDanSuDungPhanMemTinhKhoanTHEMIS(DanhChoNhanVienVaQuanTriDuAn)_v1.0.pdf"); 
+};
+
+function buttOnclickDX() {
+    window.location = '/dang-xuat';
+};
+
+function buttOnclickMapJira() {
+    window.location = '/map-ma-khoan-ma-jira';
+}
+;
+
+function buttOnclickFisxDirectorDashboard() {
+    window.location = '/quan-ly/bao-cao-lanh-dao';
+};
+
+function buttOnclickFisxDirectorKKhoan() {
+    window.location = '/quan-ly/bcld-kkhoan';
+};
+
+function buttOnclickFisxDirectorKinhDoanh() {
+    window.location = '/quan-ly/bcld-kinh-doanh';
+};
+
+function buttOnclickFisxDirectorDuAn() {
+    window.location = '/quan-ly/bcld-du-an';
+};
+
+function buttOnclickDA() {
+    window.location = '/quan-ly/thong-tin-du-an';
+}
+
+function buttOnclickTK() {
+    window.location = '/home';
+};
+
+function buttOnclickInfo() {
+    window.location = '/bao-cao-nhan-vien';
+};
+
+var expandedUserSection = true;
+$( document ).ready(function() {
+    
+     let chkBCLD = $("#chkMenuBCLD").val();
+    if(chkBCLD){
+         $("#up").show();
+         $("#down").hide();
+    $("#btnDashboard").show();
+      $("#btnKKhoan").show();
+      $("#btnKinhDoanh").show();
+      $("li #btnBaoCaoKhoan").show();
+    }else{
+          $("#up").hide();
+    $("#btnDashboard").hide();
+      $("#btnKKhoan").hide();
+      $("#btnKinhDoanh").hide();
+      $("li #btnBaoCaoKhoan").hide();
+    }
+    
+    $("#btnLanhDao").click(function () {
+        $("#down").toggle();
+        $("#up").toggle();
+        $("#btnDashboard").toggle();
+        $("#btnKKhoan").toggle();
+        $("#btnKinhDoanh").toggle();
+        $("li #btnBaoCaoKhoan").toggle();
+    });
+    
+    
+    let chkCauHinh = $("#chkCauHinh").val();
+    if(chkCauHinh){
+         $("#upCauHinh").show();
+         $("#downCauHinh").hide();
+      $("#btnJiraMap").show();
+    }else{
+          $("#upCauHinh").hide();
+    $("#btnJiraMap").hide();
+    }
+  
+    
+    $("#btnCauHinh").click(function () {
+        $("#downCauHinh").toggle();
+        $("#upCauHinh").toggle();
+        $("#btnJiraMap").toggle();
+       
+    });
+    
+    $(window).resize(function() {
+        resizeUserSection();
+    });
+    
+    $(window).resize();
+});
+
+$(function() {
+   	
+    $("#up-top-button").click(function() {
+            $(window).scrollTop(0);
+    });
+	
+    //up-top button
+    $("#up-top-button").hide();
+    expandUserSection();
+	
+    $(window).scroll(function(){
+        if($(window).scrollTop() > 300) {
+                $("#up-top-button").show();
+        } else {
+                $("#up-top-button").hide();
+        }
+
+        switchUserSectionLogoContainer();
+    });
+
+    switchUserSectionLogoContainer();
+    
+//    $('select').css({
+//        'padding' : '5px',
+//        'margin-right' : '16px',
+//        'border' : '1px solid rgb(220, 220, 220)',
+//        'border-radius' : '5px',
+//        'height' : '35px',
+//        'box-shadow' : '0px 4px 20px rgba(0, 0, 0, 0.02)'
+//    });
+
+    $('select[multiple="multiple"]').each(function(){
+    
+        var width = $(this).width();
+
+        $(this).multiselect({
+            buttonWidth: width + 'px',
+            numberDisplayed: 2,
+            maxHeight: 200,
+            includeSelectAllOption: true,
+            buttonText: function(options, select) {
+                if (options.length === 0) {
+                    return '0 lựa chọn';
+                }
+                else if (options.length > 3) {
+                    return 'Hơn 3 lựa chọn';
+                }
+                 else {
+                     var labels = [];
+                     options.each(function() {
+                         if ($(this).attr('label') !== undefined) {
+                             labels.push($(this).attr('label'));
+                         }
+                         else {
+                             labels.push($(this).html());
+                         }
+                     });
+                     return labels.join(', ') + '';
+                 }
+            }
+        });
+
+    });
+});
+
+function resizeUserSection() {
+    var bodyContentHeight = $(window).innerHeight();
+    var topLogoHeight = $('#user-section-logo-container').height();
+    var topLogoRetractedHeight = $('#user-section-logo-container-retracted').height();
+    $('#user-section').height(bodyContentHeight - topLogoHeight);
+    $('#user-section-retracted').height(bodyContentHeight - topLogoRetractedHeight);
+}
+
+function switchUserSectionLogoContainer() {
+    if($(window).scrollTop() > 40) {
+        if(expandedUserSection) {
+            $("#user-section-logo-container").hide();
+            $("#user-section-logo-container-2").show();
+        } else {
+            $("#user-section-logo-container-retracted").hide();
+            $("#user-section-logo-container-2-retracted").show();
+        }
+    } else {
+        if(expandedUserSection) {
+            $("#user-section-logo-container").show();
+            $("#user-section-logo-container-2").hide();
+        } else {
+            $("#user-section-logo-container-retracted").show();
+            $("#user-section-logo-container-2-retracted").hide();
+        }
+    }
+}
+
+function retractUserSection() {
+    $(".expanded-user-section").hide();
+    $(".retracted-user-section").show();
+    expandedUserSection = false;
+    switchUserSectionLogoContainer();
+    $("#body-content").css("margin-left", "105px");
+    relocateSummaryDiagramDiv();
+}
+
+function expandUserSection() {
+    $(".expanded-user-section").show();
+    $(".retracted-user-section").hide();
+    expandedUserSection = true;
+    switchUserSectionLogoContainer();
+    $("#body-content").css("margin-left", "325px");
+    relocateSummaryDiagramDiv();
+}
+
+function showNoDataSection() {
+    $('#no-data-section').show();
+}
+
+function hideNoDataSection() {
+    $('#no-data-section').hide();
+}
+
+//zingchart gauge
+function getMinStepForGaugeChart(maxValue, firstRingValue, pointerValue) {
+    return Math.floor(Math.max(Math.min(firstRingValue, maxValue - firstRingValue, Math.abs(firstRingValue - pointerValue)), maxValue / 20, 1000000));
+}
+;
+
+function getValueToDisplayFirstRingGaugeChart(maxValue, firstRingValue, pointerValue, step) {
+    var max = getValueToDisplayMaxGaugeChart(maxValue, step);
+    firstRing = step * (Math.ceil(firstRingValue / step) + 1);
+    if (firstRing == max && maxValue != firstRingValue) {
+        return firstRing - step;
+    } else {
+        return firstRing;
+    }
+}
+;
+
+function getValueToDisplayMaxGaugeChart(maxValue, step) {
+    return step * (Math.ceil(maxValue / step) + 1);
+}
+;
+
+function getOffsetXForMaxGaugeChart(maxValue) {
+    var string = maxValue + "";
+    return '-' + (string.length * 4 / 2 - 10) + 'px';
+}
+;
+
+
+

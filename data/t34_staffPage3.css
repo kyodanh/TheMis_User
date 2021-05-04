@@ -1,0 +1,194 @@
+#body-content-summary {
+	overflow: hidden;
+}
+
+#body-content-summary-left-1 {
+	width: 350px;
+	float: left;
+	margin-right: 25px;
+}
+
+#body-content-summary-left-2 {
+	width: 350px;
+	float: left;
+	margin-right: 25px;
+}
+
+#body-content-summary-right {
+	margin-left: 650px;
+	margin-bottom: 25px;
+	height: 305px;
+	background-color: #ffffff;
+	border-radius: 12px;
+	box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
+	overflow: auto;
+        background-color: #ffffff;
+}
+
+.body-content-summary-left-container {
+	border: 0;
+	border-radius: 12px;
+	padding: 20px;
+	height: 100px;
+	margin-bottom: 25px;
+	box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
+        background-color: #ffffff;
+}
+
+.body-content-summary-left-container-title {
+    margin-top: 15px;
+    color: #595959;
+    font-size: 14px;
+}
+
+.body-content-summary-left-container-detail {
+    margin-top: 15px;
+    color: #262626;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc tr.colunm-width-setter th {
+    background-color:white; 
+    border: none;
+    z-index: 11;
+        
+}  
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc tr.first-header {
+	height: 30px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc tr.first-header th{
+	height: 30px;
+        padding: 0;
+        top: 3px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc tr.first-header th.sticky{
+	position:-webkit-sticky;
+	position: sticky;
+	left: 0;
+	z-index: 11;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc tr.second-header th{
+	top: 34px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .project-code {
+	text-align: left; 
+	padding-left: 10px;
+	width: 150px;
+	position:-webkit-sticky;
+	position: sticky;
+	left: 0;
+	z-index: 10;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc th.project-code {
+	z-index: 11;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .project-milestone-name {
+	text-align: left; 
+	padding-left: 10px;
+	width: 300px;
+	position:-webkit-sticky;
+	position: sticky;
+	left: 161px;
+	z-index: 10;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc th.project-milestone-name {
+	z-index: 11;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .customer {
+	text-align: left; 
+	padding-left: 10px;
+	width: 250px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .loai-sp {
+	text-align: left; 
+	padding-left: 10px;
+	width: 100px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .am-k-cu {
+	text-align: right; 
+	padding-right: 10px;
+	width: 100px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .dieu-chinh-h-cu {
+	text-align: right; 
+	padding-right: 10px;
+	width: 100px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .he-so-tam-ung-cu {
+	text-align: right; 
+	padding-right: 10px;
+	width: 100px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .doanh-so-cu {
+	text-align: right; 
+	padding-right: 10px;
+	width: 150px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .loi-nhuan-base-cu {
+	text-align: right; 
+	padding-right: 10px;
+	width: 150px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .tong-thu-nhap-du-kien-cu {
+	text-align: right; 
+	padding-right: 10px;
+	width: 150px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .am-k {
+	text-align: right; 
+	padding-right: 10px;
+	width: 100px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .dieu-chinh-h {
+	text-align: right; 
+	padding-right: 10px;
+	width: 100px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .he-so-tam-ung {
+	text-align: right; 
+	padding-right: 10px;
+	width: 100px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .doanh-so {
+	text-align: right; 
+	padding-right: 10px;
+	width: 150px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .loi-nhuan-base {
+	text-align: right; 
+	padding-right: 10px;
+	width: 150px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .tong-thu-nhap-du-kien {
+	text-align: right; 
+	padding-right: 10px;
+	width: 150px;
+}
+
+#body-content-detail table#tbDuLieuKinhDoanhNamTruoc .thu-nhap-theo-ct-khoan {
+	text-align: right; 
+	padding-right: 10px;
+	width: 150px;
+}

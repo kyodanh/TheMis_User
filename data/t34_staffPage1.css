@@ -1,0 +1,261 @@
+#body-content-summary {
+    overflow: hidden;
+        margin-bottom: 50px;
+}
+
+#body-content-summary-left {
+    width: 45%;
+    float: left;
+/*    margin-right: 35px;*/
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
+    overflow: auto;
+    height: 315px;
+}
+
+#body-content-summary-right-1 {
+    float: right;
+    width: 50%;
+    /*    margin-left: 325px;*/
+    /*    margin-bottom: 25px;*/
+    height: 315px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
+    overflow: auto;
+}
+
+.body-content-summary-container-1 {
+    /*    border: 0;
+        border-radius: 12px;*/
+    padding: 20px;
+    /*    height: 100px;
+        margin-bottom: 25px;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.02);
+        background-color: #FFFFFF;*/
+}
+
+.body-content-summary-left-container-title {
+    margin-top: 15px;
+    color: #595959;
+    font-size: 14px;
+}
+
+.body-content-summary-left-container-detail {
+    margin-top: 15px;
+    color: #262626;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#body-content-detail table#tbDuLieuSanXuat .summary-row td {
+    background-color: #F0F5FF;
+    color: #2F54EB;
+}	
+
+#body-content-detail table#tbDuLieuSanXuat .project-code {
+    text-align: left; 
+    padding-left: 10px;
+}
+
+#body-content-detail table#tbDuLieuSanXuat .project-milestone-name {
+    text-align: left; 
+    padding-left: 10px;
+}
+
+#body-content-detail table#tbDuLieuSanXuat .summary-row .project-milestone-name {
+    font-weight: bold;
+}
+
+#body-content-detail table#tbDuLieuSanXuat .summary-row .payout {
+    text-align: left; 
+    padding-left: 10px;
+}
+
+#body-content-detail table#tbDuLieuSanXuat .timesheet {
+    text-align: center;
+}
+
+#body-content-detail table#tbDuLieuSanXuat .responsibility {
+    text-align: center;
+}
+
+#body-content-detail table#tbDuLieuSanXuat .punctuality {
+    text-align: center;
+}
+
+#body-content-detail table#tbDuLieuSanXuat .effectiveness {
+    text-align: center;
+}
+
+#body-content-detail table#tbDuLieuSanXuat .attitude {
+    text-align: center;
+}
+
+#body-content-detail table#tbDuLieuSanXuat .amountofwork {
+    text-align: center;
+}
+
+/*------------------------------------------------------------------*/
+.luongKhoan-chiTiet{
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    height: fit-content;
+}
+.chart-wrapper{
+    position: relative;
+    height: 70%;
+    width: 100%;
+    overflow: hidden;
+    text-align: left;
+    float: right;
+}
+.luongkhoan-chart{
+    position: relative; 
+}
+.chartColumn{
+    width: 50%;
+    float: right;
+    overflow: hidden;
+}
+.myChart{
+    position: relative; 
+}
+
+.chartjs-legend {
+    list-style-type: none;
+    width: fit-content;
+    margin: auto;
+    float: left;
+    text-align: center;
+    color: #595959;
+    border-collapse:separate; 
+    border-spacing: 0 17px;
+    padding: 10px;
+}
+.chartjs-legend tr{
+    margin: 22px;
+}
+.chartjs-legend .legend-item .label-legend {
+    color: #595959;
+    height: 18px;
+    padding-left: 0.75rem;
+}
+.chartjs-legend .legend-item .legend-color {
+    cursor: pointer;
+    margin-right: 0.75rem;
+    border-radius: 1.25rem;
+    width: 1.25rem;
+    height: 16px;
+}
+
+.chartjs-legend .legend-item .label-legend-value {
+    padding-left: 35px;
+}
+
+.luongKhoanTitle{
+    position: relative;
+}
+.title-luongKhoan{
+    position: absolute; 
+    top:50%; 
+    left: 60px;
+    font-size:16px !important;
+    transform: translateY(-50%);
+}
+/*------------------------------------------------------------------*/
+
+
+
+.ketquaLuongKhoan{
+    height:16px;
+}
+
+.ketquaLuongKhoan:after{
+    content: "";
+    clear: both;
+}
+
+.ketqua{
+    float:right;
+    width: 30%;
+}
+
+.quy{
+    /*margin-left: 50px;*/
+    float: left;
+    width: 70%;
+}
+.luongKhoan-theoky{
+    line-height: 1.5;
+}
+/*—- DIVI TIMELINE / DOTS LIST —–*/
+.dots-list {
+    width: 100%;
+    padding-left: 6px;
+}
+.dots-list ol {
+    /*padding-left: 150px;*/
+    position: relative;
+    margin-bottom: 20px;
+    list-style: none !important;
+}
+.dots-list ol li {
+    padding-left: 18px;
+    position: relative;
+    margin-top: 1.0em;
+    margin-bottom: 22px;
+}
+.dots-list ol li .date {
+    position: absolute;
+    left: -115px;
+    font-weight: bold;
+    font-size: 1em;
+    top: -2px;
+
+}
+.dots-list ol li:before {
+    content: "";
+    background: #D9D9D9; /*Sửa màu*/
+    position: absolute;
+    width: 2px;
+    top: 8px;
+    bottom: -28px;
+    left: -26px;
+}
+.dots-list ol li:after {
+    content: "";
+    background: #096DD9;  /*edit circle colour*/
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 100%;
+    /*border: 2px solid #35a6cb;*/
+    top: 3px;
+    left: -31px;
+}
+.dots-list ol li:last-child:before {
+    content: "";
+    background: rgba(0, 0, 0, 0);
+}
+
+.dots-list ol li:last-child:after {
+    content: "";
+    background: rgba(0, 0, 0, 0);
+}
+
+.dots-list ol li:nth-child(4):before{
+    content: "";
+    background: rgba(0, 0, 0, 0);
+}
+
+.dots-list ol li:last-child .quy, .dots-list ol li:last-child .ketqua{
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.hide_criteria {
+    display: none;
+}

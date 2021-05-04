@@ -1,0 +1,141 @@
+$(document).ready(function () {
+    'use strict';
+    var menuContainer = $('.menu-vertical');
+
+    var menuContent = $('.menu-content');
+
+    var menuIcons = $('.item--1st');
+
+    var menuButton = $('.menu-vertical .menu-vertical-toogle');
+
+
+    var pageName = $('#page_Name').val();
+
+    let menuLi = $('.' + pageName).parent('.item--1st');
+    menuLi.toggleClass('active');
+    menuLi.find('.menu-content').toggleClass('active');
+    $('.' + pageName).parent('.menu-items').toggleClass('active');
+    $('.' + pageName).parent('.menu-items').find('.sub-menu').toggleClass('active');
+
+    $('#' + pageName).addClass('active');
+
+    $(".item--1st > p").click(function (event) {
+        let menuLi = $(this).parent('.item--1st');
+        menuLi.toggleClass('active');
+        menuLi.find('.menu-content').toggleClass('active');
+        $('.item--1st').not(menuLi).removeClass('active');
+        $('.menu-content').not(menuLi.find('.menu-content')).removeClass('active');
+    });
+
+    $(".menu-items > p").click(function (event) {
+        let menuLi=$(this).parent('.menu-items');
+        $('.menu-items').not(menuLi).removeClass('active');
+        $(this).parent('.menu-items').toggleClass('active');
+        $(this).parent('.menu-items').find('.sub-menu').toggleClass('active');
+    });
+
+    menuButton.on('click', function () {
+        $(this).toggleClass('active');
+        menuContent.toggleClass('active');
+        menuContent.find(' > li').removeClass('active');
+        menuIcons.removeClass('active');
+        menuContent.removeClass('active');
+        $('.menu-vertical-icon').toggleClass('active');
+    });
+
+    menuContainer.find('li').each(function () {
+        if ($(this).find('ul').length) {
+            $(this).addClass('is-child');
+        }
+    });
+
+    // ******************************************************
+
+    $("body").on("click", function (event) {
+        if (!$(event.target).parents(".menu-vertical").length) {
+            //            menuContainer.find('div,ul,li').removeClass('active');
+        }
+    });
+
+    $(".page-file .main-content .menu-tab .menu-title h4 i.fa").on('click', function () {
+        $(".page-file .main-content .menu-tab .nav").fadeToggle();
+        $('.page-file .main-content .menu-tab .menu-title h4 i.fa-plus').toggleClass("minus");
+    });
+
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+
+    $("body").on("click", ".add-view .new-user", function () {
+        $("#showtheaddedform").append($("#showtheadded").html());
+    });
+
+    $(".content-searchnew .icon").on('click', function () {
+        $(".content-searchnew .form-searchdate").slideToggle();
+    });
+
+    $(".user-submit .remove").on('click', function () {
+        $(".content-searchnew .form-searchdate").slideToggle();
+    });
+
+    var sticky_navigation_offset = $(".header-file .header-top").offset();
+    if (typeof sticky_navigation_offset != "undefined") {
+        var sticky_navigation_offset_top = sticky_navigation_offset.top;
+        var sticky_navigation = function () {
+            ;
+            var scroll_top = $(window).scrollTop();
+            if (scroll_top > sticky_navigation_offset_top) {
+                ;
+                $(".header-file .header-top").addClass("sticky-menu");
+                $(".header-file .header-top").css({"top": 0, "left": 0, "right": 0});
+            } else {
+                ;
+                $(".header-file .header-top").removeClass("sticky-menu");
+            }
+            ;
+        };
+        sticky_navigation();
+        $(window).scroll(function () {
+            ;
+            sticky_navigation();
+        });
+    }
+    ;
+
+});
+
+function toggle(source) {
+    checkboxes = document.getElementsByName('foo');
+    for (var i = 0, n = checkboxes.length; i < n; i++) {
+        checkboxes[i].checked = source.checked;
+    }
+}
+
+function toggle2(source) {
+    checkboxes = document.getElementsByName('foo2');
+    for (var i = 0, n = checkboxes.length; i < n; i++) {
+        checkboxes[i].checked = source.checked;
+    }
+}
+
+function toggle3(source) {
+    checkboxes = document.getElementsByName('foo3');
+    for (var i = 0, n = checkboxes.length; i < n; i++) {
+        checkboxes[i].checked = source.checked;
+    }
+}
+
+function toggle4(source) {
+    checkboxes = document.getElementsByName('foo4');
+    for (var i = 0, n = checkboxes.length; i < n; i++) {
+        checkboxes[i].checked = source.checked;
+    }
+}
+
+function toggle5(source) {
+    checkboxes = document.getElementsByName('foo5');
+    for (var i = 0, n = checkboxes.length; i < n; i++) {
+        checkboxes[i].checked = source.checked;
+    }
+}

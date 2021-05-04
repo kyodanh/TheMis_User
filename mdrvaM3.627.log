@@ -1,0 +1,79 @@
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     if ( typeof define === "function" && define.amd ) {\r\n
+vuser_end.c(29):     \tdefine( "jquery", [], function() {\r\n
+vuser_end.c(29):     \t\treturn jQuery;\r\n
+vuser_end.c(29):     \t} );\r\n
+vuser_end.c(29):     }\r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     var\r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     \t// Map over jQuery in case of overwrite\r\n
+vuser_end.c(29):     \t_jQuery = window.jQuery,\r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     \t// Map over the $ in case of overwrite\r\n
+vuser_end.c(29):     \t_$ = window.$;\r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     jQuery.noConflict = function( deep ) {\r\n
+vuser_end.c(29):     \tif ( window.$ === jQuery ) {\r\n
+vuser_end.c(29):     \t\twindow.$ = _$;\r\n
+vuser_end.c(29):     \t}\r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     \tif ( deep && window.jQuery === jQuery ) {\r\n
+vuser_end.c(29):     \t\twindow.jQuery = _jQuery;\r\n
+vuser_end.c(29):     \t}\r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     \treturn jQuery;\r\n
+vuser_end.c(29):     };\r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     // Expose jQuery and $ identifiers, even in AMD\r\n
+vuser_end.c(29):     // (#7102#comment:10, https://github.com/jquery/jquery/pull/557)\r\n
+vuser_end.c(29):     // and CommonJS for browser emulators (#13566)\r\n
+vuser_end.c(29):     if ( typeof noGlobal === "undefined" ) {\r\n
+vuser_end.c(29):     \twindow.jQuery = window.$ = jQuery;\r\n
+vuser_end.c(29):     }\r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29):     return jQuery;\r\n
+vuser_end.c(29):     } );\r\n
+vuser_end.c(29): t=63063ms: 4194-byte ENCODED response body received for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 4195-byte DECODED response body for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 1398-byte ENCODED response body received for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 1340-byte DECODED response body for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 12287-byte ENCODED response body received for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 12288-byte DECODED response body for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 60-byte DECODED response body for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 7-byte chunked response overhead for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 8-byte chunked response overhead for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 4082-byte ENCODED response body received for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 4014-byte DECODED response body for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 4586-byte ENCODED response body received for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 4596-byte DECODED response body for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 5-byte chunked response overhead for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 7-byte chunked response overhead for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 2150-byte ENCODED response body received for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63064ms: 2298-byte DECODED response body for "https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo.png" (RelFrameId=, Internal ID=58)
+vuser_end.c(29): t=63091ms: 133-byte response headers for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29):     HTTP/1.1 200 OK\r\n
+vuser_end.c(29):     Date: Thu, 25 Mar 2021 02:33:08 GMT\r\n
+vuser_end.c(29):     Content-Type: image/png\r\n
+vuser_end.c(29):     Content-Encoding: gzip\r\n
+vuser_end.c(29):     Transfer-Encoding: chunked\r\n
+vuser_end.c(29):     \r\n
+vuser_end.c(29): t=63091ms: 6-byte chunked response overhead for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): t=63091ms: 6851-byte ENCODED response body received for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): t=63091ms: 7212-byte DECODED response body for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): t=63091ms: 6990-byte ENCODED response body received for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): t=63091ms: 7086-byte DECODED response body for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): t=63115ms: 5-byte chunked response overhead for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): t=63115ms: 7-byte chunked response overhead for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): t=63115ms: 3081-byte ENCODED response body received for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): t=63115ms: 3119-byte DECODED response body for "https://themis.test.xplat.fpt.com.vn/assets/new/image/loginIcon.png" (RelFrameId=, Internal ID=59)
+vuser_end.c(29): web_url("dang-xuat") was successful, 145999 body bytes, 864 header bytes, 127 chunking overhead bytes  	[MsgId: MMSG-26385]
+Ending action vuser_end.	[MsgId: MMSG-15918]
+Vuser Terminated.	[MsgId: MMSG-15963]
+Vuser 49 (thread 11068), ended OK."	[MsgId: MMSG-10695]

@@ -1,0 +1,492 @@
+/* global moment, contextPath, URL */
+
+Array.prototype.groupBy = function (prop) {
+    return this.reduce(function (groups, item) {
+        const val = item[prop];
+        groups[val] = groups[val] || [];
+        groups[val].push(item);
+        return groups;
+    }, {});
+};
+
+var chiTietCanBo = {
+    tinhdiemcbChart: function (data) {
+        let result = {
+            sumKhoiLuong: 0,
+            sumThaiDo: 0,
+            sumHieuQua: 0,
+            sumDungHan: 0
+        };
+
+        var khoiLuong = 0;
+        var thaiDo = 0;
+        var hieuQua = 0;
+        var dungHan = 0;
+        var khoiLuongSoApproved = 0;
+        var thaiDoSoApproved = 0;
+        var hieuQuaSoApproved = 0;
+        var dungHanSoApproved = 0;
+        console.log(data);
+        var listData = data.lists;
+        $.each(listData, function (index, item) {
+            var list = item.list;
+            $.each(list, function (index, item) {
+                if (item.KhoiLuongCongViec > 0) {
+                    khoiLuong += item.KhoiLuongCongViec * item.SoApproved;
+                    khoiLuongSoApproved += item.SoApproved;
+                }
+                if (item.ThaiDoHopTac > 0) {
+                    thaiDo += item.ThaiDoHopTac * item.SoApproved;
+                    thaiDoSoApproved += item.SoApproved;
+                }
+                if (item.TinhDungHanThoiGian > 0) {
+                    dungHan += item.TinhDungHanThoiGian * item.SoApproved;
+                    dungHanSoApproved += item.SoApproved;
+                }
+                if (item.CongViecHoanThanhHieuQua > 0) {
+                    hieuQua += item.CongViecHoanThanhHieuQua * item.SoApproved;
+                    hieuQuaSoApproved += item.SoApproved;
+
+                }
+
+            });
+        });
+
+        if (khoiLuongSoApproved > 0) {
+            console.log("1");
+            result.sumKhoiLuong = (khoiLuong / khoiLuongSoApproved).toFixed(2);
+        }
+        if (thaiDoSoApproved > 0) {
+            console.log("2");
+            result.sumThaiDo = (thaiDo / thaiDoSoApproved).toFixed(2);
+        }
+        if (dungHanSoApproved > 0) {
+            console.log("3");
+            result.sumDungHan = (dungHan / dungHanSoApproved).toFixed(2);
+        }
+        if (hieuQuaSoApproved > 0) {
+            console.log("4");
+            result.sumHieuQua = (hieuQua / hieuQuaSoApproved).toFixed(2);
+        }
+
+        return result;
+    }
+}
+
+var loaderGlobal = {
+    showLoader: function () {
+        $("#loading-site").html('<div class="loader"><div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>');
+    },
+    hideLoader: function () {
+        $("#loading-site").html('');
+    }
+};
+
+var common = {
+    percentageStr: "%",
+    convertSoTienThanhChu: function (money) {
+        if (money > 1000000000) {
+            var tien = money / 1000000000;
+            return tien.toFixed(2) + " Tỷ";
+        } else if (money > 100000000) {
+            var tien = tien / 100000000;
+            return tien.toFixed(1) + " Trăm triệu";
+        } else if (money > 1000000) {
+            var tien = tien / 1000000;
+            return tien.toFixed(1) + " Triệu";
+        }
+        return money;
+    },
+    convertSoTienThanhChuTat: function (money) {
+        if (money > 1000000000) {
+            var tien = parseFloat(money) / 1000000000;
+            return tien.toFixed(2) + " B";
+        } else if (money > 1000000) {
+            var tien = parseFloat(money) / 1000000;
+            return tien.toFixed(1) + " M";
+        }
+        return money;
+    },
+    // NgayCapNhat: "14:18:34 30/12/2020"
+    thoiGianCapNhat: function (s) {
+        var date = moment(s, 'yyyy-MM-DD HH:mm:ss').toDate();
+        if (date !== null && date !== undefined) {
+            var h = moment(date).format('HH') + 'h' + moment(date).format('mm');
+            var d = moment(date).format('DD/MM/YYYY');
+            return '<span><i class="fas fa-clock mr-2"></i>Cập nhật lần cuối lúc ' + h + ', ngày ' + d + '</span>';
+        }
+        return '';
+    },
+    thoiGianCapNhatHHmmssDDMMYYYY: function (s) {
+        var date = moment(s, 'HH:mm:ss DD-MM-yyyy').toDate();
+        if (date !== null && date !== undefined) {
+            var h = moment(date).format('HH') + 'h' + moment(date).format('mm');
+            var d = moment(date).format('DD/MM/YYYY');
+            return '<span><i class="fas fa-clock mr-2"></i>Cập nhật lần cuối lúc ' + h + ', ngày ' + d + '</span>';
+        }
+        return '';
+    },
+    thoiGianCapNhatHHmmssDDMMYYYYS: function (s) {
+        var date = moment(s, 'HH:mm:ss DD-MM-yyyy').toDate();
+        if (date !== null && date !== undefined) {
+            var d = moment(date).format('DD/MM/YYYY');
+            return d;
+        }
+        return '';
+    },
+    thoiGianCapNhatTinhKhoan: function (s) {
+        var date = moment(s, 'yyyy-MM-DD HH:mm:ss').toDate();
+        if (date !== null && date !== undefined) {
+            var h = moment(date).format('HH') + 'h' + moment(date).format('mm');
+            var d = moment(date).format('DD/MM/YYYY');
+            return '<span><i class="fas fa-clock mr-2"></i>Tính khoán lần cuối lúc ' + h + ', ngày ' + d + '</span>';
+        }
+        return '';
+    },
+    convertThoiGianCapNhat: function (s) {
+        var date = moment(s, 'yyyy-MM-DD HH:mm:ss').toDate();
+        if (date !== null && date !== undefined) {
+            var h = moment(date).format('HH') + 'h' + moment(date).format('mm');
+            var d = moment(date).format('DD/MM/YYYY');
+            return '' + h + ', ngày ' + d + '';
+        }
+        return '';
+    },
+    convertTGCNHHmmssDDMMYYYY: function (s) {
+        var date = moment(s, 'HH:mm:ss DD-MM-yyyy').toDate();
+        if (date !== null && date !== undefined) {
+            var h = moment(date).format('HH') + 'h' + moment(date).format('mm');
+            var d = moment(date).format('DD/MM/YYYY');
+            return '' + h + ', ngày ' + d + '';
+        }
+        return '';
+    },
+    numberWithCommas: function (x) {
+        if (x === undefined || x === null || x === 0 || x === '0' || x === '-0' || x === -0) {
+            return '-';
+        }
+        x = x.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        if (x === 0 || x === '0' || x === '-0' || x === -0) {
+            return '-';
+        } else
+            return x;
+    },
+    numberWithCommasFixed2: function (x) {
+        if (x === undefined || x === null || x === 0 || x === '0' || x === '-0' || x === -0) {
+            return '-';
+        }
+        x = x.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        if (x === 0 || x === '0' || x === '-0' || x === -0) {
+            return '-';
+        } else
+            return x;
+    },
+    numberWithCommasFixed6: function (x) {
+        if (x === undefined || x === null || x === 0 || x === '0' || x === '-0' || x === -0) {
+            return '-';
+        }
+        x = x.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        if (x === 0 || x === '0' || x === '-0' || x === -0) {
+            return '-';
+        } else
+            return x;
+    },
+    getKPIVal: function (ks, kid) {
+        if (ks !== undefined && ks[kid] !== null && ks[kid] !== undefined) {
+            return ks[kid];
+        }
+        return 0;
+    },
+    uploadFileExcel: function (eleId, namTinhKhoan, kyTinhKhoan, fisX, cb, mhn) {
+        if ($("#namCheckBox").val() !== undefined) {
+            if ($("#namCheckBox").is(":checked") === true) {
+                kyTinhKhoan = "0";
+                if ("0" === namTinhKhoan) {
+                    swal({
+                        title: 'Thông báo',
+                        text: 'Vui lòng chọn năm tính khoán',
+                        icon: 'warning',
+                        button: 'Đồng ý'
+                    });
+                    return;
+                }
+            } else {
+                namTinhKhoan = "0";
+                if ("0" === kyTinhKhoan) {
+                    swal({
+                        title: 'Thông báo',
+                        text: 'Vui lòng chọn kỳ tính khoán',
+                        icon: 'warning',
+                        button: 'Đồng ý'
+                    });
+                    return;
+                }
+            }
+        } else {
+            if (namTinhKhoan !== null || namTinhKhoan !== undefined) {
+                if ("0" === namTinhKhoan) {
+                    swal({
+                        title: 'Thông báo',
+                        text: 'Vui lòng chọn năm tính khoán',
+                        icon: 'warning',
+                        button: 'Đồng ý'
+                    });
+                    return;
+                }
+            } else {
+                if ("0" === kyTinhKhoan) {
+                    swal({
+                        title: 'Thông báo',
+                        text: 'Vui lòng chọn kỳ tính khoán',
+                        icon: 'warning',
+                        button: 'Đồng ý'
+                    });
+                    return;
+                }
+            }
+        }
+
+        if ("0" === fisX) {
+            swal({
+                title: 'Thông báo',
+                text: 'Vui lòng chọn FISX',
+                icon: 'warning',
+                button: 'Đồng ý'
+            });
+            return;
+        }
+        if (document.getElementById(eleId).files.length === 0) {
+            swal({
+                title: 'Thông báo',
+                text: 'Vui lòng nhập chọn tệp tin',
+                icon: 'warning',
+                button: 'Đồng ý'
+            });
+            return;
+        }
+        var files = $('#' + eleId)[0].files;
+        var tbName = $('#' + eleId).attr("data-tbnam");
+        loaderGlobal.showLoader();
+        var loaiKhoan = $("#loaiKhoan").val();
+        var mh = '?mh=TK&lk=' + loaiKhoan;
+        if (mhn !== undefined) {
+            mh = '?mh=' + mhn + '&lk=' + loaiKhoan;
+        }
+        common.uploadExcel(files, contextPath + '/nhap-tinh-khoan/upload/excels/' + tbName + '/' + kyTinhKhoan + '/' + fisX + '/' + namTinhKhoan + mh, function (s) {
+            loaderGlobal.hideLoader();
+            // checkStatus();
+            if (s.error_code === "SUCCESSFUL") {
+                swal({
+                    title: 'Thông báo',
+                    text: 'Nhập dữ liệu thành công',
+                    icon: 'success',
+                    button: 'Đồng ý'
+                });
+                if ($("#thongTinKyTinh").length) {
+                    $("#thongTinKyTinh").trigger("change");
+                }
+                if (cb !== undefined) {
+                    cb();
+                }
+            } else if (s.error_code === "SHOW_MESSAGE") {
+                swal({
+                    title: 'Thông báo',
+                    text: s.error_message,
+                    icon: 'warning',
+                    button: 'Đồng ý'
+                });
+            } else {
+                if (s.error_code === "FAILED") {
+
+                    swal({
+                        title: 'Thông báo',
+                        text: 'Nhập dữ liệu không thành công',
+                        icon: 'warning',
+                        button: 'Đồng ý'
+                    });
+                    return;
+                }
+
+                swal({
+                    title: 'Nhập dữ liệu không thành công',
+                    text: s.error_message,
+                    icon: 'warning',
+                    button: 'Đồng ý'
+                });
+            }
+        });
+    },
+    uploadExcel: function (files, url, calback) {
+        if (files === undefined || url === undefined || calback === undefined)
+        {
+            var cb = {
+                error_code: "FAILED",
+                error_message: ""
+            };
+            calback(cb);
+            return;
+        }
+        var fs = [files[0]];
+        common.uploadFile(fs, url, calback);
+    },
+    uploadFile: function (files, url, calback) {
+        var data = new FormData();
+        for (var i = 0; i < files.length; i++) {
+            data.append('file_' + i, files[i]);
+        }
+        var cb = {
+            error_code: "",
+            error_message: ""
+        };
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: url,
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 36000000,
+            success: function (data) {
+                calback(data);
+            },
+            error: function (e) {
+                cb.error_code = "FAILED";
+                cb.error_message = '';
+                calback(cb);
+            }
+        });
+    },
+    printWindow: function (divId) {
+        var divToPrint = document.getElementById(divId);
+        var newWin = window.open('', 'Print-Window');
+        newWin.document.open();
+        newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+        newWin.document.close();
+        setTimeout(function () {
+            newWin.close();
+        }, 10);
+    },
+    uploadExcelDM: function (eleId, fileType) {
+
+        if (fileType === null || fileType === undefined) {
+            swal({
+                title: 'Thông báo',
+                text: 'Lỗi trong quá trình tải file. Xin vui lòng load lại trang',
+                icon: 'warning',
+                button: 'Đồng ý'
+            });
+            return;
+        }
+
+        if (document.getElementById(eleId).files.length === 0) {
+            swal({
+                title: 'Thông báo',
+                text: 'Vui lòng nhập chọn tệp tin',
+                icon: 'warning',
+                button: 'Đồng ý'
+            });
+            return;
+        }
+        var files = $('#' + eleId)[0].files;
+        var tbName = $('#' + eleId).attr("data-tbnam");
+        loaderGlobal.showLoader();
+        common.uploadExcel(files, contextPath + '/danh-muc-don-vi/upload/excels/' + fileType, function (s) {
+            loaderGlobal.hideLoader();
+            if (s.error_code === "SUCCESSFUL") {
+                swal({
+                    title: 'Thông báo',
+                    text: 'Nhập dữ liệu thành công',
+                    icon: 'success',
+                    button: 'Đồng ý'
+                });
+            } else {
+                if (s.error_code === "FAILED") {
+                    swal({
+                        title: 'Thông báo',
+                        text: 'Nhập dữ liệu không thành công',
+                        icon: 'warning',
+                        button: 'Đồng ý'
+                    });
+                }
+            }
+        });
+    },
+    uploadExcelQuyen: function (eleId, fileType) {
+        if (fileType === null || fileType === undefined) {
+            swal({
+                title: 'Thông báo',
+                text: 'Lỗi trong quá trình tải file. Xin vui lòng load lại trang',
+                icon: 'warning',
+                button: 'Đồng ý'
+            });
+            return;
+        }
+
+        if (document.getElementById(eleId).files.length === 0) {
+            swal({
+                title: 'Thông báo',
+                text: 'Vui lòng nhập chọn tệp tin',
+                icon: 'warning',
+                button: 'Đồng ý'
+            });
+            return;
+        }
+        var files = $('#' + eleId)[0].files;
+        loaderGlobal.showLoader();
+        common.uploadExcel(files, contextPath + '/phan-quyen/upload/tep-phan-quyen', function (s) {
+            loaderGlobal.hideLoader();
+            if (s.error_code === "SUCCESSFUL") {
+                swal({
+                    title: 'Thông báo',
+                    text: 'Nhập dữ liệu thành công vui lòng đăng nhập lại',
+                    icon: 'success',
+                    button: 'Đồng ý'
+                });
+            } else {
+                if (s.error_code === "FAILED") {
+                    swal({
+                        title: 'Thông báo',
+                        text: s.error_message,
+                        icon: 'warning',
+                        button: 'Đồng ý'
+                    });
+                }
+            }
+        });
+    },
+    makeTextFile: function (text, fn) {
+        const a = document.createElement('a');
+        const blob = new Blob([text]);
+        a.href = URL.createObjectURL(blob);
+        a.download = fn;
+        a.click();
+    }
+
+};
+
+$(document).ready(function () {
+    var textFileEmpty = 'Không có tệp tin nào được chọn';
+    $(".inputFileHidden").change(function (e) {
+        var display = $(this).attr('data-txt-dis');
+        if (e.target.files.length > 0) {
+            var fileName = e.target.files[0].name;
+            $("#" + display).text(fileName);
+        } else
+            $("#" + display).text(textFileEmpty);
+    });
+    $(".textChonTapTin").text(textFileEmpty);
+    loaderGlobal.hideLoader();
+
+    $(".search-input").on("keypress", function (e) {
+        if (e.keyCode === 13 || e.keyCode === "13") {
+            getPageData(getCurrentData());
+        }
+    });
+});
+
+function buttonOnClickDangXuat() {
+    window.location = '/dang-xuat';
+}
+
+

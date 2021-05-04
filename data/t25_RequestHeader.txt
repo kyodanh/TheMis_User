@@ -1,0 +1,5 @@
+GET https://cdn.onenote.net/livetile/?Language=en-US HTTP/1.1
+User-Agent: Microsoft-WNS/10.0
+Host: cdn.onenote.net
+Connection: Keep-Alive
+

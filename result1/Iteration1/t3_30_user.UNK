@@ -1,0 +1,63 @@
+
+/* global contextPath */
+
+$(document).ready(function () {
+//    $(".menu-vertical").attr("style", "display:none");
+    $("#btnDangNhap").click(function () {
+        dangNhap();
+    });
+
+    $("#btnChangePassword").click(function () {
+        changePassword();
+    });
+
+    $("#username").on('keypress', function (e) {
+        if (e.which === 13) {
+            $("#btnDangNhap").click();
+        }
+    });
+    $("#password").on('keypress', function (e) {
+        if (e.which === 13) {
+            $("#btnDangNhap").click();
+        }
+    });
+});
+
+function requestLogin() {
+   fptURL = $("#fptURL").val();
+   window.location.href = fptURL;
+}
+
+function changePassword() {
+    var objectLogin = {
+        oldPassword: $("#oldPassword").val(),
+        newPassword: $("#newPassword").val(),
+        confirmPassword: $("#confirmPassword").val()
+    };
+    $("#error_summary").html('');
+    $.ajax({
+        type: "post",
+        url: contextPath + '/doi-mat-khau',
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(objectLogin),
+        success: function (response) {
+            if (response.error_code === "SUCCESSFUL") {
+                swal({
+                    title: 'Thông báo',
+                    text: 'Đổi mật khẩu thành công',
+                    icon: 'success'
+                });
+                setTimeout(function () {
+                    location.href = contextPath + '/login';
+                }, 3000);
+            } else {
+                $("#error_summary").html('Đổi mật khẩu không thành công. vui lòng kiểm tra lại thông tin tài khoản');
+            }
+        }
+    });
+}
+
+
+
+

@@ -1,0 +1,14 @@
+[
+    {
+        "actionName": "vuser_end",
+        "steps": [
+            {
+                "stepId": "STEP14",
+                "stepName": "Url: dang-xuat",
+                "infFile": "t14.inf",
+                "time": 1616577559716
+            }
+        ],
+        "transactions": []
+    }
+]

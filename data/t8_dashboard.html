@@ -1,0 +1,1648 @@
+var data_report = [];
+var data_report_da = [];
+var data_report_kd_da = [];
+var data_report_lnbase = [];
+var data_report_FIS = [];
+var data_donvi = [];
+var numberLoad = 0;
+var arrDonVi_LNBase = [];
+var isCheckChangeFis = false;
+var LNBFIS = 0;
+var ListEXP = {
+    list: []
+}
+
+var PageData = {
+    thongTinDonVi: [],
+    thongTinDonViText: [],
+    thongTinBoPhan: [],
+    thongTinKyKhoan: '',
+}
+var PageData_KD = {
+    thongTinDonVi: [],
+    thongTinDonViText: [],
+    thongTinBoPhan: [],
+    thongTinKyKhoan: '',
+}
+var PageData_DA = {
+    thongTinDonVi: [],
+    thongTinDonViText: [],
+    thongTinBoPhan: [],
+    thongTinKyKhoan: '',
+}
+var PageData_LNBase = {
+    thongTinDonVi: [],
+    thongTinDonViText: [],
+    thongTinBoPhan: [],
+    thongTinKyKhoan: '',
+    thongTinNam: '',
+}
+
+function loadKyTinh() {
+    var settings = {
+        url: contextPath + "/thong-tin/ky-tinh-khoan-theo-nam-select/" + $("#thongTinNam").val(),
+        method: "get",
+        timeout: 30000
+    };
+    $.ajax(settings).done(function (response) {
+        if (response.error_code === "SUCCESSFUL") {
+            var datas = response.data;
+            $("#thongTinKyKhoan").find('option').remove();
+
+            $.each(datas.listKy, function (index, item) {
+                var option = new Option(item.TenKyTinhKhoan, item.id);
+                $("#thongTinKyKhoan").append(option);
+            });
+            var ky = 0;
+            ky = datas.ky[0].id;
+            $("#thongTinKyKhoan").val(ky);
+            $("#thongTinKyKhoan").trigger('change');
+        }
+    }).fail(function (jqXHR, textStatus) {
+    });
+
+}
+
+$(document).ready(function () {
+    getDonVi();
+    loadKyTinh();
+    getPageData_FIS();
+    loadDefaultPage();
+
+    $('#sortChart').change(function () {
+        sortArray();
+    });
+//-----------------------------------------------------------------------------------//
+    $('#thongTinNam').change(function () {
+        loadKyTinh();
+    });
+    //$('#thongTinDonVi').change(function () {
+    //    getBoPhan();
+    //    displayData();
+    //    displayDataDA();
+    //    displayDataKD();
+    //});
+
+    //$('#thongTinBoPhan').change(function () {
+    //    displayData();
+    //    displayDataDA();
+    //    displayDataKD();
+    //});
+
+
+    $('#thongTinKyKhoan').change(function () {
+        getPageData_FIS();
+        numberLoad = 0;
+        loadDefaultPage();
+        //$(".multiselect-sumo")[0].sumo.selectAll();
+        loadDonVi();
+    });
+    $(window).resize(function () {
+// need to do twice to render
+        positioningContainer();
+        positioningContainer();
+    });
+    $(window).resize();
+    $("#quyKhoanTheoDonViTable").hide();
+    $("#chart-view").hide();
+    $("#table-view").click(function () {
+        $("#quyKhoanTheoDonViChart").hide();
+        $("#quyKhoanTheoDonViTable").show();
+        $("#table-view").hide();
+        $("#chart-view").show();
+    });
+    $("#chart-view").click(function () {
+        $("#quyKhoanTheoDonViChart").show();
+        $("#quyKhoanTheoDonViTable").hide();
+        $("#table-view").show();
+        $("#chart-view").hide();
+    });
+    //---------------------------------------------------------------------------//
+
+    //---------------------------------export excel ---------------------------//
+    $('#btnXuatDashboard').click(function () {
+        let arrDV_text = [];
+        PageData = {
+            thongTinDonVi: [],
+            thongTinDonViText: [],
+            thongTinBoPhan: [],
+            thongTinKyKhoan: '',
+        }
+        $('#thongTinDonVi option:selected').map(function (a, item) {
+            arrDV_text.push(item.text);
+            return null;
+        });
+        if (arrDV_text.length > 1) {
+            ListEXP.list = arrDonVi_LNBase;
+            var settings = {
+                url: contextPath + "/Export-BCLD/export-BCLD-Dashboard-Fis",
+                method: "POST",
+                data: JSON.stringify(ListEXP),
+                timeout: 30000
+            };
+        } else if ($('#thongTinDonVi option:selected').val() === "0") {
+            ListEXP.list = arrDonVi_LNBase;
+            ListEXP.list.unshift({
+                TenFisX: "FIS",
+                TotalQK: data_report_FIS[0].totalQuyKhoanFIS,
+                TotalQKDC: data_report_FIS[0].totalQuyKhoanDaChiFIS,
+                TotalQKCL: data_report_FIS[0].totalQuyKhoanConLaiFIS,
+                LNBase: LNBFIS
+            });
+            var settings = {
+                url: contextPath + "/Export-BCLD/export-BCLD-Dashboard-Fis",
+                method: "POST",
+                data: JSON.stringify(ListEXP),
+                timeout: 30000
+            };
+        } else {
+            $('#thongTinDonVi option:selected').map(function (a, item) {
+                PageData.thongTinDonVi.push(item.value);
+            });
+            $('#thongTinBoPhan option:selected').map(function (a, item) {
+                PageData.thongTinBoPhan.push(item.text);
+            });
+            PageData.thongTinKyKhoan = $("#thongTinKyKhoan").val();
+            var settings = {
+                url: contextPath + "/Export-BCLD/export-BCLD-Dashboard-Fisx",
+                method: "POST",
+                data: JSON.stringify(PageData),
+                timeout: 30000
+            };
+        }
+        loaderGlobal.showLoader();
+        $.ajax(settings).done(function (response) {
+            if (response.error_code === "SUCCESSFUL") {
+                var link = document.createElement('a');
+                document.body.appendChild(link);
+                link.href = contextPath + "/tep-dinh-kem/tai-xuong-tep-export?fileName=" + response.data;
+                link.click();
+            } else {
+                swal({
+                    title: 'Thông báo',
+                    text: 'Xuất dữ liệu không thành công',
+                    icon: 'warning',
+                    button: 'Đồng ý'
+                });
+            }
+            loaderGlobal.hideLoader();
+        }).fail(function (j, t) {
+            loaderGlobal.hideLoader();
+        });
+    });
+    //----------------------------------------------//
+
+});
+function getPageData_FIS() {
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        PageData.thongTinDonVi.push(item.value);
+    });
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        PageData.thongTinDonViText.push(item.text);
+    });
+    $('#thongTinBoPhan option:selected').map(function (a, item) {
+        PageData.thongTinBoPhan.push(item.text);
+    });
+    PageData.thongTinKyKhoan = $("#thongTinKyKhoan").val();
+    var settings = {
+        url: contextPath + "/bcld-don-vi/get-thong-tin-FIS",
+        method: "POST",
+        data: JSON.stringify(PageData),
+        timeout: 30000
+    };
+    $.ajax(settings).done(function (response) {
+        if (response.error_code === "SUCCESSFUL") {
+            data_report_FIS = response.data;
+        }
+    }).fail(function (j, t) {
+    });
+}
+;
+function displayLNBase() {
+    if ($("#thongTinDonVi :selected").text() === "FIS") {
+        $("#sumLoiNhuanBaseChart").html('<i class="fas fa-spinner fa-spin spin-default"></i>');
+        PageData_LNBase = {
+            thongTinDonVi: [],
+            thongTinDonViText: [],
+            thongTinBoPhan: [],
+            thongTinKyKhoan: '',
+        }
+        getPageData_LNBase();
+    } else {
+        var count = $("#thongTinDonVi :selected").length;
+        var count_bp = $("#thongTinBoPhan :selected").length;
+        if (count > 0) {
+            if (count_bp > 0) {
+                $("#sumLoiNhuanBaseChart").html('<i class="fas fa-spinner fa-spin spin-default"></i>');
+                PageData_LNBase = {
+                    thongTinDonVi: [],
+                    thongTinDonViText: [],
+                    thongTinBoPhan: [],
+                    thongTinKyKhoan: '',
+                }
+                getPageData_LNBase();
+            } else {
+                $("#sumLoiNhuanBaseChart").html("");
+                drawSumLoiNhuanBaseChart(0, 0, 0);
+            }
+        } else {
+            $("#sumLoiNhuanBaseChart").html("");
+            drawSumLoiNhuanBaseChart(0, 0, 0);
+        }
+    }
+}
+
+function loadDefaultPage() {
+    $(".loading-default").each(function (index, item) {
+        $(this).html('<i class="fas fa-spinner fa-spin spin-default"></i>');
+    });
+}
+
+function getDonVi() {
+    var settings = {
+        url: contextPath + "/bcld-kinh-doanh/get-don-vi-bo-phan",
+        method: "POST",
+        data: "",
+        timeout: 30000
+    };
+    $.ajax(settings).done(function (response) {
+        if (response.error_code === "SUCCESSFUL") {
+            data_donvi = response.data;
+            loadDonVi();
+        }
+    }).fail(function (jqXHR, textStatus) {
+        console.log(textStatus);
+    });
+}
+;
+
+function loadDonVi() {
+    $('#thongTinDonVi').empty();
+    $("#thongTinDonVi").find('option').remove();
+    $("#thongTinDonVi").html("");
+    if ($("#chkIsFis").val() === "true") {
+        var option = $(new Option("FIS", 0));
+        $("#thongTinDonVi").append(option);
+    }
+    $.each(data_donvi, function (index, item) {
+        var option = $(new Option(item.TenFisX, item.id, true, true));
+        option.attr('data-mabophan', item.id !== '0' ? item.TenFisX : '0');
+        $('#thongTinDonVi').append(option);
+    });
+    customSelect($('#thongTinDonVi'));
+    setTimeout(function () {
+        $(".multiselect-sumo")[0].sumo.reload();
+        getBoPhan();
+    }, 100);
+    if ($("#chkIsFis").val() === "true") {
+        $("#thongTinDonVi option:selected").prop("selected", false);
+        $("#thongTinDonVi option:first-child").prop("selected", true);
+    }
+    $('#thongTinDonVi').unbind('change');
+    $('#thongTinDonVi').on('change', function (e) {
+
+        let valDonVi = $('#thongTinDonVi option:selected').val();
+        let isFis = false;
+        $('#thongTinDonVi option:selected').map(function (a, item) {
+            if (item.value === "0") {
+                isFis = isCheckChangeFis = true;
+                $.each(data_donvi, function (index, item) {
+                    $(".multiselect-sumo")[0].sumo.unSelectItem(index + 1);
+                });
+                return;
+            }
+        });
+        if (isFis === true) {
+            getPageData_LNBase();
+            $("#hide-tr-1").hide();
+            $("#hide-tr-2").hide();
+            $("#hide-tr-3").hide();
+            displayDataKD_DA();
+            displayData();
+        } else {
+//            if (isCheckChangeFis === true)
+//                $.each(data_donvi, function (index, item) {
+//                    $(".multiselect-sumo")[0].sumo.enableItem(index + 1);
+//                });
+//            isCheckChangeFis = false;
+            $("#hide-tr-1").hide();
+            $("#hide-tr-2").hide();
+            $("#hide-tr-3").hide();
+            getBoPhan();
+        }
+    });
+
+    //loadAll();
+
+}
+
+function customSelect(curCBB) {
+    var width = $(this).width();
+    let placeHolderSearch = "Tìm kiếm ...";
+    if (curCBB.attr("data-placeholder-search")) {
+        placeHolderSearch = curCBB.attr("data-placeholder-search");
+    }
+    let placeHolder = "Chọn nhiều";
+    if (curCBB.attr("data-placeholder")) {
+        placeHolder = curCBB.attr("data-placeholder");
+    }
+    let prefix = "Đã chọn";
+    if (curCBB.attr("data-prefix")) {
+        prefix = curCBB.attr("data-prefix");
+    }
+    curCBB.SumoSelect({
+        okCancelInMulti: true, csvDispCount: 1, placeholder: placeHolder,
+        searchText: placeHolderSearch, search: true,
+        captionFormat: prefix,
+        captionFormatAllSelected: prefix,
+        isClickAwayOk: true, okCancelInMulti: true,
+        locale: ['Xong', 'Đóng lại', 'Chọn tất cả'],
+        selectAll: true,
+        showTitle: false,
+        triggerChangeCombined: true
+    });
+}
+
+function loadAll() {
+    PageData = {
+        thongTinDonVi: [],
+        thongTinDonViText: [],
+        thongTinBoPhan: [],
+        thongTinKyKhoan: '',
+    }
+    PageData_KD = {
+        thongTinDonVi: [],
+        thongTinDonViText: [],
+        thongTinBoPhan: [],
+        thongTinKyKhoan: '',
+    }
+    PageData_DA = {
+        thongTinDonVi: [],
+        thongTinDonViText: [],
+        thongTinBoPhan: [],
+        thongTinKyKhoan: '',
+    }
+    getPageData();
+    getPageData_KD_DA();
+    //getPageData_DA();
+}
+
+
+
+function getBoPhan() {
+    $('#thongTinBoPhan').empty();
+    $("#thongTinBoPhan").find('option').remove();
+    $("#thongTinBoPhan").html("");
+    //$(".multiselect-sumo")[1].sumo.unload();
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        var listDepart = [];
+        let donvi = data_donvi.find(x => x.id.toString() === item.value);
+        if (donvi) {
+            listDepart = donvi.listDepartment;
+        }
+        $.each(listDepart, function (index, item) {
+            var option = $(new Option(item.TenFisX, item.id, true, true));
+            option.attr('data-mabophan', item.id !== '0' ? item.TenFisX : '0');
+            $('#thongTinBoPhan').append(option);
+        });
+        return null;
+    });
+    customSelect($('#thongTinBoPhan'));
+    $('#thongTinBoPhan')[0].sumo.enable();
+    setTimeout(function () {
+        $(".multiselect-sumo")[1].sumo.reload();
+        displayLNBase();
+        if (numberLoad === 0)
+            loadAll();
+        else {
+            displayData();
+            displayDataKD_DA();
+        }
+    }, 100);
+    $('#thongTinBoPhan').unbind('change');
+    $('#thongTinBoPhan').on('change', function (e) {
+        if (numberLoad === 1) {
+            displayData();
+            //displayDataDA();
+            displayDataKD_DA();
+            displayLNBase();
+        }
+    });
+}
+;
+function getPageData() {
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        PageData.thongTinDonVi.push(item.value);
+    });
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        PageData.thongTinDonViText.push(item.text);
+    });
+    $('#thongTinBoPhan option:selected').map(function (a, item) {
+        PageData.thongTinBoPhan.push(item.text);
+    });
+    PageData.thongTinKyKhoan = $("#thongTinKyKhoan").val();
+    var settings = {
+        url: contextPath + "/bcld-don-vi/get-thong-tin-don-vi",
+        method: "POST",
+        data: JSON.stringify(PageData),
+        timeout: 30000
+    };
+    $.ajax(settings).done(function (response) {
+        if (response.error_code === "SUCCESSFUL") {
+            data_report = response.data;
+            displayData();
+            numberLoad = 1;
+        }
+    }).fail(function (j, t) {
+    });
+}
+;
+//function getPageData_DA() {
+//    $('#thongTinDonVi option:selected').map(function (a, item) {
+//        PageData_DA.thongTinDonVi.push(item.value);
+//    });
+//    $('#thongTinBoPhan option:selected').map(function (a, item) {
+//        PageData_DA.thongTinBoPhan.push(item.text);
+//    });
+//    PageData_DA.thongTinKyKhoan = $("#thongTinKyKhoan").val();
+//    var settings = {
+//        url: contextPath + "/bcld-don-vi/get-thong-tin-don-vi-da",
+//        method: "POST",
+//        data: JSON.stringify(PageData_DA),
+//        timeout: 30000
+//    };
+//    $.ajax(settings).done(function (response) {
+//        if (response.error_code === "SUCCESSFUL") {
+//            data_report_da = response.data;
+//            displayDataDA();
+//        }
+//    }).fail(function (j, t) {
+//    });
+//}
+//;
+function getPageData_KD_DA() {
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        PageData_KD.thongTinDonVi.push(item.value);
+    });
+    $('#thongTinBoPhan option:selected').map(function (a, item) {
+        PageData_KD.thongTinBoPhan.push(item.text);
+    });
+    PageData_KD.thongTinKyKhoan = $("#thongTinKyKhoan").val();
+    var settings = {
+        url: contextPath + "/bcld-don-vi/get-thong-tin-don-vi-kd-da",
+        method: "POST",
+        data: JSON.stringify(PageData_KD),
+        timeout: 30000
+    };
+    $.ajax(settings).done(function (response) {
+        if (response.error_code === "SUCCESSFUL") {
+            console.log("successful");
+            data_report_kd_da = response.data;
+            console.log(data_report_kd_da);
+            displayDataKD_DA();
+        }
+    }).fail(function (j, t) {
+        console.log(t);
+    });
+}
+;
+//Get du lieu lnbase
+function getPageData_LNBase() {
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        PageData_LNBase.thongTinDonVi.push(item.value);
+    });
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        PageData_LNBase.thongTinDonViText.push(item.text);
+    });
+    $('#thongTinBoPhan option:selected').map(function (a, item) {
+        PageData_LNBase.thongTinBoPhan.push(item.text);
+    });
+    PageData_LNBase.thongTinKyKhoan = $("#thongTinKyKhoan").val();
+    PageData_LNBase.thongTinNam = $('#thongTinNam').val();
+    var settings = {
+        url: contextPath + "/bcld-don-vi/get-thong-tin-don-vi-lnbase",
+        method: "POST",
+        data: JSON.stringify(PageData_LNBase),
+        timeout: 30000
+    };
+    $.ajax(settings).done(function (response) {
+        if (response.error_code === "SUCCESSFUL") {
+            data_report_lnbase = response.data;
+            console.log(response);
+            //numberLoad = 2;
+            displayDataLNBase();
+        }
+    }).fail(function (j, t) {
+        console.log(j);
+        console.log(t);
+    });
+}
+;
+function displayData() {
+    let data = JSON.parse(JSON.stringify(data_report));
+    arrDonVi_LNBase = [];
+    var qkSumDV_big = 0;
+    var qkDCSumDV_big = 0;
+    var qkCLSumDV_big = 0;
+    var qkSumDV = 0;
+    var qkDCSumDV = 0;
+    var qkCLSumDV = 0;
+    var qkSumDA = 0;
+    var qkDCSumDA = 0;
+    var qkCLSumDA = 0;
+    var qkSumKD = 0;
+    var qkDCSumKD = 0;
+    var qkCLSumKD = 0;
+    var lnbaseKeHoachHienTai = 0;
+    let arrDV = [];
+    let arrDV_text = [];
+    let arrBP = [];
+    let valDonVi = $('#thongTinDonVi option:selected').val();
+    if (valDonVi === "0") {
+        data_donvi.map(function (item, index) {
+            arrDV.push(item.id.toString());
+            arrDV_text.push(item.TenFisX);
+            $.each(item.listDepartment, function (index, iChild) {
+                arrBP.push(iChild.TenFisX.toLowerCase());
+            });
+            return null;
+        });
+    } else {
+        $('#thongTinDonVi option:selected').map(function (a, item) {
+            arrDV.push(item.value);
+            arrDV_text.push(item.text);
+            return null;
+        });
+        $('#thongTinBoPhan option:selected').map(function (a, item) {
+            arrBP.push(item.text.toLowerCase());
+            return null;
+        });
+    }
+
+    $.each(arrDV, function (i, idFisx) {
+        let dtDV = data.find(x => x.idFisX.toString() === idFisx);
+        if (dtDV) {
+            if (data) {
+                if (arrDV.length > 1) {
+                    let totalQKDonVi_temp = 0;
+                    let totalQKDonViDaChi_temp = 0;
+                    let totalQKDonViConLai_temp = 0;
+//                    let totalQKDonViConLai_temp = 0;
+                    let lnbaseKeHoachHienTai_temp = 0;
+                    let data_bp = dtDV.listDVBP.filter(x => arrBP.includes(x.BoPhan.toLowerCase()));
+                    $.each(data_bp, function (iBP, item) {
+//                        lnbaseKeHoachNam += item.LNBaseKeHoachNam;
+//                        console.log(item.LNBaseKeHoachHienTai);
+                        lnbaseKeHoachHienTai_temp += item.LNBaseKeHoachHienTai;
+                        totalQKDonVi_temp += item.totalQuyKhoanDV;
+                        totalQKDonViDaChi_temp += item.totalQuyKhoanDVDaChi;
+                        totalQKDonViConLai_temp += item.totalQuyKhoanDVConLai;
+                        qkSumKD += item.totalQuyKhoanKD;
+                        qkDCSumKD += item.totalQuyKhoanKDDaChi;
+                        qkCLSumKD += item.totalQuyKhoanKDConLai;
+                        qkSumDA += item.totalQuyKhoanDA;
+                        qkDCSumDA += item.totalQuyKhoanDADaChi;
+                        qkCLSumDA += item.totalQuyKhoanDAConLai;
+                    });
+                    arrDonVi_LNBase.push({
+                        TenFisX: arrDV_text[i],
+                        TotalQK: totalQKDonVi_temp,
+                        TotalQKDC: totalQKDonViDaChi_temp,
+                        TotalQKCL: totalQKDonViConLai_temp,
+                        LNBase: lnbaseKeHoachHienTai_temp
+                    });
+                    qkSumDV_big = qkSumDV += totalQKDonVi_temp;
+                    qkDCSumDV_big = qkDCSumDV += totalQKDonViDaChi_temp;
+                    qkCLSumDV_big = qkCLSumDV += totalQKDonViConLai_temp;
+                    lnbaseKeHoachHienTai += lnbaseKeHoachHienTai_temp;
+                } else {
+                    let data_dv = dtDV.listDVBP.filter(x => arrDV_text.map(x => x.toLowerCase()).includes(x.BoPhan.toLowerCase()));
+                    $.each(data_dv, function (iBP, items) {
+                        qkSumDV_big += items.totalQuyKhoanFisx;
+                        qkDCSumDV_big += items.totalQuyKhoanDCFisx;
+                        qkCLSumDV_big += items.totalQuyKhoanCLFisx;
+                    });
+                    data_bp = dtDV.listDVBP.filter(x => arrBP.includes(x.BoPhan.toLowerCase()));
+                    $.each(data_bp, function (iChild, item) {
+                        arrDonVi_LNBase.push({
+                            TenFisX: item.BoPhan,
+                            TotalQK: item.totalQuyKhoanDV,
+                            TotalQKDC: item.totalQuyKhoanDVDaChi,
+                            TotalQKCL: item.totalQuyKhoanDVConLai,
+                            LNBase: item.LNBaseKeHoachHienTai
+                        });
+                        //luongKhoanChiTraList.push(common.convertSoTienThanhChuTat(item.totalLuongKhoanChiTra));
+
+                        //lnbaseKeHoachNam += item.LNBaseKeHoachNam;
+                        lnbaseKeHoachHienTai += item.LNBaseKeHoachHienTai;
+                        qkSumDV += item.totalQuyKhoanDV;
+                        qkDCSumDV += item.totalQuyKhoanDVDaChi;
+                        qkCLSumDV += item.totalQuyKhoanDVConLai;
+                        qkSumKD += item.totalQuyKhoanKD;
+                        qkDCSumKD += item.totalQuyKhoanKDDaChi;
+                        qkCLSumKD += item.totalQuyKhoanKDConLai;
+                        qkSumDA += item.totalQuyKhoanDA;
+                        qkDCSumDA += item.totalQuyKhoanDADaChi;
+                        qkCLSumDA += item.totalQuyKhoanDAConLai;
+                    });
+                }
+            }
+        }
+
+    });
+    sortArray();
+    if (valDonVi === "0") {
+        if (data_report_FIS.length > 0) {
+            qkSumDV_big = data_report_FIS[0].totalQuyKhoanFIS;
+            qkDCSumDV_big = data_report_FIS[0].totalQuyKhoanDaChiFIS;
+            qkCLSumDV_big = data_report_FIS[0].totalQuyKhoanConLaiFIS;
+        } else {
+            qkSumDV_big = qkDCSumDV_big = qkCLSumDV_big = 0;
+        }
+    }
+    let convertSo = convertSoTienThanhObject(qkSumDV_big, 2, "B");
+    $("#qkSumDV_big").html(convertSo.soTien + " " + convertSo.chuTat);
+    convertSo = convertSoTienThanhObject(qkDCSumDV_big, 2, "B");
+    $("#qkDCSumDV_big").html(convertSo.soTien + " " + convertSo.chuTat);
+    convertSo = convertSoTienThanhObject(qkCLSumDV_big, 2, "B");
+    $("#qkCLSumDV_big").html(convertSo.soTien + " " + convertSo.chuTat);
+    convertSo = convertSoTienThanhObject(qkSumDV, 2, "B");
+    $("#totalQKDV").html(convertSo.soTien + "<span> " + convertSo.chuTat + "</span>");
+    convertSo = convertSoTienThanhObject(qkDCSumDV, 2, "B");
+    $("#totalQKDVDC").html(convertSo.soTien + "<span> " + convertSo.chuTat + "</span>");
+    convertSo = convertSoTienThanhObject(qkCLSumDV, 2, "B");
+    $("#totalQKDVCL").html(convertSo.soTien + "<span> " + convertSo.chuTat + "</span>");
+    convertSo = convertSoTienThanhObject(qkSumKD, 2, "B");
+    $("#totalQKKD").html(convertSo.soTien + "<span> " + convertSo.chuTat + "</span>");
+    convertSo = convertSoTienThanhObject(qkDCSumKD, 2, "B");
+    $("#totalQKKD_DC").html(convertSo.soTien + "<span> " + convertSo.chuTat + "</span>");
+    convertSo = convertSoTienThanhObject(qkCLSumKD, 2, "B");
+    $("#totalQKKD_CL").html(convertSo.soTien + "<span> " + convertSo.chuTat + "</span>");
+    convertSo = convertSoTienThanhObject(qkSumDA, 2, "B");
+    $("#totalQKDA").html(convertSo.soTien + "<span> " + convertSo.chuTat + "</span>");
+    convertSo = convertSoTienThanhObject(qkDCSumDA, 2, "B");
+    $("#totalQKDA_DC").html(convertSo.soTien + "<span> " + convertSo.chuTat + "</span>");
+    convertSo = convertSoTienThanhObject(qkCLSumDA, 2, "B");
+    $("#totalQKDA_CL").html(convertSo.soTien + "<span> " + convertSo.chuTat + "</span>");
+}
+;
+function sortArray() {
+    let typeSort = $("#sortChart").val();
+    //        TenFisX: "",
+//        TotalQK: 0,
+//        TotalQKDC: 0,
+//        TotalQKCL: 0,
+//        LNBase: 0
+    arrDonVi_LNBase.sort(function (a, b) {
+        if (typeSort === "lnbase")
+        {
+            return b.LNBase - a.LNBase;
+        } else if (typeSort === "qk")
+        {
+            return b.TotalQK - a.TotalQK;
+        } else if (typeSort === "qkdc")
+        {
+            return b.TotalQKDC - a.TotalQKDC;
+        } else if (typeSort === "qkcl")
+        {
+            return b.TotalQKCL - a.TotalQKCL;
+        }
+    });
+    let arrDV_text = [];
+    $('#thongTinDonVi option:selected').map(function (a, item) {
+        arrDV_text.push(item.text);
+        return null;
+    });
+    if (arrDV_text.length === 1) {
+        arrDV_text = [];
+        $('#thongTinBoPhan option:selected').map(function (a, item) {
+            arrDV_text.push(item.text);
+            return null;
+        });
+    }
+    let arrDonVi = arrDonVi_LNBase.map((v) => v.TenFisX);
+    let quyKhoanList = arrDonVi_LNBase.map((v) => parseFloat(convertSoTienThanhObject(v.TotalQK, 2, " B").soTien));
+    let quyKhoanDaChiList = arrDonVi_LNBase.map((v) => parseFloat(convertSoTienThanhObject(v.TotalQKDC, 2, " B").soTien));
+    let quyKhoanConLaiList = arrDonVi_LNBase.map((v) => parseFloat(convertSoTienThanhObject(v.TotalQKCL, 2, " B").soTien));
+    let lnBaseList = arrDonVi_LNBase.map((v) => parseFloat(convertSoTienThanhObject(v.LNBase, 2, " B").soTien));
+//    let data_filter = arrDV_text.filter(item => !arrDonVi.includes(item));
+
+    drawQuyKhoanTheoDonViChart(arrDonVi, quyKhoanList, quyKhoanDaChiList, quyKhoanConLaiList, lnBaseList);
+    $('#quyKhoanTheoDonViTable table tbody').empty();
+    for (var i = 0, max = arrDonVi.length; i < max; i++) {
+        var row2$ = $('<tr/>');
+        row2$.append($('<td/>').html(arrDonVi[i]));
+        row2$.append($('<td/>').html(lnBaseList[i].toFixed(2) + " B"));
+        row2$.append($('<td/>').html(quyKhoanList[i].toFixed(2) + " B"));
+        row2$.append($('<td/>').html(quyKhoanDaChiList[i].toFixed(2) + " B"));
+        row2$.append($('<td/>').html((quyKhoanConLaiList[i].toFixed(2) + " B")));
+        // row2$.append($('<tr/>'));
+        $('#quyKhoanTheoDonViTable table tbody').append(row2$);
+    }
+
+}
+;
+//function displayDataDA() {
+////    $("#totalQKDA_DA").html("0.00 B");
+////    $("#totalQKDA_DA_DC").html("0.00 B");
+////    $("#totalQKDA_DA_CL").html("0.00 B");
+////    $("#QkCTDA").html("0.00 B");
+//
+//
+//    let data = data_report_da;
+//    let arrDV_DA = [];
+//    let arrBP_DA = [];
+//    var totalQkDA = 0;
+//    var totalQkDADC = 0;
+//    var totalQkDACL = 0;
+//    var totalQkDACT = 0;
+//
+//    $('#thongTinDonVi option:selected').map(function (a, item) {
+//        arrDV_DA.push(item.value);
+//        return null;
+//    });
+//    $('#thongTinBoPhan option:selected').map(function (a, item) {
+//        arrBP_DA.push(item.text);
+//        return null;
+//    });
+//    if (data) {
+//        let data_filter = data.filter(x => arrDV_DA.includes(x.idFisX.toString()));
+//
+//        $.each(data_filter, function (index, dv) {
+//            //get ten Fisx
+//            let donvi = data_donvi.find(x => x.id.toString() === dv.idFisX.toString());
+//            if (donvi) {
+//
+//                if (arrDV_DA.length > 1) {
+//                    let data_bp = dv.listDVBP.filter(x => arrBP_DA.includes(x.BoPhan));
+//                    $.each(data_bp, function (iBP, item) {
+//                        totalQkDA += item.totalQuyKhoanDA_DA;
+//                        totalQkDADC += item.totalQuyKhoanDADaChi_DA;
+//                        totalQkDACL += item.totalQuyKhoanDAConLai_DA;
+//                        totalQkDACT += item.totalLuongKhoanChiTra_DA;
+//                    });
+////                    luongKhoanChiTraList.push(common.convertSoTienThanhChuTat(totalluongKhoanChiTrachart));
+//                } else {
+//                    data_bp = dv.listDVBP.filter(x => arrBP_DA.includes(x.BoPhan));
+//                    $.each(data_bp, function (iChild, item) {
+//                        totalQkDA += item.totalQuyKhoanDA_DA;
+//                        totalQkDADC += item.totalQuyKhoanDADaChi_DA;
+//                        totalQkDACL += item.totalQuyKhoanDAConLai_DA;
+//                        totalQkDACT += item.totalLuongKhoanChiTra_DA;
+//                    });
+//                }
+//
+////                if (totalQkDACL < 0) {
+////                    $("#totalQKDA_DA_CL").html("-" + common.convertSoTienThanhChuTat(Math.abs(totalQkDACL)));
+////                } else {
+////                    $("#totalQKDA_DA_CL").html(common.convertSoTienThanhChuTat(totalQkDACL));
+////                }
+////                if (totalQkDACT < 0) {
+////                    $("#QkCTDA").html("-" + common.convertSoTienThanhChuTat(Math.abs(totalQkDACT)));
+////                } else {
+////                    $("#QkCTDA").html(common.convertSoTienThanhChuTat(totalQkDACT));
+////                }
+//            }
+//        });
+//    }
+//    convertSo = convertSoTienThanhObject(totalQkDA);
+//    $("#totalQKDA_DA").html(convertSo.soTien + "<span> " + convertSo.chuTat + "</span>");
+//    convertSo = convertSoTienThanhObject(totalQkDADC);
+//    $("#totalQKDA_DA_DC").html(convertSo.soTien + "<span> " + convertSo.chuTat + "</span>");
+//    convertSo = convertSoTienThanhObject(totalQkDACL);
+//    $("#totalQKDA_DA_CL").html(convertSo.soTien + "<span> " + convertSo.chuTat + "</span>");
+//    convertSo = convertSoTienThanhObject(totalQkDACT);
+//    $("#QkCTDA").html(convertSo.soTien + "<span> " + convertSo.chuTat + "</span>");
+//}
+
+function displayDataKD_DA() {
+//    $("#totalQKKD_KD").html("0.00 B");
+//    $("#totalQKKD_KD_DC").html("0.00 B");
+//    $("#totalQKKD_KD_CL").html("0.00 B");
+//    $("#QkCTKD").html("0.00 B");
+    let data = data_report_kd_da;
+    let arrDV_KD = [];
+    let arrBP_KD = [];
+    var totalQkKD = 0;
+    var totalQkKDDC = 0;
+    var totalQkKDCL = 0;
+    var totalQkKDCT = 0;
+    var totalQkDA = 0;
+    var totalQkDADC = 0;
+    var totalQkDACL = 0;
+    var totalQkDACT = 0;
+    let valDonVi = $('#thongTinDonVi option:selected').val();
+    if (valDonVi === "0") {
+        data_donvi.map(function (item, index) {
+            arrDV_KD.push(item.id.toString());
+            $.each(item.listDepartment, function (index, iChild) {
+                arrBP_KD.push(iChild.TenFisX.toLowerCase());
+            });
+            return null;
+        });
+    } else {
+        $('#thongTinDonVi option:selected').map(function (a, item) {
+            arrDV_KD.push(item.value);
+            return null;
+        });
+        $('#thongTinBoPhan option:selected').map(function (a, item) {
+            arrBP_KD.push(item.text.toLowerCase());
+            return null;
+        });
+    }
+//    $('#thongTinDonVi option:selected').map(function (a, item) {
+//        arrDV_KD.push(item.value);
+//        return null;
+//    });
+//    $('#thongTinBoPhan option:selected').map(function (a, item) {
+//        arrBP_KD.push(item.text);
+//        return null;
+//    });
+    if (data) {
+        let data_filter = data.filter(x => arrDV_KD.includes(x.idFisX.toString()));
+        $.each(data_filter, function (index, dv) {
+            //get ten Fisx
+            let donvi = data_donvi.find(x => x.id.toString() === dv.idFisX.toString());
+            if (donvi) {
+                if (arrDV_KD.length > 1) {
+                    let data_bp = dv.listDVBP.filter(x => arrBP_KD.includes(x.BoPhan.toLowerCase()));
+                    $.each(data_bp, function (iBP, item) {
+                        totalQkKD += (item.totalQuyKhoanKDNamTruoc + item.totalQuyKhoanKDNamNay);
+                        totalQkKDDC += item.totalQuyKhoanKDDaChi_KD;
+                        totalQkKDCL += item.totalQuyKhoanKDConLai_KD;
+                        totalQkKDCT += item.totalLuongKhoanChiTra_KD;
+                        totalQkDA += item.totalQuyKhoanDA_DA;
+                        totalQkDADC += item.totalQuyKhoanDADaChi_DA;
+                        totalQkDACL += item.totalQuyKhoanDAConLai_DA;
+                        totalQkDACT += item.totalLuongKhoanChiTra_DA;
+                    });
+//                    luongKhoanChiTraList.push(common.convertSoTienThanhChuTat(totalluongKhoanChiTrachart));
+                } else {
+                    data_bp = dv.listDVBP.filter(x => arrBP_KD.includes(x.BoPhan.toLowerCase()));
+                    $.each(data_bp, function (iChild, item) {
+                        totalQkKD += (item.totalQuyKhoanKDNamTruoc + item.totalQuyKhoanKDNamNay);
+                        totalQkKDDC += item.totalQuyKhoanKDDaChi_KD;
+                        totalQkKDCL += item.totalQuyKhoanKDConLai_KD;
+                        totalQkKDCT += item.totalLuongKhoanChiTra_KD;
+                        totalQkDA += item.totalQuyKhoanDA_DA;
+                        totalQkDADC += item.totalQuyKhoanDADaChi_DA;
+                        totalQkDACL += item.totalQuyKhoanDAConLai_DA;
+                        totalQkDACT += item.totalLuongKhoanChiTra_DA;
+                    });
+                }
+            }
+        });
+    }
+//    convertSo = convertSoTienThanhObject(totalQkKD);
+    $("#totalQKKD_KD").html(convertSoTienThanhTy(totalQkKD) + "<span> B</span>");
+//    convertSo = convertSoTienThanhObject(totalQkKDDC);
+    $("#totalQKKD_KD_DC").html(convertSoTienThanhTy(totalQkKDDC) + "<span> B</span>");
+//    convertSo = convertSoTienThanhObject(totalQkKDCL);
+    $("#totalQKKD_KD_CL").html(convertSoTienThanhTy(totalQkKDCL) + "<span> B</span>");
+//    convertSo = convertSoTienThanhObject(totalQkKDCT);
+    $("#QkCTKD").html(convertSoTienThanhTy(totalQkKDCT) + "<span> B</span>");
+//    convertSo = convertSoTienThanhObject(totalQkDA);
+    $("#totalQKDA_DA").html(convertSoTienThanhTy(totalQkDA) + "<span> B</span>");
+//    convertSo = convertSoTienThanhObject(totalQkDADC);
+    $("#totalQKDA_DA_DC").html(convertSoTienThanhTy(totalQkDADC) + "<span> B</span>");
+//    convertSo = convertSoTienThanhObject(totalQkDACL);
+    $("#totalQKDA_DA_CL").html(convertSoTienThanhTy(totalQkDACL) + "<span> B</span>");
+//    convertSo = convertSoTienThanhObject();
+    $("#QkCTDA").html(convertSoTienThanhTy(totalQkDACT) + "<span> B</span>");
+//    convertSo = convertSoTienThanhObject((totalQkKD + totalQkDA), 2, "");
+    $("#totalQKDAKD").html(convertSoTienThanhTy(totalQkKD + totalQkDA) + "<span> B</span>");
+//    convertSo = convertSoTienThanhObject((totalQkKDDC + totalQkDADC), 2, "");
+    $("#totalQKDAKDDC").html(convertSoTienThanhTy(totalQkKDDC + totalQkDADC) + "<span> B</span>");
+//    convertSo = convertSoTienThanhObject((totalQkKDCL + totalQkDACL), 2, "");
+    $("#totalQKDAKDCL").html(convertSoTienThanhTy(totalQkKDCL + totalQkDACL) + "<span> B</span>");
+}
+
+function displayDataLNBase() {
+//    let arrDV_text = [];
+//    $('#thongTinDonVi option:selected').map(function (a, item) {
+//        arrDV_text.push(item.text);
+//        return null;
+//    });
+
+    var lnbaseKeHoachNam = 0;
+    var lnbaseKeHoachHienTai = 0;
+    var lnbaseKeHoachNamFIS = 0;
+    var lnbaseKeHoachHienTaiFIS = 0;
+    var lnbaseThucTe = 0;
+    $.each(data_report_lnbase, function (i, dtLNBase) {
+        lnbaseKeHoachNam += dtLNBase.LNBaseKeHoachNam;
+        lnbaseKeHoachHienTai += dtLNBase.LNBaseKeHoachHienTai;
+        lnbaseKeHoachNamFIS += dtLNBase.LNBaseKeHoachNamFIS;
+        lnbaseKeHoachHienTaiFIS += dtLNBase.LNBaseKeHoachHienTaiFIS;
+        LNBFIS += lnbaseKeHoachHienTaiFIS;
+        
+    })
+    if ($("#thongTinDonVi option:selected").text() === "FIS") {
+        drawSumLoiNhuanBaseChart(lnbaseKeHoachHienTaiFIS, lnbaseKeHoachNamFIS, lnbaseThucTe);
+    } else {
+        drawSumLoiNhuanBaseChart(lnbaseKeHoachHienTai, lnbaseKeHoachNam, lnbaseThucTe);
+    }
+
+}
+// function fired when expand-retract user-section
+function relocateSummaryDiagramDiv() {
+    positioningContainer();
+    positioningContainer();
+}
+
+function positioningContainer() {
+    var bodyContentWidth = $('#body-content').width();
+    var sumFirstRowWidthCase1 = bodyContentWidth - 25 * 3;
+    var eachFirstRowWidthCase1 = sumFirstRowWidthCase1 / 4;
+    var sumFirstRowWidthCase2 = bodyContentWidth - 25 * 2;
+    var eachFirstRowWidthCase2 = sumFirstRowWidthCase2 / 3;
+    var sumFirstRowWidthCase3 = bodyContentWidth - 25;
+    var eachFirstRowWidthCase3 = sumFirstRowWidthCase3 / 2;
+    if (eachFirstRowWidthCase1 > 300) {
+        $('.small-summary-container.summary-container').css({
+            'width': (eachFirstRowWidthCase1 - 1) + 'px',
+            'margin-right': '25px'
+        });
+        $('.small-summary-container.summary-container.last-first-row').css({
+            'margin-right': '0'
+        });
+        $('.big-summary-container.summary-container').css({
+            'width': (bodyContentWidth - 4) + 'px'
+        });
+        var eachLastRowWidth = (bodyContentWidth - 25) / 2;
+        $('.medium-summary-container.summary-container').css({
+            'width': (eachLastRowWidth - 2) + 'px',
+            'margin-right': '25px'
+        });
+        $('.medium-summary-container.summary-container.last-third-row').css({
+            'margin-right': '0'
+        });
+    } else if (eachFirstRowWidthCase2 > 300) {
+        $('.small-summary-container.summary-container').css({
+            'width': (eachFirstRowWidthCase2 - 1) + 'px',
+            'margin-right': '25px'
+        });
+        $('.small-summary-container.summary-container.third-first-row').css({
+            'margin-right': '0'
+        });
+        $('.big-summary-container.summary-container').css({
+            'width': (bodyContentWidth - eachFirstRowWidthCase2 - 28) + 'px'
+        });
+        var eachLastRowWidth = (bodyContentWidth - 25) / 2;
+        $('.medium-summary-container.summary-container').css({
+            'width': (eachLastRowWidth - 1.5) + 'px',
+            'margin-right': '25px'
+        });
+        $('.medium-summary-container.summary-container.last-third-row').css({
+            'margin-right': '0'
+        });
+    } else {
+        $('.small-summary-container.summary-container').css({
+            'width': (eachFirstRowWidthCase3 - 1) + 'px',
+            'margin-right': '25px'
+        });
+        $('.small-summary-container.summary-container.second-first-row').css({
+            'margin-right': '0'
+        });
+        $('.small-summary-container.summary-container.last-first-row').css({
+            'margin-right': '0'
+        });
+        $('.big-summary-container.summary-container').css({
+            'width': (bodyContentWidth - 2) + 'px'
+        });
+        $('.medium-summary-container.summary-container').css({
+            'width': (bodyContentWidth - 1) + 'px',
+            'margin-right': 0
+        });
+    }
+}
+
+function drawSumLoiNhuanBaseChart(loiNhuanBaseKHHienTai, loiNhuanBaseKHCaNam, loiNhuanBaseThucTe) {
+    $("div#sumLoiNhuanBaseChart").html("");
+    if (loiNhuanBaseKHHienTai > ((loiNhuanBaseKHCaNam * 9) / 10) && loiNhuanBaseKHCaNam!==0) {
+        var step = getMinStepForGaugeChart_Billion(loiNhuanBaseKHCaNam, loiNhuanBaseKHHienTai, loiNhuanBaseThucTe);
+        var displayMaxValue = getValueToDisplayMaxGaugeChart_Billion(loiNhuanBaseKHCaNam, step);
+        var displayFirstRingValue = getValueToDisplayFirstRingGaugeChart_Billion(loiNhuanBaseKHCaNam, loiNhuanBaseKHHienTai, loiNhuanBaseThucTe, step);
+//      
+//       var step=0;
+//        var displayMaxValue=0;
+//        var displayFirstRingValue=0;
+        zingchart.render({
+            id: 'sumLoiNhuanBaseChart',
+            data: {
+                type: 'gauge',
+                globals: {
+                    'font-family': "Roboto, sans-serif",
+                    fontSize: '12px'
+                },
+                title: {
+                    "text": "Lợi nhuận Base (Billions)",
+                    "position": "0% 95%",
+                    "offset-y": 15,
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                },
+                scale: {
+                    'size-factor': "170%" //Modify your gauge chart size.
+                },
+                plot: {
+                    valueBox: {
+                        placement: 'tip',
+                        rules: [
+                            {
+                                rule: '%v == ' + displayFirstRingValue + " && %v != " + step,
+                                text: loiNhuanBaseKHHienTai.toFixed(2) + " B",
+                                color: "#597EF7",
+                                placement: 'center',
+                                offsetY: '-40px',
+                                offsetX: '135px',
+                                fontSize: '15px'
+                            },
+                            {
+                                rule: '%v == ' + displayMaxValue + " && %v != " + step,
+                                text: loiNhuanBaseKHCaNam.toFixed(2) + " B",
+                                offsetY: '15px',
+                                offsetX: getOffsetXForMaxGaugeChart_Billion(loiNhuanBaseKHCaNam),
+                                placement: 'tip',
+                                color: "#96B8FD",
+                            },
+                            {
+                                rule: '%v == ' + step,
+                                text: ''
+                            },
+                            {
+                                rule: '%v == -1',
+                                text: '0',
+                                offsetY: '15px',
+                                offsetX: '20px'
+                            }
+                        ]
+                    },
+                    size: '100%',
+                    tooltip: {
+                        visible: false
+                    }
+                },
+                plotarea: {
+                    marginTop: '110px'
+                },
+                scaleR: {
+                    aperture: 180,
+                    center: {
+                        visible: false
+                    },
+                    item: {
+                        'font-size': 0
+                    },
+                    maxValue: displayMaxValue,
+                    minValue: 0,
+                    ring: {
+                        rules: [{
+                                backgroundColor: '#597EF7',
+                                rule: '%v >= 0 && %v <= ' + displayFirstRingValue
+                            },
+                            {
+                                backgroundColor: '#96B8FD',
+                                rule: '%v >= ' + displayFirstRingValue + ' && %v <= ' + displayMaxValue
+                            }
+                        ],
+                        size: '40'
+                    },
+                    step: step,
+                    tick: {
+                        visible: false
+                    }
+                },
+                series: [
+                    {
+                        backgroundColor: '#597EF7',
+                        text: "Kế hoạch thực tế"
+                    }
+                    ,
+                    {
+                        backgroundColor: '#96B8FD',
+                        text: "Kế hoạch cả năm"
+                    },
+                    {
+                        indicator: [10, 0, 0, 0, 0],
+                        values: [loiNhuanBaseThucTe], // starting value
+                        csize: "3%", //Needle Width
+                        size: "40%", //Needle Length
+                        'background-color': "#FF4D4F", //Needle Color
+                        visible: false,
+                        legendItem: {
+                            visible: false
+                        }
+                    },
+                    {
+                        values: [displayFirstRingValue],
+                        csize: "1%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [-1], // starting value
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [displayMaxValue],
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }
+
+                ]
+                ,
+                legend: {
+                    border: 'none',
+                    layout: " 1x2", //row x column
+                    align: "left",
+                    "vertical-align": "top",
+                    toggleAction: 'none',
+                    item: {
+                        'font-family': "Roboto, sans-serif",
+                        'font-size': "12px",
+                        color: "#595959"
+                    },
+                    marker: {
+                        type: 'circle'
+                    },
+                    offsetX: '-2px',
+                    offsetY: '-10px'
+                }
+            },
+            height: '100%',
+            width: '100%'
+        });
+    } else if (loiNhuanBaseKHCaNam !== 0) {
+        var step = getMinStepForGaugeChart_Billion(loiNhuanBaseKHCaNam, loiNhuanBaseKHHienTai, loiNhuanBaseThucTe);
+        var displayMaxValue = getValueToDisplayMaxGaugeChart_Billion(loiNhuanBaseKHCaNam, step);
+        var displayFirstRingValue = getValueToDisplayFirstRingGaugeChart_Billion(loiNhuanBaseKHCaNam, loiNhuanBaseKHHienTai, loiNhuanBaseThucTe, step);
+        zingchart.render({
+            id: 'sumLoiNhuanBaseChart',
+            data: {
+                type: 'gauge',
+                globals: {
+                    'font-family': "Roboto, sans-serif",
+                    fontSize: '12px'
+                },
+                title: {
+                    "text": "Lợi nhuận Base (Billions)",
+                    "position": "0% 95%",
+                    "offset-y": 15,
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                },
+                scale: {
+                    'size-factor': "170%" //Modify your gauge chart size.
+                },
+                plot: {
+                    valueBox: {
+                        placement: 'tip',
+                        rules: [
+                            {
+                                rule: '%v == ' + displayFirstRingValue + " && %v != " + step,
+                                text: loiNhuanBaseKHHienTai.toFixed(2) + " B",
+                                color: "#597EF7",
+                                offsetY: '-15px'
+                            },
+                            {
+                                rule: '%v == ' + displayMaxValue + " && %v != " + step,
+                                text: loiNhuanBaseKHCaNam.toFixed(2) + " B",
+                                offsetY: '15px',
+                                offsetX: getOffsetXForMaxGaugeChart_Billion(loiNhuanBaseKHCaNam),
+                                color: "#96B8FD",
+                            },
+                            {
+                                rule: '%v == ' + step,
+                                text: ''
+                            },
+                            {
+                                rule: '%v == -1',
+                                text: '0',
+                                offsetY: '15px',
+                                offsetX: '20px'
+                            },
+                            {
+                                rule: '%v == ' + loiNhuanBaseThucTe,
+                                text: loiNhuanBaseThucTe.toFixed(2),
+                                offsetY: '-15px'
+                            }
+                        ]
+                    },
+                    size: '100%',
+                    tooltip: {
+                        visible: false
+                    }
+                },
+                plotarea: {
+                    marginTop: '110px'
+                },
+                scaleR: {
+                    aperture: 180,
+                    center: {
+                        visible: false
+                    },
+                    item: {
+                        'font-size': 0
+                    },
+                    maxValue: displayMaxValue,
+                    minValue: 0,
+                    ring: {
+                        rules: [{
+                                backgroundColor: '#597EF7',
+                                rule: '%v >= 0 && %v <= ' + displayFirstRingValue
+                            },
+                            {
+                                backgroundColor: '#96B8FD',
+                                rule: '%v >= ' + displayFirstRingValue + ' && %v <= ' + displayMaxValue
+                            }
+                        ],
+                        size: '40'
+                    },
+                    step: step,
+                    tick: {
+                        visible: false
+                    }
+                },
+                series: [
+                    {
+                        backgroundColor: '#597EF7',
+                        text: "Kế hoạch thực tế"
+                    }
+                    ,
+                    {
+                        backgroundColor: '#96B8FD',
+                        text: "Kế hoạch cả năm"
+                    },
+                    {
+                        indicator: [10, 0, 0, 0, 0],
+                        values: [loiNhuanBaseThucTe], // starting value
+                        csize: "3%", //Needle Width
+                        size: "40%", //Needle Length
+                        'background-color': "#FF4D4F", //Needle Color
+                        visible: false,
+                        legendItem: {
+                            visible: false
+                        }
+                    },
+                    {
+                        values: [displayFirstRingValue],
+                        csize: "1%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [-1], // starting value
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [displayMaxValue],
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }
+
+                ]
+                ,
+                legend: {
+                    border: 'none',
+                    layout: " 1x2", //row x column
+                    align: "left",
+                    "vertical-align": "top",
+                    toggleAction: 'none',
+                    item: {
+                        'font-family': "Roboto, sans-serif",
+                        'font-size': "12px",
+                        color: "#595959"
+                    },
+                    marker: {
+                        type: 'circle'
+                    },
+                    offsetX: '-2px',
+                    offsetY: '-10px'
+                }
+            },
+            height: '100%',
+            width: '100%'
+        });
+    } else {
+        var step = 0
+        var displayMaxValue = 0
+        var displayFirstRingValue = 0;
+        zingchart.render({
+            id: 'sumLoiNhuanBaseChart',
+            data: {
+                type: 'gauge',
+                globals: {
+                    'font-family': "Roboto, sans-serif",
+                    fontSize: '12px'
+                },
+                title: {
+                    "text": "Lợi nhuận Base (Billions)",
+                    "position": "0% 95%",
+                    fontSize: '14px',
+                    fontWeight: 'bold'
+                },
+                scale: {
+                    'size-factor': "170%" //Modify your gauge chart size.
+                },
+                plot: {
+                    valueBox: {
+                        placement: 'tip',
+                        rules: [
+                            {
+                                //rule: '%v == ' + displayFirstRingValue + " && %v != " + step,
+                                text: loiNhuanBaseKHHienTai + " B",
+                                color: "#595959",
+                                offsetY: '-15px'
+                            },
+                            {
+                                //rule: '%v == ' + displayMaxValue + " && %v != " + step,
+                                text: loiNhuanBaseKHCaNam + " B",
+                                offsetY: '15px',
+                                //offsetX: getOffsetXForMaxGaugeChart_Billion(loiNhuanBaseKHCaNam)
+                            },
+                            {
+                                rule: '%v == ' + step,
+                                text: ''
+                            },
+                            {
+                                rule: '%v == -1',
+                                text: '0',
+                                offsetY: '15px',
+                                offsetX: '20px'
+                            },
+                            {
+                                //rule: '%v == ' + loiNhuanBaseThucTe,
+                                text: loiNhuanBaseThucTe,
+                                offsetY: '-15px'
+                            }
+                        ]
+                    },
+                    size: '100%',
+                    tooltip: {
+                        visible: false
+                    }
+                },
+                plotarea: {
+                    marginTop: '110px'
+                },
+                scaleR: {
+                    aperture: 180,
+                    center: {
+                        visible: false
+                    },
+                    item: {
+                        'font-size': 0
+                    },
+                    maxValue: displayMaxValue,
+                    minValue: 0,
+                    ring: {
+                        rules: [{
+                                backgroundColor: '#597EF7',
+                                rule: '%v >= 0 && %v <= ' + displayFirstRingValue
+                            },
+                            {
+                                backgroundColor: '#96B8FD',
+                                rule: '%v >= ' + displayFirstRingValue + ' && %v <= ' + displayMaxValue
+                            }
+                        ],
+                        size: '40'
+                    },
+                    step: step,
+                    tick: {
+                        visible: false
+                    }
+                },
+                series: [
+                    {
+                        backgroundColor: '#597EF7',
+                        text: "Kế hoạch thực tế"
+                    }
+                    ,
+                    {
+                        backgroundColor: '#96B8FD',
+                        text: "Kế hoạch cả năm"
+                    },
+                    {
+                        indicator: [10, 0, 0, 0, 0],
+                        values: [loiNhuanBaseThucTe], // starting value
+                        csize: "3%", //Needle Width
+                        size: "40%", //Needle Length
+                        'background-color': "#FF4D4F", //Needle Color
+                        visible: false,
+                        legendItem: {
+                            visible: false
+                        }
+                    },
+                    {
+                        values: [displayFirstRingValue],
+                        csize: "1%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [-1], // starting value
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }, {
+                        values: [displayMaxValue],
+                        csize: "5%", //Needle Width
+                        size: "100%", //Needle Length
+                        'background-color': "none",
+                        legendItem: {
+                            visible: false
+                        }//Needle Color
+                    }
+
+                ]
+                ,
+                legend: {
+                    border: 'none',
+                    layout: " 1x2", //row x column
+                    align: "left",
+                    "vertical-align": "top",
+                    toggleAction: 'none',
+                    item: {
+                        'font-family': "Roboto, sans-serif",
+                        'font-size': "12px",
+                        color: "#595959"
+                    },
+                    marker: {
+                        type: 'circle'
+                    },
+                    offsetX: '-2px',
+                    offsetY: '-10px'
+                }
+            },
+            height: '100%',
+            width: '100%'
+        });
+    }
+}
+
+
+function drawQuyKhoanTheoDonViChart(tenDonViList, quyKhoanList, quyKhoanDaChiList, quyKhoanConLaiList, LNBaselist) {
+    $("#quyKhoanTheoDonViChart").html("");
+    var LNBaseChart = [];
+    for (var i = 0; i < LNBaselist.length; i++) {
+        LNBaseChart[i] = "LNBase: " + LNBaselist[i];
+    }
+    ;
+    zingchart.render({
+        id: 'quyKhoanTheoDonViChart',
+        data: {
+            type: 'bar',
+            plotarea: {
+                "margin": "40px dynamic dynamic dynamic"
+            },
+            "plot": {
+                "bars-space-left": 0.15,
+                "bars-space-right": 0.15,
+                "bar-space": "0px",
+                "bar-width": "15px"
+            },
+            globals: {
+                'font-family': "Roboto, sans-serif",
+                fontSize: '12px'
+            },
+            'scroll-y': {
+
+            },
+            "scale-y": {
+                "line-width": "0",
+                "item": {
+                    "font-color": "#8C8C8C"
+                },
+                "itemsOverlap": true,
+                "max-items": 10,
+                "guide": {
+                    "visible": true,
+                    "line-color": "#F5F5F5",
+                    "line-width": "1px"
+                },
+                "tick": {
+                    "visible": false
+                },
+                "label": {
+                    "text": "Billions",
+                    "font-family": "arial",
+                    "bold": true,
+                    "font-size": "14px",
+                    "font-color": "#7E7E7E",
+                },
+            },
+            'scroll-x': {
+
+            },
+            'scaleX': {
+                "values": tenDonViList,
+                "line-color": "#F5F5F5",
+                "line-width": "1px",
+                zooming: true,
+                'zoom-to': [0, 5],
+                "item": {
+                    "font-color": "#8C8C8C"
+                },
+                "itemsOverlap": false,
+                "tick": {
+                    "visible": false,
+//                    "size": 50,
+                }
+
+            },
+            "scaleX2": {
+                "values": LNBaseChart,
+                "placement": "default",
+                "line-color": "#F5F5F5",
+                "line-width": "1px",
+                zooming: true,
+                'zoom-to': [0, 5],
+                "tick": {
+                    "visible": false,
+//                    "size": 20,
+//                    "placement": "cross"
+                },
+                "item": {
+                    "offsetY": -20,
+                    "font-color": "#DFDC7C"
+                }
+            },
+            "crosshair-x": {
+                "line-width": "100%",
+                "alpha": 0.18,
+                "plot-label": {
+                    "header-text": "%k"
+                }
+            },
+            series: [
+                {
+                    values: quyKhoanList,
+                    "background-color": "#91D5FF",
+                    "text": "Quỹ khoán",
+                },
+                {
+                    values: quyKhoanDaChiList,
+                    "background-color": "#B3EBC5",
+                    "text": "Quỹ khoán đã chi",
+                },
+                {
+                    values: quyKhoanConLaiList,
+                    "background-color": "#FFBB96",
+                    "text": "Quý khoán còn lại",
+                },
+//                {
+//                    values: LNBaselist,
+//                    "background-color": "#DFDC7C",
+//                    "text": "LNBase",
+//                }
+            ],
+            legend: {
+                border: 'none',
+                layout: " 1x4", //row x column
+                align: "left",
+                "vertical-align": "top",
+                toggleAction: 'none',
+                item: {
+                    'font-family': "Roboto, sans-serif",
+                    'font-size': "12px",
+                    color: "#595959",
+                    "visible": false
+                },
+                marker: {
+                    type: 'circle'
+                },
+                offsetX: '-2px',
+                offsetY: '-10px'
+            }
+        },
+        height: '100%',
+        width: '100%'
+    });
+}
+;

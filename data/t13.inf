@@ -1,0 +1,13 @@
+[t13]
+FileName1=t13.json
+URL1=https://themis.test.xplat.fpt.com.vn/bcld-don-vi/get-thong-tin-don-vi-kd-da
+Total=2
+RequestHeaderFile=t13_RequestHeader.txt
+RequestBodyFile=t13_RequestBody.txt
+ResponseHeaderFile=t13_ResponseHeader.txt
+ContentType=application/json
+SnapshotXmlFile=snapshot_13.xml
+FileName2=t13_topBannerFptLogo2.png
+URL2=https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo2.png
+[ProtocolInfo]
+ProtocolId=QTWeb

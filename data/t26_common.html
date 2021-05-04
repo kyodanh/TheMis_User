@@ -1,0 +1,43 @@
+function buttOnclickCB() {
+    window.location = '/quan-ly/thong-tin-can-bo';
+}
+
+function buttOnclickTieuDe() {
+    window.location = '/quan-ly/thong-tin-du-an';
+}
+
+$(function() {
+    //table header sort icon
+    $("th .sort-icon").hide();
+    $("th").hover(function() {
+		$( this ).find( ".sort-icon" ).show();
+    },
+    function() {
+            $( this ).find( ".sort-icon" ).hide();
+    }
+    );
+
+    relocateSummaryDiagramDiv();
+
+    $( window ).resize(function() {
+            relocateSummaryDiagramDiv();
+    });
+});
+
+function relocateSummaryDiagramDiv() {
+	var summaryDiagramDiv = $("#body-content-summary-right");
+	var summaryDiv = $(summaryDiagramDiv).parent();
+	var extraMarginLeft = 0;
+	$(summaryDiv).children().each(function() {
+		extraMarginLeft += ($(this).width() + 25);
+	});
+	extraMarginLeft -= (summaryDiagramDiv.width() + 25);
+	
+	if(summaryDiv.width() < (500 + extraMarginLeft)) {
+		summaryDiagramDiv.css("clear", "both");
+		summaryDiagramDiv.css("margin-left", "0");
+	} else {
+		summaryDiagramDiv.css("clear", "none");
+		summaryDiagramDiv.css("margin-left", extraMarginLeft + "px");
+	}
+}

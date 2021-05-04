@@ -1,0 +1,19 @@
+POST https://themis.test.xplat.fpt.com.vn/dang-nhap-demo HTTP/1.1
+sec-ch-ua: "Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36
+Content-Type: application/json
+Origin: https://themis.test.xplat.fpt.com.vn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://themis.test.xplat.fpt.com.vn/dang-nhap-test-perf
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+Cookie: adfs=1; sstk=630f2d6e-218a-46dc-a908-2fcb75c1b132-1616576349604; _firo_crfs=Jluq18jArFFQsT9wqEVRPV0azR_Ss8ENJcI51DINSfjpEt7EiBjtt53aAOdICcjiZy0=; 921003f142e7cfc42fd106350b5b3d9e=6ef5a8f4485d2a17e81198c877602733
+Host: themis.test.xplat.fpt.com.vn
+Content-Length: 15
+Connection: Keep-Alive
+

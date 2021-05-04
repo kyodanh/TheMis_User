@@ -1,0 +1,31 @@
+
+/* global contextPath */
+
+$(document).ready(function () {
+});
+
+function requestLogin() {
+    var objectLogin = {
+        user: $('#user').val()
+    };
+    $("#error_summary").html('');
+    $.ajax({
+        type: "post",
+        url: contextPath + '/dang-nhap-demo',
+        contentType: "application/json",
+        dataType: "json",
+        data: JSON.stringify(objectLogin),
+        success: function (response) {
+            if (response.error_code === "SUCCESSFUL") {
+                window.location.href = contextPath + response.error_message;
+            } else {
+                $("#error_summary").html('Đăng nhập thất bại');
+            }
+        }
+    });
+}
+
+
+
+
+

@@ -1,0 +1,6 @@
+HTTP/1.1 200 OK
+Date: Mon, 22 Mar 2021 10:33:42 GMT
+Content-Type: application/json
+x-frame-options: DENY
+X-XSS-Protection: 1; mode=block
+

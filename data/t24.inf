@@ -1,0 +1,13 @@
+[t24]
+FileName1=t24_2021.json
+URL1=https://themis.test.xplat.fpt.com.vn/thong-tin/ky-tinh-khoan-theo-nam-select/2021
+Total=2
+ContentType=application/json
+SnapshotXmlFile=snapshot_24.xml
+RequestHeaderFile=t24_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t24_ResponseHeader.txt
+FileName2=t24_fa-solid-900.html
+URL2=https://themis.test.xplat.fpt.com.vn/assets/new/webfonts/fa-solid-900.woff2
+[ProtocolInfo]
+ProtocolId=QTWeb

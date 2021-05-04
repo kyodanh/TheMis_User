@@ -1,0 +1,15 @@
+[t30]
+FileName1=t30.json
+URL1=https://themis.test.xplat.fpt.com.vn/bao-cao-lanh-dao-DA/don-vi
+Total=3
+RequestHeaderFile=t30_RequestHeader.txt
+RequestBodyFile=t30_RequestBody.txt
+ResponseHeaderFile=t30_ResponseHeader.txt
+ContentType=application/json
+SnapshotXmlFile=snapshot_30.xml
+FileName2=t30_topBannerFptLogo2.png
+URL2=https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogo2.png
+FileName3=t30_topBannerFptLogoRetracted2.png
+URL3=https://themis.test.xplat.fpt.com.vn/assets/new/image/topBannerFptLogoRetracted2.png
+[ProtocolInfo]
+ProtocolId=QTWeb

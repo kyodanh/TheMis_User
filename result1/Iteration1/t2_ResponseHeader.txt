@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+Date: Wed, 24 Mar 2021 09:16:16 GMT
+Content-Type: application/json
+Set-Cookie: sstk=dac867e9-1ff6-4c99-8fb8-fe1630c3bff4-1616577376417;Path=/;Domain=themis.test.xplat.fpt.com.vn;Expires=Thu, 25-Mar-2021 09:16:16 GMT;HttpOnly
+Expires: Thu, 01 Jan 1970 00:00:00 GMT
+Set-Cookie: adfs=1;Path=/;Domain=themis.test.xplat.fpt.com.vn;Expires=Thu, 25-Mar-2021 09:16:16 GMT;HttpOnly
+x-frame-options: DENY
+X-XSS-Protection: 1; mode=block
+Transfer-Encoding: chunked
+

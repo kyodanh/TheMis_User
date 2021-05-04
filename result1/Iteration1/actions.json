@@ -1,0 +1,71 @@
+[
+    {
+        "actionName": "Action",
+        "steps": [
+            {
+                "stepId": "STEP6",
+                "stepName": "Custom Request: bao-cao-nhan-vien_3",
+                "infFile": "t6.inf",
+                "time": 1616577497609
+            },
+            {
+                "stepId": "STEP7",
+                "stepName": "Custom Request: check-eva_2",
+                "infFile": "t7.inf",
+                "time": 1616577497664
+            },
+            {
+                "stepId": "STEP8",
+                "stepName": "Url: 2020",
+                "infFile": "t8.inf",
+                "time": 1616577497747
+            },
+            {
+                "stepId": "STEP9",
+                "stepName": "Custom Request: bao-cao-nhan-vien_4",
+                "infFile": "t9.inf",
+                "time": 1616577557897
+            },
+            {
+                "stepId": "STEP10",
+                "stepName": "Custom Request: bao-cao-nhan-vien_5",
+                "infFile": "t10.inf",
+                "time": 1616577558080
+            },
+            {
+                "stepId": "STEP11",
+                "stepName": "Url: 2021",
+                "infFile": "t11.inf",
+                "time": 1616577558184
+            },
+            {
+                "stepId": "STEP12",
+                "stepName": "Custom Request: check-eva_3",
+                "infFile": "t12.inf",
+                "time": 1616577558283
+            },
+            {
+                "stepId": "STEP13",
+                "stepName": "Custom Request: bao-cao-nhan-vien_6",
+                "infFile": "t13.inf",
+                "time": 1616577558362
+            }
+        ],
+        "transactions": [
+            {
+                "transactionName": "Trans_BaoCao_kinhDoanh",
+                "rawStartTime": 1616577497329,
+                "rawEndTime": 1616577557909,
+                "thinkTime": 0.0,
+                "wastedTime": 0.021823883056640626
+            },
+            {
+                "transactionName": "Trans_BaoCao_SanXuat",
+                "rawStartTime": 1616577557924,
+                "rawEndTime": 1616577558376,
+                "thinkTime": 0.0,
+                "wastedTime": 0.023743867874145509
+            }
+        ]
+    }
+]

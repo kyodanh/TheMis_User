@@ -1,0 +1,15 @@
+[t41]
+FileName1=t41.json
+URL1=https://themis.test.xplat.fpt.com.vn/bao-cao-khoan/bao-cao-nhan-vien
+Total=3
+RequestHeaderFile=t41_RequestHeader.txt
+RequestBodyFile=t41_RequestBody.txt
+ResponseHeaderFile=t41_ResponseHeader.txt
+ContentType=application/json
+SnapshotXmlFile=snapshot_41.xml
+FileName2=t41.html
+URL2=https://p6-ctl.chat.zalo.me/?zpw_ver=355&zpw_type=24&params=256950998275,7,256781839624,256818836124,256818874912,256818875086,256950956129,256950998225,256950998275&ts=1616576921
+FileName3=t41.html
+URL3=https://p3-msg.chat.zalo.me/?zpw_ver=355&zpw_type=24&params=2300541172619,10,2300062008148,2300190507117,2300203899015,2300204435079,2300205689018,2300331150006,2300331189954,2300539133561,2300540269303,2300541077102&ts=1616576923
+[ProtocolInfo]
+ProtocolId=QTWeb

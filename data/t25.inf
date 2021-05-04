@@ -1,0 +1,11 @@
+[t25]
+FileName1=t25.xml
+URL1=https://cdn.onenote.net/livetile/?Language=en-US
+Total=1
+ContentType=text/xml
+SnapshotXmlFile=snapshot_25.xml
+RequestHeaderFile=t25_RequestHeader.txt
+RequestBodyFile=NONE
+ResponseHeaderFile=t25_ResponseHeader.txt
+[ProtocolInfo]
+ProtocolId=QTWeb
