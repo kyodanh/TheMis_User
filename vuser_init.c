@@ -157,5 +157,12 @@ vuser_init()
 
 	lr_end_transaction("login ",LR_AUTO);
 
+	//thêm tho`i gian danhnc15
+	
+	//Danhnc14 User không câ`n tho`i gian dê? phê duyê?t bo? phâ`n na`y 
+	
+
+
+	
 	return 0;
 }
